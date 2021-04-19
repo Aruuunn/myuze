@@ -2,13 +2,18 @@ import React, { CSSProperties, ReactElement } from "react";
 import { Slider } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 
-interface Props {
+export interface MusicSliderProps {
   maxValue: number;
   currentValue: number;
   containerStyle?: CSSProperties;
+  onChangeCommitted?: (
+    e: React.ChangeEvent<{}>,
+    value: number | number[]
+  ) => void;
+  onChange?: (e: React.ChangeEvent<{}>, value: number | number[]) => void;
 }
 
-const PrettoSlider = withStyles({
+const CustomSlider = withStyles({
   root: {
     color: "var(--primary)",
     height: 8,
@@ -38,17 +43,25 @@ const PrettoSlider = withStyles({
   },
 })(Slider);
 
-export const MusicSlider = (props: Props): ReactElement => {
-  const { currentValue, maxValue, containerStyle } = props;
+export const MusicSlider = (props: MusicSliderProps): ReactElement => {
+  const {
+    currentValue,
+    maxValue,
+    containerStyle,
+    onChange,
+    onChangeCommitted,
+  } = props;
 
   return (
     <div style={containerStyle}>
-      <PrettoSlider
-        aria-label="pretto slider"
+      <CustomSlider
+        aria-label="music slider"
         value={currentValue}
         min={0}
         max={maxValue}
         defaultValue={0}
+        onChange={onChange}
+        onChangeCommitted={onChangeCommitted}
       />
     </div>
   );
