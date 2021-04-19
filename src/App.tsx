@@ -1,10 +1,8 @@
-import React from 'react';
-import { Slider } from "./components/slider"
+import React from "react";
 
 function App() {
   return (
     <div>
-      <Slider maxValue={300} currentValue={10} />
     </div>
   );
 }
