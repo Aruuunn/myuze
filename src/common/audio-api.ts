@@ -38,6 +38,6 @@ export class AudioAPI implements AudioServiceInterface {
   }
 
   goToTime(time: number) {
-    this.audioEl.preload = `${time}`;
+    this.audioEl.currentTime = time;
   }
 }
