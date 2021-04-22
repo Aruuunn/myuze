@@ -4,9 +4,7 @@ export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;
 
   constructor() {
-    this.audioEl = document.createElement("audio");
-    this.audioEl.style.display = "none";
-    this.audioEl.id = "audio-el";
+    this.audioEl = document.createElement("audio"); 
   }
 
   get duration() {
@@ -15,6 +13,10 @@ export class AudioAPI implements AudioServiceInterface {
 
   get currentTime() {
     return this.audioEl.currentTime;
+  }
+
+  isPlaying(): boolean {
+    return !this.audioEl.paused;
   }
 
   clear() {

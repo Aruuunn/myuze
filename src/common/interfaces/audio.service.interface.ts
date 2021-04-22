@@ -6,5 +6,6 @@ export interface AudioServiceInterface {
   onTimeUpdate: (callback: (ev: Event) => void) => void;
   duration: number;
   currentTime: number;
-  goToTime:(timeInSeconds: number) => void
+  goToTime: (timeInSeconds: number) => void;
+  isPlaying(): boolean;
 }

@@ -2,12 +2,15 @@ import React, { ReactElement, useState, useEffect, useRef } from "react";
 import { Container, Grid } from "@material-ui/core";
 
 import { AudioAPI } from "../../common/audio-api";
-import { MusicSlider, MusicSliderProps } from "../../components";
-import { useStyles } from "./styles";
 import { AudioServiceInterface } from "../../common/interfaces/audio.service.interface";
+
+import { MusicSlider, MusicSliderProps, PlayButton } from "../../components";
+import { useStyles } from "./styles";
 
 /**
  * @TODO Refactor , reducing redundancy
+ * @TODO clear interval on pause to stop unnecessary renders
+ * @TODO add event listener ("play" and "pause") to change playing mode of play button
  */
 
 export function MusicPlayerPage(): ReactElement {
@@ -95,7 +98,6 @@ export function MusicPlayerPage(): ReactElement {
               }));
             }}
             onChangeCommitted={(e, value) => {
-    
               if (typeof value === "number") {
                 audioPlayer.current?.goToTime(value);
               }
@@ -114,6 +116,7 @@ export function MusicPlayerPage(): ReactElement {
               }, 100);
             }}
           />
+          <PlayButton audioPlayer={audioPlayer.current} />
         </Grid>
       </Grid>
     </Container>

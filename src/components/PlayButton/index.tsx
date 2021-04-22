@@ -1,0 +1,63 @@
+import React, { ReactElement } from "react";
+import { IconButton, SvgIcon } from "@material-ui/core";
+
+import { AudioServiceInterface } from "../../common/interfaces/audio.service.interface";
+import { useStyles } from "./styles";
+
+export interface PlayButtonProps {
+  audioPlayer?: AudioServiceInterface;
+}
+
+export function PlayButton(props: PlayButtonProps): ReactElement {
+  const { audioPlayer } = props;
+
+  const styles = useStyles();
+
+  if (!audioPlayer) {
+    return <div></div>;
+  }
+
+  console.log("rendering play button");
+
+  const isAudioPlaying = audioPlayer.isPlaying();
+
+  return (
+    <IconButton
+      className={styles.root}
+      color="primary"
+      onClick={() =>
+        isAudioPlaying ? audioPlayer.pause() : audioPlayer.play()
+      }
+    >
+      <SvgIcon>
+        {isAudioPlaying ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#000000"
+          >
+            <path
+              d="M8 19c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2v10c0 1.1.9 2 2 2zm6-12v10c0 1.1.9 2 2 2s2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2z"
+              fill="currentColor"
+            />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#000000"
+          >
+            <path
+              d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"
+              fill="currentColor"
+            />
+          </svg>
+        )}
+      </SvgIcon>
+    </IconButton>
+  );
+}
