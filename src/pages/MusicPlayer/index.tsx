@@ -8,74 +8,51 @@ import { MusicSlider, MusicSliderProps, PlayButton } from "../../components";
 import { useStyles } from "./styles";
 
 /**
- * @TODO Refactor , reducing redundancy
- * @TODO clear interval on pause to stop unnecessary renders
- * @TODO add event listener ("play" and "pause") to change playing mode of play button
+ * @TODO fix unnecessary renders of play button
+ * @TODO make slider movement look smooth
  */
-
 export function MusicPlayerPage(): ReactElement {
   const [musicSliderState, setMusicSliderState] = useState<MusicSliderProps>({
     currentValue: 0,
-    maxValue: 300,
+    maxValue: 0,
   });
 
-  const audioPlayer = useRef<AudioServiceInterface>();
-  const audioPlayerIntv = useRef<any>();
+  const audioPlayerRef = useRef<AudioServiceInterface>(new AudioAPI());
+  let audioPlayer: AudioServiceInterface = audioPlayerRef.current;
 
   const updateSliderValue = (newCurrentValue: number) => {
-    if (newCurrentValue > musicSliderState.maxValue) {
-      return;
-    }
-
     setMusicSliderState((state) => ({
       ...state,
-      currentValue: newCurrentValue,
+      currentValue: newCurrentValue ?? state.currentValue,
     }));
   };
 
+  const updateSliderMaxValue = (newMaxValue: number) => {
+    setMusicSliderState((state) => ({
+      ...state,
+      maxValue: newMaxValue ?? state.maxValue,
+    }));
+  };
+
+  const addTimeUpdateListener = () => {
+    audioPlayer.onTimeUpdate((currentTime) => {
+      updateSliderValue(currentTime);
+    });
+  };
+
   useEffect(() => {
-    audioPlayer.current = new AudioAPI();
+    audioPlayer.load("/sample.mp3").then(() => {
+      audioPlayer.play();
 
-    let interval: any;
+      updateSliderMaxValue(audioPlayer.duration);
 
-    audioPlayer.current.load("").then(() => {
-      if (typeof audioPlayer.current === "undefined") return;
-
-      audioPlayer.current.play();
-
-      setMusicSliderState((state) => ({
-        ...state,
-        maxValue: audioPlayer.current?.duration ?? state.maxValue,
-      }));
-
-      interval = setInterval(() => {
-        if (typeof audioPlayer.current === "undefined") return;
-
-        if (audioPlayer.current.currentTime >= musicSliderState.maxValue) {
-          clearInterval(interval);
-        }
-        updateSliderValue(audioPlayer.current.currentTime);
-      }, 100);
-
-      audioPlayerIntv.current = interval;
-
-      // audioPlayer.current.onTimeUpdate(() => {
-      //   if (audioPlayer.current.currentTime < audioPlayer.current.duration) {
-      //     setTimeout(() => {
-      //       updateSliderValue(audioPlayer.current.currentTime)
-      //     }, 300);
-      //   }
-      //   setMusicSliderState((state) => ({
-      //     ...state,
-      //     currentValue: audioPlayer.current.currentTime,
-      //   }));
-      // });
+      addTimeUpdateListener();
     });
 
     return () => {
-      clearInterval(interval);
-      audioPlayer.current?.clear();
+      audioPlayer.clear();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const styles = useStyles();
@@ -86,37 +63,20 @@ export function MusicPlayerPage(): ReactElement {
         <Grid id="music-player" item xs={8}>
           <MusicSlider
             {...musicSliderState}
-            onChange={(e, value) => {
-              if (typeof value !== "number") return;
-
-              // audioPlayer.current?.pause();
-              clearInterval(audioPlayerIntv.current ?? 0);
-
-              setMusicSliderState((state) => ({
-                ...state,
-                currentValue: value,
-              }));
+            onChange={(e, currentValue) => {
+              if (typeof currentValue !== "number") return;
+              audioPlayer.removeTimeUpdateListener();
+              updateSliderValue(currentValue);
             }}
-            onChangeCommitted={(e, value) => {
-              if (typeof value === "number") {
-                audioPlayer.current?.goToTime(value);
-              }
+            onChangeCommitted={(e, timeInSeconds) => {
+              if (typeof timeInSeconds !== "number") return;
 
-              audioPlayer.current?.play();
-
-              audioPlayerIntv.current = setInterval(() => {
-                if (typeof audioPlayer.current === "undefined") return;
-
-                if (
-                  audioPlayer.current?.currentTime >= musicSliderState.maxValue
-                ) {
-                  clearInterval(audioPlayerIntv.current ?? 0);
-                }
-                updateSliderValue(audioPlayer.current.currentTime);
-              }, 100);
+              audioPlayer.goToTime(timeInSeconds);
+              audioPlayer.play();
+              addTimeUpdateListener();
             }}
           />
-          <PlayButton audioPlayer={audioPlayer.current} />
+          <PlayButton audioPlayer={audioPlayer} />
         </Grid>
       </Grid>
     </Container>

@@ -7,5 +7,7 @@ export const useStyles = makeStyles({
     "&:hover": {
       backgroundColor: "var(--primary)",
     },
+
+    boxShadow: "-1px 2px 2px 0px var(--primary-bright)",
   },
 });

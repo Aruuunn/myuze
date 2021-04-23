@@ -2,9 +2,10 @@ import { AudioServiceInterface } from "./interfaces/audio.service.interface";
 
 export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;
+  private interval: any;
 
   constructor() {
-    this.audioEl = document.createElement("audio"); 
+    this.audioEl = document.createElement("audio");
   }
 
   get duration() {
@@ -20,10 +21,12 @@ export class AudioAPI implements AudioServiceInterface {
   }
 
   clear() {
+    clearInterval(this.interval);
     this.audioEl.src = "";
   }
-  async load() {
-    this.audioEl.src = "/sample.mp3";
+
+  async load(dataURL: string) {
+    this.audioEl.src = dataURL;
     return new Promise<void>((res) => {
       this.audioEl.oncanplay = () => res();
     });
@@ -35,11 +38,17 @@ export class AudioAPI implements AudioServiceInterface {
     this.audioEl.play();
   }
 
-  onTimeUpdate(callback: (ev: Event) => void): void {
-    this.audioEl.ontimeupdate = callback;
+  onTimeUpdate(callback: (currentTime: number) => void): void {
+    this.interval = setInterval(() => {
+      callback(this.audioEl.currentTime);
+    }, 200);
   }
 
-  goToTime(time: number) {
-    this.audioEl.currentTime = time;
+  removeTimeUpdateListener() {
+    clearInterval(this.interval);
+  }
+
+  goToTime(timeInSeconds: number) {
+    this.audioEl.currentTime = timeInSeconds;
   }
 }
