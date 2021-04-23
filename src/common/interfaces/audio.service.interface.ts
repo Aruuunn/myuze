@@ -3,8 +3,12 @@ export interface AudioServiceInterface {
   play: () => Promise<void>;
   pause: () => Promise<void>;
   clear: () => void;
-  onTimeUpdate: (callback: (ev: Event) => void) => void;
+  onTimeUpdate: (callback: (currentTime: number) => void) => void;
   duration: number;
   currentTime: number;
-  goToTime:(timeInSeconds: number) => void
+  goToTime: (timeInSeconds: number) => void;
+  isPlaying(): boolean;
+  removeTimeUpdateListener: () => void;
+  onPlay: (callback: () => void) => void;
+  onPause: (callback: () => void) => void;
 }

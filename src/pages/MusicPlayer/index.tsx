@@ -1,78 +1,65 @@
-import React, { ReactElement, useState, useEffect, useRef } from "react";
+import React, { ReactElement, useState, useEffect, useContext } from "react";
 import { Container, Grid } from "@material-ui/core";
 
-import { AudioAPI } from "../../common/audio-api";
-import { MusicSlider, MusicSliderProps } from "../../components";
+import {
+  MusicSlider,
+  MusicSliderProps,
+  MusicController,
+} from "../../components";
 import { useStyles } from "./styles";
+import { AudioServiceContext } from "../../common/audio-service.provider";
 import { AudioServiceInterface } from "../../common/interfaces/audio.service.interface";
-
-/**
- * @TODO Refactor , reducing redundancy
- */
 
 export function MusicPlayerPage(): ReactElement {
   const [musicSliderState, setMusicSliderState] = useState<MusicSliderProps>({
     currentValue: 0,
-    maxValue: 300,
+    maxValue: 0,
   });
 
-  const audioPlayer = useRef<AudioServiceInterface>();
-  const audioPlayerIntv = useRef<any>();
+  const [isAudioPlaying, setAudioPlaying] = useState(false);
+
+  const audioService: AudioServiceInterface = useContext(AudioServiceContext);
 
   const updateSliderValue = (newCurrentValue: number) => {
-    if (newCurrentValue > musicSliderState.maxValue) {
-      return;
-    }
-
     setMusicSliderState((state) => ({
       ...state,
-      currentValue: newCurrentValue,
+      currentValue: newCurrentValue ?? state.currentValue,
     }));
   };
 
+  const updateSliderMaxValue = (newMaxValue: number) => {
+    setMusicSliderState((state) => ({
+      ...state,
+      maxValue: newMaxValue ?? state.maxValue,
+    }));
+  };
+
+  const addTimeUpdateListener = () => {
+    audioService.onTimeUpdate((currentTime) => {
+      updateSliderValue(currentTime);
+    });
+  };
+
   useEffect(() => {
-    audioPlayer.current = new AudioAPI();
+    audioService.onPlay(() => {
+      setAudioPlaying(true);
+    });
 
-    let interval: any;
+    audioService.onPause(() => {
+      setAudioPlaying(false);
+    });
 
-    audioPlayer.current.load("").then(() => {
-      if (typeof audioPlayer.current === "undefined") return;
+    audioService.load("/sample.mp3").then(() => {
+      audioService.play();
 
-      audioPlayer.current.play();
-
-      setMusicSliderState((state) => ({
-        ...state,
-        maxValue: audioPlayer.current?.duration ?? state.maxValue,
-      }));
-
-      interval = setInterval(() => {
-        if (typeof audioPlayer.current === "undefined") return;
-
-        if (audioPlayer.current.currentTime >= musicSliderState.maxValue) {
-          clearInterval(interval);
-        }
-        updateSliderValue(audioPlayer.current.currentTime);
-      }, 100);
-
-      audioPlayerIntv.current = interval;
-
-      // audioPlayer.current.onTimeUpdate(() => {
-      //   if (audioPlayer.current.currentTime < audioPlayer.current.duration) {
-      //     setTimeout(() => {
-      //       updateSliderValue(audioPlayer.current.currentTime)
-      //     }, 300);
-      //   }
-      //   setMusicSliderState((state) => ({
-      //     ...state,
-      //     currentValue: audioPlayer.current.currentTime,
-      //   }));
-      // });
+      updateSliderMaxValue(audioService.duration);
+      addTimeUpdateListener();
     });
 
     return () => {
-      clearInterval(interval);
-      audioPlayer.current?.clear();
+      audioService.clear();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const styles = useStyles();
@@ -83,36 +70,26 @@ export function MusicPlayerPage(): ReactElement {
         <Grid id="music-player" item xs={8}>
           <MusicSlider
             {...musicSliderState}
-            onChange={(e, value) => {
-              if (typeof value !== "number") return;
-
-              // audioPlayer.current?.pause();
-              clearInterval(audioPlayerIntv.current ?? 0);
-
-              setMusicSliderState((state) => ({
-                ...state,
-                currentValue: value,
-              }));
+            onChange={(e, currentValue) => {
+              if (typeof currentValue !== "number") return;
+              audioService.removeTimeUpdateListener();
+              updateSliderValue(currentValue);
             }}
-            onChangeCommitted={(e, value) => {
-    
-              if (typeof value === "number") {
-                audioPlayer.current?.goToTime(value);
-              }
+            onChangeCommitted={(e, timeInSeconds) => {
+              if (typeof timeInSeconds !== "number") return;
 
-              audioPlayer.current?.play();
-
-              audioPlayerIntv.current = setInterval(() => {
-                if (typeof audioPlayer.current === "undefined") return;
-
-                if (
-                  audioPlayer.current?.currentTime >= musicSliderState.maxValue
-                ) {
-                  clearInterval(audioPlayerIntv.current ?? 0);
-                }
-                updateSliderValue(audioPlayer.current.currentTime);
-              }, 100);
+              audioService.goToTime(timeInSeconds);
+              audioService.play();
+              addTimeUpdateListener();
             }}
+          />
+          <MusicController
+            onPause={audioService.pause.bind(audioService)}
+            onPlay={audioService.play.bind(audioService)}
+            isPlaying={isAudioPlaying}
+            onNextMusic={() => {}}
+            onPrevMusic={() => {}}
+            size="large"
           />
         </Grid>
       </Grid>

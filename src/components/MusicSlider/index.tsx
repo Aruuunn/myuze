@@ -15,7 +15,7 @@ export interface MusicSliderProps {
 
 const CustomSlider = withStyles({
   root: {
-    color: "var(--primary)",
+    color: "var(--primary-bright)",
     height: 8,
   },
   thumb: {
