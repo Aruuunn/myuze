@@ -1,15 +1,15 @@
-import React, { ReactElement, useState, useEffect, useRef } from "react";
+import React, { ReactElement, useState, useEffect, useContext } from "react";
 import { Container, Grid } from "@material-ui/core";
 
-import { AudioAPI } from "../../common/audio-api";
+import {
+  MusicSlider,
+  MusicSliderProps,
+  MusicController,
+} from "../../components";
+import { useStyles } from "./styles";
+import { AudioServiceContext } from "../../common/audio-service.provider";
 import { AudioServiceInterface } from "../../common/interfaces/audio.service.interface";
 
-import { MusicSlider, MusicSliderProps, PlayButton } from "../../components";
-import { useStyles } from "./styles";
-
-/**
- * @TODO make slider movement look smooth
- */
 export function MusicPlayerPage(): ReactElement {
   const [musicSliderState, setMusicSliderState] = useState<MusicSliderProps>({
     currentValue: 0,
@@ -18,8 +18,7 @@ export function MusicPlayerPage(): ReactElement {
 
   const [isAudioPlaying, setAudioPlaying] = useState(false);
 
-  const audioPlayerRef = useRef<AudioServiceInterface>(new AudioAPI());
-  let audioPlayer: AudioServiceInterface = audioPlayerRef.current;
+  const audioService: AudioServiceInterface = useContext(AudioServiceContext);
 
   const updateSliderValue = (newCurrentValue: number) => {
     setMusicSliderState((state) => ({
@@ -36,29 +35,29 @@ export function MusicPlayerPage(): ReactElement {
   };
 
   const addTimeUpdateListener = () => {
-    audioPlayer.onTimeUpdate((currentTime) => {
+    audioService.onTimeUpdate((currentTime) => {
       updateSliderValue(currentTime);
     });
   };
 
   useEffect(() => {
-    audioPlayer.onPlay(() => {
+    audioService.onPlay(() => {
       setAudioPlaying(true);
     });
 
-    audioPlayer.onPause(() => {
+    audioService.onPause(() => {
       setAudioPlaying(false);
     });
 
-    audioPlayer.load("/sample.mp3").then(() => {
-      audioPlayer.play();
+    audioService.load("/sample.mp3").then(() => {
+      audioService.play();
 
-      updateSliderMaxValue(audioPlayer.duration);
+      updateSliderMaxValue(audioService.duration);
       addTimeUpdateListener();
     });
 
     return () => {
-      audioPlayer.clear();
+      audioService.clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -73,21 +72,24 @@ export function MusicPlayerPage(): ReactElement {
             {...musicSliderState}
             onChange={(e, currentValue) => {
               if (typeof currentValue !== "number") return;
-              audioPlayer.removeTimeUpdateListener();
+              audioService.removeTimeUpdateListener();
               updateSliderValue(currentValue);
             }}
             onChangeCommitted={(e, timeInSeconds) => {
               if (typeof timeInSeconds !== "number") return;
 
-              audioPlayer.goToTime(timeInSeconds);
-              audioPlayer.play();
+              audioService.goToTime(timeInSeconds);
+              audioService.play();
               addTimeUpdateListener();
             }}
           />
-          <PlayButton
-            onPause={audioPlayer.pause.bind(audioPlayer)}
-            onPlay={audioPlayer.play.bind(audioPlayer)}
+          <MusicController
+            onPause={audioService.pause.bind(audioService)}
+            onPlay={audioService.play.bind(audioService)}
             isPlaying={isAudioPlaying}
+            onNextMusic={() => {}}
+            onPrevMusic={() => {}}
+            size="large"
           />
         </Grid>
       </Grid>

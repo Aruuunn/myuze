@@ -8,4 +8,8 @@ export const useStyles = makeStyles({
       backgroundColor: "var(--primary-bright)",
     },
   },
+
+  medium: {
+    padding: "20px",
+  },
 });

@@ -7,20 +7,21 @@ export interface PlayButtonProps {
   onPause: () => void;
   onPlay: () => void;
   isPlaying: boolean;
+  size: "small" | "large";
 }
 
 export function PlayButton(props: PlayButtonProps): ReactElement {
-  const { isPlaying, onPause, onPlay } = props;
+  const { isPlaying, onPause, onPlay, size } = props;
 
   const styles = useStyles();
 
   return (
     <IconButton
-      className={styles.root}
+      className={styles.root + " " + styles.medium}
       color="primary"
       onClick={() => (isPlaying ? onPause() : onPlay())}
     >
-      <SvgIcon>
+      <SvgIcon fontSize={size}>
         {isPlaying ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
