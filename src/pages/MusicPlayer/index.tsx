@@ -8,7 +8,6 @@ import { MusicSlider, MusicSliderProps, PlayButton } from "../../components";
 import { useStyles } from "./styles";
 
 /**
- * @TODO fix unnecessary renders of play button
  * @TODO make slider movement look smooth
  */
 export function MusicPlayerPage(): ReactElement {
@@ -16,6 +15,8 @@ export function MusicPlayerPage(): ReactElement {
     currentValue: 0,
     maxValue: 0,
   });
+
+  const [isAudioPlaying, setAudioPlaying] = useState(false);
 
   const audioPlayerRef = useRef<AudioServiceInterface>(new AudioAPI());
   let audioPlayer: AudioServiceInterface = audioPlayerRef.current;
@@ -41,11 +42,18 @@ export function MusicPlayerPage(): ReactElement {
   };
 
   useEffect(() => {
+    audioPlayer.onPlay(() => {
+      setAudioPlaying(true);
+    });
+
+    audioPlayer.onPause(() => {
+      setAudioPlaying(false);
+    });
+
     audioPlayer.load("/sample.mp3").then(() => {
       audioPlayer.play();
 
       updateSliderMaxValue(audioPlayer.duration);
-
       addTimeUpdateListener();
     });
 
@@ -76,7 +84,11 @@ export function MusicPlayerPage(): ReactElement {
               addTimeUpdateListener();
             }}
           />
-          <PlayButton audioPlayer={audioPlayer} />
+          <PlayButton
+            onPause={audioPlayer.pause.bind(audioPlayer)}
+            onPlay={audioPlayer.play.bind(audioPlayer)}
+            isPlaying={isAudioPlaying}
+          />
         </Grid>
       </Grid>
     </Container>

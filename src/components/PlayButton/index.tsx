@@ -1,36 +1,27 @@
 import React, { ReactElement } from "react";
 import { IconButton, SvgIcon } from "@material-ui/core";
 
-import { AudioServiceInterface } from "../../common/interfaces/audio.service.interface";
 import { useStyles } from "./styles";
 
 export interface PlayButtonProps {
-  audioPlayer?: AudioServiceInterface;
+  onPause: () => void;
+  onPlay: () => void;
+  isPlaying: boolean;
 }
 
 export function PlayButton(props: PlayButtonProps): ReactElement {
-  const { audioPlayer } = props;
+  const { isPlaying, onPause, onPlay } = props;
 
   const styles = useStyles();
-
-  if (!audioPlayer) {
-    return <div></div>;
-  }
-
-  console.log("rendering play button");
-
-  const isAudioPlaying = audioPlayer.isPlaying();
 
   return (
     <IconButton
       className={styles.root}
       color="primary"
-      onClick={() =>
-        isAudioPlaying ? audioPlayer.pause() : audioPlayer.play()
-      }
+      onClick={() => (isPlaying ? onPause() : onPlay())}
     >
       <SvgIcon>
-        {isAudioPlaying ? (
+        {isPlaying ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"

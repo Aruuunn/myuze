@@ -40,8 +40,11 @@ export class AudioAPI implements AudioServiceInterface {
 
   onTimeUpdate(callback: (currentTime: number) => void): void {
     this.interval = setInterval(() => {
+      if (this.audioEl.paused || this.audioEl.ended) {
+        return;
+      }
       callback(this.audioEl.currentTime);
-    }, 200);
+    }, 100);
   }
 
   removeTimeUpdateListener() {
@@ -50,5 +53,13 @@ export class AudioAPI implements AudioServiceInterface {
 
   goToTime(timeInSeconds: number) {
     this.audioEl.currentTime = timeInSeconds;
+  }
+
+  onPlay(callback: () => void) {
+    this.audioEl.addEventListener("play", () => callback());
+  }
+
+  onPause(callback: () => void) {
+    this.audioEl.addEventListener("pause", () => callback());
   }
 }

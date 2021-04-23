@@ -2,12 +2,10 @@ import { makeStyles } from "@material-ui/styles";
 
 export const useStyles = makeStyles({
   root: {
-    backgroundColor: "var(--primary-bright)",
+    backgroundColor: "var(--primary)",
     color: "var(--primary-dark)",
     "&:hover": {
-      backgroundColor: "var(--primary)",
+      backgroundColor: "var(--primary-bright)",
     },
-
-    boxShadow: "-1px 2px 2px 0px var(--primary-bright)",
   },
 });

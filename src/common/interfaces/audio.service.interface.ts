@@ -9,4 +9,6 @@ export interface AudioServiceInterface {
   goToTime: (timeInSeconds: number) => void;
   isPlaying(): boolean;
   removeTimeUpdateListener: () => void;
+  onPlay: (callback: () => void) => void;
+  onPause: (callback: () => void) => void;
 }
