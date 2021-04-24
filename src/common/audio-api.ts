@@ -17,7 +17,7 @@ export class AudioAPI implements AudioServiceInterface {
   }
 
   isPlaying(): boolean {
-    return !this.audioEl.paused;
+    return !this.audioEl.paused && !this.audioEl.ended;
   }
 
   clear() {
@@ -31,6 +31,11 @@ export class AudioAPI implements AudioServiceInterface {
       this.audioEl.oncanplay = () => res();
     });
   }
+
+  onLoad(callback: () => void) {
+    this.audioEl.addEventListener("canplay", () => callback());
+  }
+
   async pause() {
     this.audioEl.pause();
   }

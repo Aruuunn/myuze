@@ -11,4 +11,5 @@ export interface AudioServiceInterface {
   removeTimeUpdateListener: () => void;
   onPlay: (callback: () => void) => void;
   onPause: (callback: () => void) => void;
+  onLoad: (callback: () => void) => void;
 }

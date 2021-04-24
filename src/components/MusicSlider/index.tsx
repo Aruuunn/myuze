@@ -1,70 +1,82 @@
-import React, { CSSProperties, ReactElement } from "react";
-import { Slider } from "@material-ui/core";
-import { withStyles } from "@material-ui/styles";
+import React, {
+  useContext,
+  ReactElement,
+  useState,
+  useEffect,
+  ChangeEvent,
+} from "react";
 
-export interface MusicSliderProps {
-  maxValue: number;
-  currentValue: number;
-  containerStyle?: CSSProperties;
-  onChangeCommitted?: (
-    e: React.ChangeEvent<{}>,
-    value: number | number[]
-  ) => void;
-  onChange?: (e: React.ChangeEvent<{}>, value: number | number[]) => void;
-}
+import { Slider } from "./components";
+import { AudioServiceContext } from "../../common/audio-service.provider";
 
-const CustomSlider = withStyles({
-  root: {
-    color: "var(--primary-bright)",
-    height: 8,
-  },
-  thumb: {
-    height: 24,
-    width: 24,
-    backgroundColor: "var(--primary-dark)",
-    border: "2px solid currentColor",
-    marginTop: -8,
-    marginLeft: -12,
-    "&:focus, &:hover, &$active": {
-      boxShadow: "inherit",
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: "calc(-50% + 4px)",
-  },
-  track: {
-    height: 8,
-    borderRadius: 4,
-  },
-  rail: {
-    height: 8,
-    borderRadius: 4,
-  },
-})(Slider);
+export interface MusicSliderProps {}
 
-export const MusicSlider = (props: MusicSliderProps): ReactElement => {
-  const {
-    currentValue,
-    maxValue,
-    containerStyle,
-    onChange,
-    onChangeCommitted,
-  } = props;
+export function MusicSlider(props: MusicSliderProps): ReactElement {
+  const [musicSliderState, setMusicSliderState] = useState({
+    currentValue: 0,
+    maxValue: 0,
+  });
+
+  const audioService = useContext(AudioServiceContext);
+
+  const updateSliderValue = (newCurrentValue: number) => {
+    setMusicSliderState((state) => ({
+      ...state,
+      currentValue: newCurrentValue ?? state.currentValue,
+    }));
+  };
+
+  const updateSliderMaxValue = (newMaxValue: number) => {
+    setMusicSliderState((state) => ({
+      ...state,
+      maxValue: newMaxValue ?? state.maxValue,
+    }));
+  };
+
+  const addTimeUpdateListener = () => {
+    audioService.onTimeUpdate((currentTime) => {
+      updateSliderValue(currentTime);
+    });
+  };
+
+  const onChange = (e: ChangeEvent<{}>, currentValue: number | number[]) => {
+    if (typeof currentValue !== "number") return;
+    audioService.removeTimeUpdateListener();
+    updateSliderValue(currentValue);
+  };
+
+  const onChangeCommitted = (
+    e: ChangeEvent<{}>,
+    timeInSeconds: number | number[]
+  ) => {
+    if (typeof timeInSeconds !== "number") return;
+
+    audioService.goToTime(timeInSeconds);
+    audioService.play();
+    addTimeUpdateListener();
+  };
+
+  useEffect(() => {
+    audioService.onLoad(() => {
+      console.log("after loading inside slider");
+      updateSliderMaxValue(audioService.duration);
+      addTimeUpdateListener();
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div style={containerStyle}>
-      <CustomSlider
-        aria-label="music slider"
-        value={currentValue}
-        min={0}
-        max={maxValue}
-        defaultValue={0}
-        onChange={onChange}
-        onChangeCommitted={onChangeCommitted}
-      />
-    </div>
+    <Slider
+      aria-label="music slider"
+      value={musicSliderState.currentValue}
+      min={0}
+      max={musicSliderState.maxValue}
+      defaultValue={0}
+      onChange={onChange}
+      onChangeCommitted={onChangeCommitted}
+    />
   );
-};
+}
 
 export default MusicSlider;
