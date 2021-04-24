@@ -1,9 +1,9 @@
 import React, { ReactElement, useEffect, useContext } from 'react';
 import { Container, Grid } from '@material-ui/core';
 
-import { MusicSlider, MusicController } from '../../components';
+import { MusicSlider, MusicController, AlbumCover } from '../../components';
 import { useStyles } from './styles';
-import { AudioServiceContext } from '../../common/audio-service.provider';
+import { AudioServiceContext } from '../../common';
 
 export function MusicPlayerPage(): ReactElement {
   const audioService = useContext(AudioServiceContext);
@@ -22,11 +22,25 @@ export function MusicPlayerPage(): ReactElement {
   const styles = useStyles();
 
   return (
-    <Container>
+    <Container maxWidth="lg">
       <Grid id="music-player-container" container className={styles.container}>
-        <Grid id="music-player" item xs={8}>
-          <MusicSlider size="large" />
-          <MusicController size="large" />
+        <Grid
+          id="music-player"
+          justify="center"
+          alignItems="center"
+          item
+          container
+          xs={8}
+        >
+          <Grid item container justify="center" xs={12}>
+            <AlbumCover artistName="IU" />
+          </Grid>
+          <Grid item xs={12}>
+            <MusicSlider size="large" />
+          </Grid>
+          <Grid item xs={12}>
+            <MusicController size="large" />
+          </Grid>
         </Grid>
       </Grid>
     </Container>

@@ -3,13 +3,13 @@ import { withStyles } from '@material-ui/styles';
 
 export const Slider = withStyles({
   root: {
-    color: 'var(--primary-bright)',
+    color: 'rgb(var(--primary))',
     height: 8,
   },
   thumb: {
     height: 24,
     width: 24,
-    backgroundColor: 'var(--primary-dark)',
+    backgroundColor: 'rgb(var(--primary-dark))',
     border: '2px solid currentColor',
     marginTop: -8,
     marginLeft: -12,

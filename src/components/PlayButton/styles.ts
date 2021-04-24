@@ -2,10 +2,10 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
   root: {
-    backgroundColor: 'var(--primary)',
-    color: 'var(--primary-dark)',
+    backgroundColor: 'rgb(var(--primary))',
+    color: 'rgb(var(--primary-dark))',
     '&:hover': {
-      backgroundColor: 'var(--primary-bright)',
+      backgroundColor: 'rgb(var(--primary-bright))',
     },
   },
 
