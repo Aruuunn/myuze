@@ -1,15 +1,15 @@
-import React, { ReactElement, useEffect, useContext } from "react";
-import { Container, Grid } from "@material-ui/core";
+import React, { ReactElement, useEffect, useContext } from 'react';
+import { Container, Grid } from '@material-ui/core';
 
-import { MusicSlider, MusicController } from "../../components";
-import { useStyles } from "./styles";
-import { AudioServiceContext } from "../../common/audio-service.provider";
+import { MusicSlider, MusicController } from '../../components';
+import { useStyles } from './styles';
+import { AudioServiceContext } from '../../common/audio-service.provider';
 
 export function MusicPlayerPage(): ReactElement {
   const audioService = useContext(AudioServiceContext);
 
   useEffect(() => {
-    audioService.load("/sample.mp3").then(() => {
+    audioService.load('/sample.mp3').then(() => {
       audioService.play();
     });
 

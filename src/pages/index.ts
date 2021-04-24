@@ -1,1 +1,1 @@
-export { MusicPlayerPage } from './MusicPlayerPage'
+export { MusicPlayerPage } from './MusicPlayerPage';

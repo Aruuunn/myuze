@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactElement } from 'react';
 
-import { AudioAPI } from "./common/audio-api";
-import { AudioServiceContext } from "./common/audio-service.provider";
-import { AudioServiceInterface } from "./common/interfaces/audio.service.interface";
-import Routes from "./Routes";
+import { AudioAPI } from './common/audio-api';
+import { AudioServiceContext } from './common/audio-service.provider';
+import { AudioServiceInterface } from './common/interfaces/audio.service.interface';
+import { Routes } from './Routes';
 
-function App() {
+function App(): ReactElement {
   const audioServiceInstance: AudioServiceInterface = new AudioAPI();
 
   return (

@@ -4,16 +4,18 @@ import React, {
   useState,
   useEffect,
   ChangeEvent,
-} from "react";
+} from 'react';
 
-import { Slider } from "./components";
-import { AudioServiceContext } from "../../common/audio-service.provider";
+import { Slider } from './components';
+import { AudioServiceContext } from '../../common/audio-service.provider';
 
 export interface MusicSliderProps {
-  size: "small" | "large";
+  size: 'small' | 'large';
 }
 
 export function MusicSlider(props: MusicSliderProps): ReactElement {
+  // eslint-disable-next-line no-console
+  console.log(props);
   const [musicSliderState, setMusicSliderState] = useState({
     currentValue: 0,
     maxValue: 0,
@@ -42,16 +44,16 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   };
 
   const onChange = (e: ChangeEvent<{}>, currentValue: number | number[]) => {
-    if (typeof currentValue !== "number") return;
+    if (typeof currentValue !== 'number') return;
     audioService.removeTimeUpdateListener();
     updateSliderValue(currentValue);
   };
 
   const onChangeCommitted = (
     e: ChangeEvent<{}>,
-    timeInSeconds: number | number[]
+    timeInSeconds: number | number[],
   ) => {
-    if (typeof timeInSeconds !== "number") return;
+    if (typeof timeInSeconds !== 'number') return;
 
     audioService.goToTime(timeInSeconds);
     audioService.play();
