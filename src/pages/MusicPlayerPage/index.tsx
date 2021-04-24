@@ -25,7 +25,7 @@ export function MusicPlayerPage(): ReactElement {
     <Container>
       <Grid id="music-player-container" container className={styles.container}>
         <Grid id="music-player" item xs={8}>
-          <MusicSlider />
+          <MusicSlider size="large" />
           <MusicController size="large" />
         </Grid>
       </Grid>

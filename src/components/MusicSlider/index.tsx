@@ -9,7 +9,9 @@ import React, {
 import { Slider } from "./components";
 import { AudioServiceContext } from "../../common/audio-service.provider";
 
-export interface MusicSliderProps {}
+export interface MusicSliderProps {
+  size: "small" | "large";
+}
 
 export function MusicSlider(props: MusicSliderProps): ReactElement {
   const [musicSliderState, setMusicSliderState] = useState({
@@ -58,7 +60,6 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
 
   useEffect(() => {
     audioService.onLoad(() => {
-      console.log("after loading inside slider");
       updateSliderMaxValue(audioService.duration);
       addTimeUpdateListener();
     });
