@@ -1,23 +1,15 @@
-import React, { ReactElement } from 'react';
 import { AlbumCover } from './index';
 import '../../styles/index.css';
 import '../../styles/palette.css';
+import { storyFactory } from '../../utils';
 
 export default {
   title: 'Album Cover',
   component: AlbumCover,
 };
 
-export const AlbumCoverComponent = ({
-  artistName,
-}: {
-  artistName: string;
-}): ReactElement => <AlbumCover artistName={artistName} />;
-
-AlbumCoverComponent.args = {
+export const AlbumCoverComponent = storyFactory(AlbumCover, {
   artistName: 'Ariana Grande',
-};
-
-export const Example1 = (): ReactElement => <AlbumCover artistName="IU" />;
-
-export const Example2 = (): ReactElement => <AlbumCover artistName="BTS" />;
+});
+export const Example1 = storyFactory(AlbumCover, { artistName: 'IU' });
+export const Example2 = storyFactory(AlbumCover, { artistName: 'BTS' });
