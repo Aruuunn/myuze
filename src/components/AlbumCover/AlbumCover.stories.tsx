@@ -1,6 +1,6 @@
 import { AlbumCover } from './index';
-import '../../styles/index.css';
-import '../../styles/palette.css';
+import '../../styles';
+
 import { storyFactory } from '../../utils';
 
 export default {
