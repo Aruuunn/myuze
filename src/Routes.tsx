@@ -1,9 +1,9 @@
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { ReactElement } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
-import { MusicPlayerPage } from "./pages";
+import { MusicPlayerPage } from './pages';
 
-export function Routes() {
+export function Routes(): ReactElement {
   return (
     <BrowserRouter>
       <MusicPlayerPage />

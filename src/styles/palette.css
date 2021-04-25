@@ -1,11 +1,11 @@
 :root {
-    --primary-bright: #93EEDE;
-    --primary: #C7F5FB;
-    --primary-dark: #719C9F;
-    --primary-darker: #0F3333;
-    --text-primary: #CAFBF5;
-    --text-secondary: --primary-dark;
-    --bg-color: #102325;
-    --bg-color-lighter: #182E31;  
+    --primary-bright: 213, 249, 255;
+    --primary: 199,245,251;
+    --primary-dark: 113,156,159;
+    --primary-darker: 15,51,51;
+    --text-primary: 202,251,245;
+    --text-secondary: rgb(var(--primary-dark));
+    --bg-color: 16,35,37;
+    --bg-color-lighter: 24,46,49;
 }
 

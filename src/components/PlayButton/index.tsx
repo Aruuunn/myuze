@@ -1,25 +1,32 @@
-import React, { ReactElement } from "react";
-import { IconButton, SvgIcon } from "@material-ui/core";
+import React, { ReactElement, useContext, useState } from 'react';
+import { IconButton, SvgIcon } from '@material-ui/core';
 
-import { useStyles } from "./styles";
+import { AudioServiceContext } from '../../common/audio-service.provider';
+import { useStyles } from './styles';
 
 export interface PlayButtonProps {
-  onPause: () => void;
-  onPlay: () => void;
-  isPlaying: boolean;
-  size: "small" | "large";
+  size: 'small' | 'large';
 }
 
 export function PlayButton(props: PlayButtonProps): ReactElement {
-  const { isPlaying, onPause, onPlay, size } = props;
-
+  const { size } = props;
+  const audioService = useContext(AudioServiceContext);
+  const [isPlaying, setIsPlaying] = useState(audioService.isPlaying());
   const styles = useStyles();
+
+  audioService.onPlay(() => {
+    setIsPlaying(true);
+  });
+
+  audioService.onPause(() => {
+    setIsPlaying(false);
+  });
 
   return (
     <IconButton
-      className={styles.root + " " + styles.medium}
+      className={`${styles.root} ${styles.medium}`}
       color="primary"
-      onClick={() => (isPlaying ? onPause() : onPlay())}
+      onClick={() => (isPlaying ? audioService.pause() : audioService.play())}
     >
       <SvgIcon fontSize={size}>
         {isPlaying ? (

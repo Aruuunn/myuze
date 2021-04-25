@@ -1,45 +1,52 @@
-import { AudioServiceInterface } from "./interfaces/audio.service.interface";
+import { AudioServiceInterface } from './interfaces/audio.service.interface';
 
 export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;
-  private interval: any;
+
+  private interval = 0;
 
   constructor() {
-    this.audioEl = document.createElement("audio");
+    this.audioEl = document.createElement('audio');
   }
 
-  get duration() {
+  get duration(): number {
     return this.audioEl.duration;
   }
 
-  get currentTime() {
+  get currentTime(): number {
     return this.audioEl.currentTime;
   }
 
   isPlaying(): boolean {
-    return !this.audioEl.paused;
+    return !this.audioEl.paused && !this.audioEl.ended;
   }
 
-  clear() {
+  clear(): void {
     clearInterval(this.interval);
-    this.audioEl.src = "";
+    this.audioEl.src = '';
   }
 
-  async load(dataURL: string) {
+  async load(dataURL: string): Promise<void> {
     this.audioEl.src = dataURL;
     return new Promise<void>((res) => {
       this.audioEl.oncanplay = () => res();
     });
   }
-  async pause() {
+
+  onLoad(callback: () => void): void {
+    this.audioEl.addEventListener('canplay', () => callback());
+  }
+
+  async pause(): Promise<void> {
     this.audioEl.pause();
   }
-  async play() {
+
+  async play(): Promise<void> {
     this.audioEl.play();
   }
 
   onTimeUpdate(callback: (currentTime: number) => void): void {
-    this.interval = setInterval(() => {
+    this.interval = window.setInterval(() => {
       if (this.audioEl.paused || this.audioEl.ended) {
         return;
       }
@@ -47,19 +54,19 @@ export class AudioAPI implements AudioServiceInterface {
     }, 100);
   }
 
-  removeTimeUpdateListener() {
+  removeTimeUpdateListener(): void {
     clearInterval(this.interval);
   }
 
-  goToTime(timeInSeconds: number) {
+  goToTime(timeInSeconds: number): void {
     this.audioEl.currentTime = timeInSeconds;
   }
 
-  onPlay(callback: () => void) {
-    this.audioEl.addEventListener("play", () => callback());
+  onPlay(callback: () => void): void {
+    this.audioEl.addEventListener('play', () => callback());
   }
 
-  onPause(callback: () => void) {
-    this.audioEl.addEventListener("pause", () => callback());
+  onPause(callback: () => void): void {
+    this.audioEl.addEventListener('pause', () => callback());
   }
 }
