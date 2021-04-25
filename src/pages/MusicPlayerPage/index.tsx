@@ -33,7 +33,7 @@ export function MusicPlayerPage(): ReactElement {
           xs={8}
         >
           <Grid item container justify="center" xs={12}>
-            <AlbumCover artistName="IU" />
+            <AlbumCover artistName="Ariana Grande" />
           </Grid>
           <Grid item xs={12}>
             <MusicSlider size="large" />
