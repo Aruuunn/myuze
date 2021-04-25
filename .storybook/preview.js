@@ -6,9 +6,8 @@ import { themes } from '@storybook/theming';
 addDecorator((story) => (
   <Grid
     container
-    justify="center"
     alignItems="center"
-    style={{ minHeight: '100vh' }}>
+    style={{ margin: '20px' }}>
     {story()}
   </Grid>
 ));
