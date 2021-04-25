@@ -34,7 +34,7 @@
   "lint-staged": {
     "./src/*.{js,jsx,ts,tsx}": [
       "npx prettier --write",
-      "eslint src/*.{ts,js,tsx,jsx} --fix-dry-run"
+      "eslint src/*.{ts,js,tsx,jsx} --fix"
     ]
   },
   "scripts": {
