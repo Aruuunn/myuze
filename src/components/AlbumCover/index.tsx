@@ -27,7 +27,9 @@ export function AlbumCover(props: AlbumCoverProps): ReactElement {
 
   return (
     <div className={styles.root}>
-      {artistName ? <span className={styles.innerText}>{getArtistShortName()}</span> : null}
+      {artistName && !imgURL
+        ? <span className={styles.innerText}>{getArtistShortName()}</span>
+        : null}
     </div>
   );
 }
