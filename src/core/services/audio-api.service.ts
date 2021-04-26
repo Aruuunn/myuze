@@ -1,4 +1,4 @@
-import { AudioServiceInterface } from './interfaces/audio.service.interface';
+import { AudioServiceInterface } from '../interfaces/audio.service.interface';
 
 export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;

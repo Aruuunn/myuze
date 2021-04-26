@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 
-import { AudioAPI } from './common/audio-api';
-import { AudioServiceContext } from './common/audio-service.provider';
-import { AudioServiceInterface } from './common/interfaces/audio.service.interface';
+import { AudioAPI } from './core/services';
+import { AudioServiceContext } from './core/providers';
+import { AudioServiceInterface } from './core/interfaces';
 import { Routes } from './Routes';
 
 function App(): ReactElement {

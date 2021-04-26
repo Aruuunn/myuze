@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 
 import { Slider } from './components';
-import { AudioServiceContext } from '../../common/audio-service.provider';
+import { AudioServiceContext } from '../../core/providers';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';

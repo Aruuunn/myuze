@@ -12,10 +12,9 @@ export function storyFactory<Props>(
   Component: (props: Props) => ReactElement,
   props: Props,
 ): Story<Props> {
-  // eslint-disable-next-line react/jsx-props-no-spreading
   const Template = templateFactory(Component);
   const CloneComponent = Template.bind({});
-  (CloneComponent as Function & { args?: Props }).args = props;
+  CloneComponent.args = props;
 
   return CloneComponent;
 }

@@ -4,7 +4,7 @@ import { useStyles } from './styles';
 
 export interface MusicNameProps {
   name: string;
-  artistName: string;
+  artistName: string[];
 }
 
 export function MusicName(props: MusicNameProps): ReactElement {
@@ -23,7 +23,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
         <span className={styles.secondaryText}>
           -
           {' '}
-          {artistName}
+          {artistName.join(' , ')}
         </span>
       ) : null}
     </div>

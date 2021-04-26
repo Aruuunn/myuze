@@ -2,7 +2,7 @@ import React, { ReactElement, useContext, useState } from 'react';
 import { IconButton, SvgIcon } from '@material-ui/core';
 import { motion } from 'framer-motion';
 
-import { AudioServiceContext } from '../../common/audio-service.provider';
+import { AudioServiceContext } from '../../core/providers';
 import { useStyles } from './styles';
 
 export interface PlayButtonProps {
