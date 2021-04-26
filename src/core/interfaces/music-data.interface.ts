@@ -1,5 +1,6 @@
 export interface MusicDataInterface {
-  name: string;
+  id: string;
+  title: string;
   artists?: string[];
   imgURL?: string;
   createdAt: Date;

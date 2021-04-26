@@ -1,8 +1,13 @@
 import React, { ReactElement } from 'react';
 import { parseBlob } from 'music-metadata-browser';
-
 import { Container } from '@material-ui/core';
+
 import { fileToBase64, uintToBase64Image } from '../../utils';
+import { MusicStorage } from '../../core/services';
+
+const db = new MusicStorage();
+
+(window as any).db = db;
 
 export function HomePage(): ReactElement {
   const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -15,8 +20,18 @@ export function HomePage(): ReactElement {
             artists, title, picture,
           },
         } = metaData;
-        if (picture?.[0]) console.log(uintToBase64Image(picture[0].format, picture[0].data));
-        console.log(artists, title, picture);
+
+        console.log(metaData);
+
+        let pictureBase64: string | undefined;
+        if (picture?.[0]) {
+          pictureBase64 = (uintToBase64Image(picture[0].format, picture[0].data));
+        }
+        db.addNewMusic({
+          artists: artists || ['unknown'],
+          imgURL: pictureBase64,
+          title: title ?? files[0].name,
+        });
       });
     }
 

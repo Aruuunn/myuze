@@ -1,1 +1,2 @@
-export { AudioAPI } from './audio-api.service';
+export { AudioAPI } from './audio-api';
+export { MusicStorage } from './music-storage';
