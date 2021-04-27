@@ -6,7 +6,7 @@ import { MusicPlayerPage, HomePage } from './pages';
 export function Routes(): ReactElement {
   return (
     <BrowserRouter>
-      <Route path="/play" exact component={MusicPlayerPage} />
+      <Route path="/play/:id" exact component={MusicPlayerPage} />
       <Route path="/" exact component={HomePage} />
     </BrowserRouter>
   );

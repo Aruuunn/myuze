@@ -3,6 +3,8 @@ import React, {
   ReactElement, useContext, useEffect, useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+
 import { MusicStorageContext } from '../../core/providers';
 import { MusicDataInterface } from '../../core/interfaces';
 import { useStyles } from './styles';
@@ -20,12 +22,16 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     style = {},
   } = props;
 
+  const history = useHistory();
   const db = useContext(MusicStorageContext);
-  const [musicData, setMusicData] = useState<Pick<MusicDataInterface, 'title' | 'artists'> | null>(null);
+  const [musicData, setMusicData] = useState<Pick<
+  MusicDataInterface,
+  'title' | 'artists' | 'id'
+  > | null>(null);
 
   useEffect(() => {
     db.getMusicAt(index).then((data) => {
-      if (data) setMusicData({ artists: data.artists, title: data.title });
+      if (data) setMusicData({ artists: data.artists, title: data.title, id: data.id });
     });
   }, []);
 
@@ -33,7 +39,13 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
 
   return (
     <div className={styles.root} key={key} style={style}>
-      <Paper className={styles.card}>
+      <Paper
+        className={styles.card}
+        onClick={() => {
+          if (!musicData) return;
+          history.push(`/play/${musicData.id}`);
+        }}
+      >
         <Grid container alignItems="center">
           <Grid item xs={12} alignItems="center">
             {musicData ? musicData.title : ''}

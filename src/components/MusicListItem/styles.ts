@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
   root: {
-    padding: '5px',
+    padding: '2px',
   },
   card: {
     backgroundColor: 'rgb(var(--bg-color-lighter))',

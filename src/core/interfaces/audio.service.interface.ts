@@ -1,5 +1,5 @@
 export interface AudioServiceInterface {
-  load: (id: string) => Promise<void>;
+  load: (dataURL: string) => Promise<void>;
   play: () => Promise<void>;
   pause: () => Promise<void>;
   clear: () => void;

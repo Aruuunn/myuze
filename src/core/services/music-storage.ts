@@ -41,7 +41,8 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
       .first();
   }
 
-  async getMusicUsingId(id: number): Promise<MusicDataInterface | undefined> {
+  async getMusicUsingId(id: string): Promise<MusicDataInterface | undefined> {
+    console.log(`fetching ${id}`);
     return (await this.songs.where('id').equals(id).limit(1).toArray())[0];
   }
 

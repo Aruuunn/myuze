@@ -13,7 +13,7 @@ export interface MusicStorageInterface {
     filter?: (obj: MusicDataInterface) => boolean
   ): Promise<MusicDataInterface | undefined>;
 
-  getMusicUsingId(id: number): Promise<MusicDataInterface | undefined>;
+  getMusicUsingId(id: string): Promise<MusicDataInterface | undefined>;
 
   addNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): Promise<void>;
 
