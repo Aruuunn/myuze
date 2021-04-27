@@ -2,13 +2,19 @@ import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
 import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
 
+function getNewMusicData(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): MusicDataInterface {
+  return ({
+    ...musicData, createdAt: new Date(), id: uuid(),
+  });
+}
+
 export class MusicStorage extends Dexie implements MusicStorageInterface {
   private songs: Dexie.Table<MusicDataInterface, number>;
 
   constructor() {
     super('MusicDatabase');
     this.version(1).stores({
-      songs: '++id, imgURL, artists, createdAt, title',
+      songs: '++id, imgURL, artists, createdAt, title, musicDataURL',
     });
     this.songs = this.table('songs');
   }
@@ -19,7 +25,12 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
 
   async addNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): Promise<void> {
     await this.songs
-      .add({ ...musicData, createdAt: new Date(), id: uuid() });
+      .add(getNewMusicData(musicData));
+  }
+
+  async addBulkNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[]): Promise<void> {
+    await this.songs
+      .bulkAdd(musicData.map((data) => getNewMusicData(data)));
   }
 
   getMusicAt(index: number): Promise<MusicDataInterface | undefined> {

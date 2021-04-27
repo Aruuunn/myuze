@@ -3,6 +3,7 @@ export { PlayButton } from './PlayButton';
 export { MusicController } from './MusicControls';
 export { AlbumCover } from './AlbumCover';
 export { MusicName } from './MusicName';
+export { UploadNewMusic } from './UploadNewMusic';
 
 export type { MusicSliderProps } from './MusicSlider';
 export type { PlayButtonProps } from './PlayButton';

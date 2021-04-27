@@ -12,7 +12,9 @@ export interface MusicStorageInterface {
 
   getMusicUsingId(id: number): Promise<MusicDataInterface | undefined>;
 
-  addNewMusic(musicData: Omit<MusicDataInterface, 'id'>): Promise<void>;
+  addNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): Promise<void>;
+
+  addBulkNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[]): Promise<void>;
 
   deleteMusicUsingId(id: number): Promise<void>;
 }
