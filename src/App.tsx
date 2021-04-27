@@ -1,18 +1,24 @@
 import React, { ReactElement } from 'react';
 
-import { AudioAPI } from './common/audio-api';
-import { AudioServiceContext } from './common/audio-service.provider';
-import { AudioServiceInterface } from './common/interfaces/audio.service.interface';
+import { AudioAPI, MusicStorage } from './core/services';
+import { AudioServiceContext, MusicStorageContext } from './core/providers';
+import {
+  AudioServiceInterface,
+  MusicStorageInterface,
+} from './core/interfaces';
 import { Routes } from './Routes';
 
 function App(): ReactElement {
   const audioServiceInstance: AudioServiceInterface = new AudioAPI();
+  const musicStorage: MusicStorageInterface = new MusicStorage();
 
   return (
     <>
-      <AudioServiceContext.Provider value={audioServiceInstance}>
-        <Routes />
-      </AudioServiceContext.Provider>
+      <MusicStorageContext.Provider value={musicStorage}>
+        <AudioServiceContext.Provider value={audioServiceInstance}>
+          <Routes />
+        </AudioServiceContext.Provider>
+      </MusicStorageContext.Provider>
     </>
   );
 }

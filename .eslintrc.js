@@ -15,7 +15,17 @@ module.exports = {
     'react/prop-types': 'off',
     'react/jsx-filename-extension': 'off',
     '@typescript-eslint/ban-types': 'off',
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          '**/*.stories.tsx',
+            'src/utils/story-template-factory.tsx'
+        ],
+      },
+    ],
+
   },
   settings: {
     react: {

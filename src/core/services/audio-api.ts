@@ -1,4 +1,4 @@
-import { AudioServiceInterface } from './interfaces/audio.service.interface';
+import { AudioServiceInterface } from '../interfaces';
 
 export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;
@@ -42,7 +42,7 @@ export class AudioAPI implements AudioServiceInterface {
   }
 
   async play(): Promise<void> {
-    this.audioEl.play();
+    await this.audioEl.play();
   }
 
   onTimeUpdate(callback: (currentTime: number) => void): void {
