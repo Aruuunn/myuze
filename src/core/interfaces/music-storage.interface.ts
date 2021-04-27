@@ -8,7 +8,10 @@ export interface MusicStorageInterface {
    *  return order of all Music Data.
    *  This will be used to virtualize list
    * */
-  getMusicAt(index: number): Promise<MusicDataInterface | undefined>;
+  getMusicAt(
+    index: number,
+    filter?: (obj: MusicDataInterface) => boolean
+  ): Promise<MusicDataInterface | undefined>;
 
   getMusicUsingId(id: number): Promise<MusicDataInterface | undefined>;
 

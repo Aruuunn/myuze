@@ -1,13 +1,19 @@
 import React, { ReactElement } from 'react';
-import { Container } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 
-import { UploadNewMusic } from '../../components';
+import { UploadNewMusic, MusicList } from '../../components';
 
 export function HomePage(): ReactElement {
   return (
     <>
       <Container maxWidth="lg">
-        <UploadNewMusic />
+        <Grid style={{ color: 'rgb(var(--primary))' }}>
+          New Music
+          <UploadNewMusic />
+        </Grid>
+
+        <MusicList />
+        {' '}
       </Container>
     </>
   );

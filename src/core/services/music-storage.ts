@@ -33,8 +33,12 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
       .bulkAdd(musicData.map((data) => getNewMusicData(data)));
   }
 
-  getMusicAt(index: number): Promise<MusicDataInterface | undefined> {
-    return this.songs.orderBy('createdAt').reverse().offset(index).first();
+  getMusicAt(
+    index: number,
+    filter: (obj: MusicDataInterface) => boolean = () => true,
+  ): Promise<MusicDataInterface | undefined> {
+    return this.songs.orderBy('createdAt').filter(filter).reverse().offset(index)
+      .first();
   }
 
   async getMusicUsingId(id: number): Promise<MusicDataInterface | undefined> {
