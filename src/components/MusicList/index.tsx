@@ -26,7 +26,7 @@ export function MusicList(): ReactElement {
         width={500}
         rowRenderer={
           (rowProps) => (
-            <MusicListItem key={rowProps.key} index={rowProps.index} />
+            <MusicListItem index={rowProps.index} />
           )
         }
         height={2000}

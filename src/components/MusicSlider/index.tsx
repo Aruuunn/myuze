@@ -31,6 +31,9 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   };
 
   const updateSliderMaxValue = (newMaxValue: number) => {
+    if (newMaxValue === Infinity) {
+      return;
+    }
     setMusicSliderState((state) => ({
       ...state,
       maxValue: newMaxValue ?? state.maxValue,
@@ -63,8 +66,13 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   useEffect(() => {
     audioService.onLoad(() => {
       updateSliderMaxValue(audioService.duration);
-      addTimeUpdateListener();
     });
+
+    audioService.onDurationChange(() => {
+      updateSliderMaxValue(audioService.duration);
+    });
+
+    addTimeUpdateListener();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

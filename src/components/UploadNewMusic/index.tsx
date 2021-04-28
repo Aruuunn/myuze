@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext } from 'react';
 import { IconButton } from '@material-ui/core';
-import { PublishRounded } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 
 import { OnMusicUpload } from '../../core/common';
 import { MusicStorageContext } from '../../core/providers';
@@ -19,7 +19,7 @@ export function UploadNewMusic(): ReactElement {
       <label htmlFor="upload-file">
         {' '}
         <IconButton component="span" color="primary" aria-label="upload music">
-          <PublishRounded fontSize="large" style={{ fill: 'rgb(var(--primary))' }} />
+          <Add style={{ fill: 'rgb(var(--primary))' }} />
         </IconButton>
       </label>
     </>

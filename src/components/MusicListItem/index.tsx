@@ -10,7 +10,6 @@ import { MusicDataInterface } from '../../core/interfaces';
 import { useStyles } from './styles';
 
 export interface MusicListItemProps {
-  key: string;
   index: number;
   style?: CSSProperties;
 }
@@ -18,7 +17,6 @@ export interface MusicListItemProps {
 export function MusicListItem(props: MusicListItemProps): ReactElement {
   const {
     index,
-    key,
     style = {},
   } = props;
 
@@ -38,7 +36,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   const styles = useStyles();
 
   return (
-    <div className={styles.root} key={key} style={style}>
+    <div className={styles.root} key={index} style={style}>
       <Paper
         className={styles.card}
         onClick={() => {
@@ -47,11 +45,11 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12} alignItems="center">
+          <Grid item xs={12}>
             {musicData ? musicData.title : ''}
           </Grid>
-          <Grid className={styles.artists} xs={12} item alignItems="center">
-            {musicData?.artists?.length ? musicData.artists.join(' , ') : 'unkown' }
+          <Grid className={styles.artists} xs={12} item>
+            {musicData?.artists?.length ? musicData.artists.join(' , ') : 'unknown' }
           </Grid>
         </Grid>
       </Paper>
