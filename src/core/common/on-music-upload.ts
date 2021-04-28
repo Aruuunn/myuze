@@ -24,7 +24,7 @@ export async function OnMusicUpload(db: MusicStorageInterface, files: File[]): P
     }
 
     musicData.push({
-      artists: artists || ['unknown'],
+      artists: artists ?? [],
       imgURL: pictureBase64,
       title: title ?? files[0].name,
       // eslint-disable-next-line no-await-in-loop

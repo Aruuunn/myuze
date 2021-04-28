@@ -13,7 +13,7 @@ export function MusicList(): ReactElement {
 
   useEffect(() => {
     db.getTotalCount().then(setTotalCount);
-  }, []);
+  }, [db]);
 
   if (totalCount === -1) {
     return <div />;

@@ -33,7 +33,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     db.getMusicAt(index).then((data) => {
       if (data) setMusicData({ artists: data.artists, title: data.title, id: data.id });
     });
-  }, []);
+  }, [db, index]);
 
   const styles = useStyles();
 
@@ -51,7 +51,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
             {musicData ? musicData.title : ''}
           </Grid>
           <Grid className={styles.artists} xs={12} item alignItems="center">
-            {(musicData?.artists || []).join(' , ')}
+            {musicData?.artists?.length ? musicData.artists.join(' , ') : 'unkown' }
           </Grid>
         </Grid>
       </Paper>

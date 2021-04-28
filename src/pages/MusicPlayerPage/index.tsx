@@ -51,10 +51,10 @@ export function MusicPlayerPage(): ReactElement {
         >
           <Grid item container justify="center" alignItems="center" xs={12} style={{ marginBottom: '40px' }}>
             <Grid container justify="center" alignItems="center" style={{ marginBottom: '60px' }} item xs={12}>
-              <AlbumCover artistName={(musicData?.artists ?? [])[0] || ''} imgURL={musicData?.imgURL ?? ''} />
+              <AlbumCover musicTitle={musicData?.title ?? ''} artistName={(musicData?.artists ?? [])[0]} imgURL={musicData?.imgURL} />
             </Grid>
             <Grid container justify="center" alignItems="center" item xs={12}>
-              <MusicName name={musicData?.title ?? ''} artistName={musicData?.artists ?? []} />
+              <MusicName title={musicData?.title ?? ''} artists={musicData?.artists ?? []} />
             </Grid>
           </Grid>
           <Grid item xs={12}>
