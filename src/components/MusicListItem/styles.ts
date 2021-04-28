@@ -8,7 +8,7 @@ export const useStyles = makeStyles({
     backgroundColor: 'rgb(var(--bg-color-lighter))',
     padding: '20px',
     textOverflow: 'ellipsis',
-    color: 'rgb(var(--primary))',
+    color: 'rgb(var(--primary-bright))',
   },
   artists: {
     fontWeight: 'normal',

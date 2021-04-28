@@ -9,7 +9,7 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    boxShadow: '-1px 9px 36px -9px rgba(var(--primary),0.5)',
+    boxShadow: '-1px 9px 36px -9px rgba(var(--primary),0.3)',
     backgroundImage: imgURL ? `url(${imgURL})` : '',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',

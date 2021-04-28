@@ -10,6 +10,7 @@ import { MusicDataInterface } from '../../core/interfaces';
 import { useStyles } from './styles';
 
 export interface MusicListItemProps {
+  itemKey: string;
   index: number;
   style?: CSSProperties;
 }
@@ -17,6 +18,7 @@ export interface MusicListItemProps {
 export function MusicListItem(props: MusicListItemProps): ReactElement {
   const {
     index,
+    itemKey,
     style = {},
   } = props;
 
@@ -36,7 +38,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   const styles = useStyles();
 
   return (
-    <div className={styles.root} key={index} style={style}>
+    <div className={styles.root} key={itemKey} style={style}>
       <Paper
         className={styles.card}
         onClick={() => {

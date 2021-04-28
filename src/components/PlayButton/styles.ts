@@ -7,6 +7,7 @@ export const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: 'rgb(var(--primary-bright))',
     },
+    filter: 'drop-shadow(0px 10px 10px rgba(145, 210, 214, 0.25))',
   },
 
   medium: {
