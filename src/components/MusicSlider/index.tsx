@@ -14,14 +14,19 @@ export interface MusicSliderProps {
 }
 
 export function MusicSlider(props: MusicSliderProps): ReactElement {
-  // eslint-disable-next-line no-console
-  console.log(props);
+  const {
+    size,
+  } = props;
   const [musicSliderState, setMusicSliderState] = useState({
     currentValue: 0,
     maxValue: 0,
   });
-
   const audioService = useContext(AudioServiceContext);
+  const [disabled, setDisabled] = useState(Number.isNaN(audioService.duration));
+
+  audioService.onLoad(() => {
+    setDisabled(false);
+  });
 
   const updateSliderValue = (newCurrentValue: number) => {
     setMusicSliderState((state) => ({
@@ -64,21 +69,27 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   };
 
   useEffect(() => {
-    audioService.onLoad(() => {
+    const callback = () => {
       updateSliderMaxValue(audioService.duration);
-    });
+    };
 
-    audioService.onDurationChange(() => {
-      updateSliderMaxValue(audioService.duration);
-    });
+    if (!Number.isNaN(audioService.duration)) {
+      callback();
+    }
+
+    audioService.onLoad(callback);
+
+    audioService.onDurationChange(callback);
 
     addTimeUpdateListener();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [size]);
 
   return (
     <Slider
+      data-size={size}
+      disabled={disabled}
       aria-label="music slider"
       value={musicSliderState.currentValue}
       min={0}

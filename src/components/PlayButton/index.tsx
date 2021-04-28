@@ -13,10 +13,15 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
   const { size } = props;
   const audioService = useContext(AudioServiceContext);
   const [isPlaying, setIsPlaying] = useState(audioService.isPlaying());
+  const [disabled, setDisabled] = useState(Number.isNaN(audioService.duration));
   const styles = useStyles();
 
   audioService.onPlay(() => {
     setIsPlaying(true);
+  });
+
+  audioService.onLoad(() => {
+    setDisabled(false);
   });
 
   audioService.onPause(() => {
@@ -24,10 +29,14 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
   });
 
   return (
-    <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.05 }}>
+    <motion.div
+      whileTap={{ scale: disabled ? 1 : 0.9 }}
+      whileHover={{ scale: disabled ? 1 : 1.05 }}
+    >
       <IconButton
-        className={`${styles.root} ${styles.medium}`}
+        className={`${styles.root} ${styles[size]}`}
         color="primary"
+        disabled={disabled}
         onClick={() => (isPlaying ? audioService.pause() : audioService.play())}
       >
         <SvgIcon fontSize={size}>

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
-import { UploadNewMusic, MusicList } from '../../components';
+import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
 
 export function HomePage(): ReactElement {
   return (
@@ -22,6 +22,7 @@ export function HomePage(): ReactElement {
         <MusicList />
         {' '}
       </Container>
+      <BottomControlsBar />
     </>
   );
 }

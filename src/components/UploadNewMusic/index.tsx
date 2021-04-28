@@ -19,7 +19,7 @@ export function UploadNewMusic(): ReactElement {
       <label htmlFor="upload-file">
         {' '}
         <IconButton component="span" color="primary" aria-label="upload music">
-          <Add style={{ fill: 'rgb(var(--primary-dark))' }}  />
+          <Add style={{ fill: 'rgb(var(--primary-dark))' }} />
         </IconButton>
       </label>
     </>

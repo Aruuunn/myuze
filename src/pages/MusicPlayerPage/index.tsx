@@ -1,11 +1,14 @@
 import React, {
   ReactElement, useEffect, useContext, useState,
 } from 'react';
-import { Container, Grid } from '@material-ui/core';
+import {
+  Container, Grid, IconButton,
+} from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
+import { ExpandMoreOutlined } from '@material-ui/icons';
 
 import {
-  MusicSlider, MusicController, AlbumCover, MusicName,
+  MusicSlider, MusicControls, AlbumCover, MusicName,
 } from '../../components';
 import { useStyles } from './styles';
 import { AudioServiceContext, MusicStorageContext } from '../../core/providers';
@@ -40,7 +43,12 @@ export function MusicPlayerPage(): ReactElement {
 
   return (
     <Container maxWidth="lg">
-      <Grid id="music-player-container" container className={styles.container}>
+      <Grid
+        id="music-player-container"
+        container
+        style={{ position: 'relative' }}
+        className={styles.container}
+      >
         <Grid
           id="music-player"
           justify="center"
@@ -49,6 +57,20 @@ export function MusicPlayerPage(): ReactElement {
           container
           xs={8}
         >
+          <IconButton
+            size="medium"
+            style={{
+              color: 'rgb(var(--primary-dark))',
+              position: 'absolute',
+              top: '50px',
+              left: 0,
+            }}
+            onClick={() => {
+              history.push('/');
+            }}
+          >
+            <ExpandMoreOutlined fontSize="large" />
+          </IconButton>
           <Grid item container justify="center" alignItems="center" xs={12} style={{ marginBottom: '40px' }}>
             <Grid container justify="center" alignItems="center" style={{ marginBottom: '60px' }} item xs={12}>
               <AlbumCover musicTitle={musicData?.title ?? ''} artistName={(musicData?.artists ?? [])[0]} imgURL={musicData?.imgURL} />
@@ -61,7 +83,7 @@ export function MusicPlayerPage(): ReactElement {
             <MusicSlider size="large" />
           </Grid>
           <Grid item xs={12}>
-            <MusicController size="large" />
+            <MusicControls size="large" />
           </Grid>
         </Grid>
       </Grid>
