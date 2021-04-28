@@ -27,7 +27,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
     const secondaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(`.${styles.secondaryText}`);
 
     if (rootContainerEl.clientWidth < rootContainerEl.scrollWidth) {
-      const textWithEl = [{ type: 'title', text: title }, { type: 'artists', text: ` - ${secondaryText} - ` }];
+      const textWithEl = [{ type: 'title', text: title }, { type: 'artists', text: ` - by ${secondaryText} - ` }];
 
       interval = window.setInterval(() => {
         console.log(textWithEl.map((e) => e.text).join(' '));
@@ -35,13 +35,13 @@ export function MusicName(props: MusicNameProps): ReactElement {
 
         if (textWithEl[textWithEl.length - 1].type === firstElement.type) {
           textWithEl[textWithEl.length - 1]
-            .text = textWithEl[textWithEl.length - 1].text + firstElement.text[0] ?? '';
+            .text = textWithEl[textWithEl.length - 1].text + (firstElement.text[0] ?? '');
         } else {
           textWithEl
             .push(
               {
                 type: firstElement.type,
-                text: firstElement.text[0] ?? '',
+                text: (firstElement.text[0] ?? ''),
               },
             );
         }
