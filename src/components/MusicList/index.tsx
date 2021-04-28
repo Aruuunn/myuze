@@ -5,8 +5,16 @@ import { List } from 'react-virtualized';
 
 import { MusicStorageContext } from '../../core/providers';
 import { MusicListItem } from '../MusicListItem';
+import { MusicDataInterface } from '../../core/interfaces';
 
-export function MusicList(): ReactElement {
+export interface MusicListProps {
+  onSelectItem?: (musicData: Pick<MusicDataInterface, 'id' | 'title' | 'artists'> | null) => void;
+}
+
+export function MusicList(props: MusicListProps): ReactElement {
+  const {
+    onSelectItem,
+  } = props;
   const [totalCount, setTotalCount] = useState(-1);
 
   const db = useContext(MusicStorageContext);
@@ -26,7 +34,11 @@ export function MusicList(): ReactElement {
         width={500}
         rowRenderer={
           (rowProps) => (
-            <MusicListItem itemKey={rowProps.key} index={rowProps.index} />
+            <MusicListItem
+              onSelectItem={onSelectItem}
+              itemKey={rowProps.key}
+              index={rowProps.index}
+            />
           )
         }
         height={2000}

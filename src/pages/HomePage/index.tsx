@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
+import { useHistory } from 'react-router-dom';
 import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
 
 export function HomePage(): ReactElement {
+  const history = useHistory();
   return (
     <>
       <Container maxWidth="lg">
@@ -19,7 +21,12 @@ export function HomePage(): ReactElement {
           </Typography>
           <UploadNewMusic />
         </Grid>
-        <MusicList />
+        <MusicList onSelectItem={(musicData) => {
+          if (musicData) {
+            history.push(`/play/${musicData.id}`);
+          }
+        }}
+        />
         {' '}
       </Container>
       <BottomControlsBar />

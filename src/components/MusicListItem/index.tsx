@@ -3,7 +3,6 @@ import React, {
   ReactElement, useContext, useEffect, useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 
 import { MusicStorageContext } from '../../core/providers';
 import { MusicDataInterface } from '../../core/interfaces';
@@ -13,6 +12,7 @@ export interface MusicListItemProps {
   itemKey: string;
   index: number;
   style?: CSSProperties;
+  onSelectItem?: (musicData: Pick<MusicDataInterface, 'id' | 'title' | 'artists'> | null) => void;
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
@@ -20,9 +20,9 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     index,
     itemKey,
     style = {},
+    onSelectItem,
   } = props;
 
-  const history = useHistory();
   const db = useContext(MusicStorageContext);
   const [musicData, setMusicData] = useState<Pick<
   MusicDataInterface,
@@ -42,8 +42,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       <Paper
         className={styles.card}
         onClick={() => {
-          if (!musicData) return;
-          history.push(`/play/${musicData.id}`);
+          if (typeof onSelectItem === 'function') onSelectItem(musicData);
         }}
       >
         <Grid container alignItems="center">

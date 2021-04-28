@@ -14,3 +14,4 @@ export type { MusicControllerProps } from './MusicControls';
 export type { AlbumCoverProps } from './AlbumCover';
 export type { MusicNameProps } from './MusicName';
 export type { MusicListItemProps } from './MusicListItem';
+export type { MusicListProps } from './MusicList';
