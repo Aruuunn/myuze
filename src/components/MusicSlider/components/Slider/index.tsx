@@ -8,6 +8,9 @@ export const Slider = withStyles({
     '&[data-size="small"]': {
       height: 6,
     },
+    '&:hover .MuiSlider-thumb': {
+      display: 'block',
+    },
   },
   thumb: {
     height: 24,
@@ -16,6 +19,7 @@ export const Slider = withStyles({
     border: '2px solid currentColor',
     marginTop: -8,
     marginLeft: -12,
+    display: 'none',
     '&:focus, &:hover, &$active': {
       boxShadow: 'inherit',
     },
