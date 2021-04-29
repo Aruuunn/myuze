@@ -1,11 +1,13 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
 import { useHistory } from 'react-router-dom';
 import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
+import { CurrentMusicDetailsContext } from '../../core/providers';
 
 export function HomePage(): ReactElement {
   const history = useHistory();
+  const setCurrentMusicState = useContext(CurrentMusicDetailsContext)?.[1];
   return (
     <>
       <Container maxWidth="lg">
@@ -23,6 +25,9 @@ export function HomePage(): ReactElement {
         </Grid>
         <MusicList onSelectItem={(musicData) => {
           if (musicData) {
+            if (typeof setCurrentMusicState === 'function') {
+              setCurrentMusicState(musicData);
+            }
             history.push(`/play/${musicData.id}`);
           }
         }}

@@ -1,7 +1,12 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 
 import { AudioAPI, MusicStorage } from './core/services';
-import { AudioServiceContext, MusicStorageContext } from './core/providers';
+import {
+  AudioServiceContext,
+  MusicStorageContext,
+  CurrentMusicDetailsContext,
+  CurrentMusicDetails,
+} from './core/providers';
 import {
   AudioServiceInterface,
   MusicStorageInterface,
@@ -11,12 +16,15 @@ import { Routes } from './Routes';
 function App(): ReactElement {
   const audioServiceInstance: AudioServiceInterface = new AudioAPI();
   const musicStorage: MusicStorageInterface = new MusicStorage();
+  const currentMusicState = useState<CurrentMusicDetails>(null);
 
   return (
     <>
       <MusicStorageContext.Provider value={musicStorage}>
         <AudioServiceContext.Provider value={audioServiceInstance}>
-          <Routes />
+          <CurrentMusicDetailsContext.Provider value={currentMusicState}>
+            <Routes />
+          </CurrentMusicDetailsContext.Provider>
         </AudioServiceContext.Provider>
       </MusicStorageContext.Provider>
     </>

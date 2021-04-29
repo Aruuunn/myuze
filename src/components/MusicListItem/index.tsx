@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
-import { MusicStorageContext } from '../../core/providers';
+import { CurrentMusicDetailsContext, MusicStorageContext } from '../../core/providers';
 import { MusicDataInterface } from '../../core/interfaces';
 import { useStyles } from './styles';
 
@@ -24,18 +24,27 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   } = props;
 
   const db = useContext(MusicStorageContext);
+  const currentMusicState = useContext(CurrentMusicDetailsContext)?.[0];
   const [musicData, setMusicData] = useState<Pick<
   MusicDataInterface,
   'title' | 'artists' | 'id'
   > | null>(null);
+  const [isCurrentPlayingMusic, setIsCurrentPlayingMusic] = useState(false);
 
   useEffect(() => {
     db.getMusicAt(index).then((data) => {
-      if (data) setMusicData({ artists: data.artists, title: data.title, id: data.id });
+      if (data) {
+        setMusicData({ artists: data.artists, title: data.title, id: data.id });
+        if (currentMusicState) {
+          if (data.id === currentMusicState?.id) {
+            setIsCurrentPlayingMusic(true);
+          }
+        }
+      }
     });
-  }, [db, index]);
+  }, [db, index, currentMusicState]);
 
-  const styles = useStyles();
+  const styles = useStyles({ isCurrentPlayingMusic });
 
   return (
     <div className={styles.root} key={itemKey} style={style}>
