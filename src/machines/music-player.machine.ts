@@ -1,5 +1,5 @@
 import {
-  assign, Machine,
+  assign, interpret, Machine,
 } from 'xstate';
 import { MusicDataInterface } from '../interfaces';
 import { AudioAPI, MusicStorage } from '../services';
@@ -104,3 +104,5 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
     },
   },
 });
+
+export const musicPlayerService = interpret(musicPlayerMachine).start();

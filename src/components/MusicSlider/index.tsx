@@ -6,11 +6,13 @@ import React, {
   ChangeEvent,
 } from 'react';
 
+import { useService } from '@xstate/react';
+import { send } from 'xstate';
 import { Slider } from './components';
 import {
   AudioServiceContext,
-  CurrentMusicDetailsContext,
 } from '../../providers';
+import { MusicPlayerMachineEvents, MusicPlayerMachineStates, musicPlayerService } from '../../machines';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';
@@ -22,13 +24,9 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     currentValue: 0,
     maxValue: 0,
   });
-  const currentMusicDetails = useContext(CurrentMusicDetailsContext)?.[0];
   const audioService = useContext(AudioServiceContext);
-  const [disabled, setDisabled] = useState(!currentMusicDetails);
-
-  audioService.onLoad(() => {
-    setDisabled(false);
-  });
+  const [current] = useService(musicPlayerService);
+  const currentState = current.value;
 
   const updateSliderValue = (newCurrentValue: number) => {
     setMusicSliderState((state) => ({
@@ -66,7 +64,9 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     if (typeof timeInSeconds !== 'number') return;
 
     audioService.goToTime(timeInSeconds);
-    audioService.play();
+    send({
+      type: MusicPlayerMachineEvents.PLAY,
+    });
     addTimeUpdateListener();
   };
 
@@ -75,7 +75,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
       updateSliderMaxValue(audioService.duration);
     };
 
-    if (currentMusicDetails) callback();
+    if (currentState !== MusicPlayerMachineStates.NOT_LOADED) callback();
 
     audioService.onLoad(callback);
 
@@ -89,7 +89,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   return (
     <Slider
       data-size={size}
-      disabled={disabled}
+      disabled={currentState === MusicPlayerMachineStates.NOT_LOADED}
       aria-label="music slider"
       value={musicSliderState.currentValue}
       min={0}

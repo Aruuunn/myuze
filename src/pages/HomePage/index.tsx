@@ -1,19 +1,30 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
+import { useService } from '@xstate/react';
 import { useHistory } from 'react-router-dom';
+import { State } from 'xstate';
 import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
-import {
-  AudioServiceContext,
-  CurrentMusicDetailsContext,
-} from '../../providers';
-import { useMusicStorage } from '../../hooks/use-music-storage.hook';
+import { MusicPlayerMachineEvents, musicPlayerService } from '../../machines';
+import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
 
 export function HomePage(): ReactElement {
+  const [, send] = useService(musicPlayerService);
   const history = useHistory();
-  const db = useMusicStorage();
-  const audioService = useContext(AudioServiceContext);
-  const setCurrentMusicState = useContext(CurrentMusicDetailsContext)?.[1];
+
+  useEffect(() => {
+    const eventListener = (state: State<MusicPlayerMachineContext>) => {
+      if (state.event.type === 'done.invoke.load-music' && state.context.currentPlayingMusic?.id) {
+        history.push(`/play/${state.context.currentPlayingMusic?.id}`);
+      }
+    };
+    musicPlayerService.onTransition(eventListener);
+
+    return () => {
+      musicPlayerService.off(eventListener);
+    };
+  }, []);
+
   return (
     <>
       <Container maxWidth="lg">
@@ -41,17 +52,10 @@ export function HomePage(): ReactElement {
         <MusicList
           onSelectItem={(id: string | null) => {
             if (id) {
-              if (typeof setCurrentMusicState === 'function') {
-                db.getMusicUsingId(id).then((musicData) => {
-                  if (musicData) {
-                    audioService.load(musicData.musicDataURL).then(() => {
-                      audioService.play();
-                      setCurrentMusicState(musicData);
-                      history.push(`/play/${id}`);
-                    });
-                  }
-                });
-              }
+              send({
+                type: MusicPlayerMachineEvents.LOAD,
+                id,
+              });
             }
           }}
         />

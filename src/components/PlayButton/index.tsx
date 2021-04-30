@@ -1,12 +1,10 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement } from 'react';
+import { useService } from '@xstate/react';
 import { IconButton, SvgIcon } from '@material-ui/core';
 import { motion } from 'framer-motion';
 
-import {
-  AudioServiceContext,
-  CurrentMusicDetailsContext,
-} from '../../providers';
 import { useStyles } from './styles';
+import { MusicPlayerMachineEvents, musicPlayerService, MusicPlayerMachineStates } from '../../machines';
 
 export interface PlayButtonProps {
   size: 'small' | 'large';
@@ -14,37 +12,30 @@ export interface PlayButtonProps {
 
 export function PlayButton(props: PlayButtonProps): ReactElement {
   const { size } = props;
-  const audioService = useContext(AudioServiceContext);
-  const [isPlaying, setIsPlaying] = useState(audioService.isPlaying());
-  const currentMusicDetails = useContext(CurrentMusicDetailsContext)?.[0];
-  const [disabled, setDisabled] = useState(!currentMusicDetails);
+  const [current, send] = useService(musicPlayerService);
   const styles = useStyles();
 
-  audioService.onPlay(() => {
-    setIsPlaying(true);
-  });
+  const { currentPlayingMusic } = current.context;
+  const currentState = current.value;
 
-  audioService.onLoad(() => {
-    setDisabled(false);
-  });
-
-  audioService.onPause(() => {
-    setIsPlaying(false);
-  });
+  const isDisabled = () => !currentPlayingMusic;
 
   return (
     <motion.div
-      whileTap={{ scale: disabled ? 1 : 0.9 }}
-      whileHover={{ scale: disabled ? 1 : 1.05 }}
+      whileTap={{ scale: isDisabled() ? 1 : 0.9 }}
+      whileHover={{ scale: isDisabled() ? 1 : 1.05 }}
     >
       <IconButton
         className={`${styles.root} ${styles[size]}`}
         color="primary"
-        disabled={disabled}
-        onClick={() => (isPlaying ? audioService.pause() : audioService.play())}
+        disabled={isDisabled()}
+        onClick={() => send({
+          type: currentState === MusicPlayerMachineStates.PLAYING
+            ? MusicPlayerMachineEvents.PAUSE : MusicPlayerMachineEvents.PLAY,
+        })}
       >
         <SvgIcon fontSize={size}>
-          {isPlaying ? (
+          {currentState === MusicPlayerMachineStates.PLAYING ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"

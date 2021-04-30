@@ -1,5 +1,5 @@
 import React, {
-  ReactElement, useEffect, useContext, useState,
+  ReactElement, useEffect,
 } from 'react';
 import { Container, Grid, IconButton } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
@@ -12,45 +12,29 @@ import {
   MusicName,
 } from '../../components';
 import { useStyles } from './styles';
-import {
-  AudioServiceContext,
-  CurrentMusicDetailsContext,
-  MusicStorageContext,
-} from '../../providers';
-import { MusicDataInterface } from '../../interfaces';
 
+import { useMusicPlayerMachine } from '../../hooks';
+import { MusicPlayerMachineEvents, MusicPlayerMachineStates } from '../../machines';
+
+/**
+ * @TODO handle the edge case when the id is invalid.
+ * */
 export function MusicPlayerPage(): ReactElement {
   const styles = useStyles();
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
-  const audioService = useContext(AudioServiceContext);
-  const db = useContext(MusicStorageContext);
-  const currentMusicDetails = useContext(CurrentMusicDetailsContext)?.[0];
-  const [musicData, setMusicData] = useState<MusicDataInterface | null>(null);
+  const [current, send] = useMusicPlayerMachine();
+  const {
+    currentPlayingMusic,
+  } = current.context;
 
   useEffect(() => {
-    if (currentMusicDetails && currentMusicDetails.id === id) {
-      setMusicData(currentMusicDetails);
-      return;
+    if (id && current.value === MusicPlayerMachineStates.NOT_LOADED) {
+      send({
+        type: MusicPlayerMachineEvents.LOAD,
+        id,
+      });
     }
-
-    if (id) {
-      db.getMusicUsingId(id)
-        .then((music) => {
-          if (music) {
-            setMusicData(music);
-            audioService.load(music.musicDataURL).then(() => {
-              audioService.play();
-            });
-          } else {
-            history.goBack();
-          }
-        })
-        .catch(() => {
-          history.goBack();
-        });
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -101,15 +85,15 @@ export function MusicPlayerPage(): ReactElement {
               xs={12}
             >
               <AlbumCover
-                musicTitle={musicData?.title ?? ''}
-                artistName={(musicData?.artists ?? [])[0]}
-                imgURL={musicData?.imgURL}
+                musicTitle={currentPlayingMusic?.title ?? ''}
+                artistName={(currentPlayingMusic?.artists ?? [])[0]}
+                imgURL={currentPlayingMusic?.imgURL}
               />
             </Grid>
             <Grid container justify="center" alignItems="center" item xs={12}>
               <MusicName
-                title={musicData?.title ?? ''}
-                artists={musicData?.artists ?? []}
+                title={currentPlayingMusic?.title ?? ''}
+                artists={currentPlayingMusic?.artists ?? []}
               />
             </Grid>
           </Grid>

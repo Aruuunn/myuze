@@ -34,7 +34,6 @@ export function MusicName(props: MusicNameProps): ReactElement {
       ];
 
       interval = window.setInterval(() => {
-        console.log(textWithEl.map((e) => e.text).join(' '));
         const firstElement = textWithEl[0];
 
         if (textWithEl[textWithEl.length - 1].type === firstElement.type) {
