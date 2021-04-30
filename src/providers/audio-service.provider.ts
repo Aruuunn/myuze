@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { AudioAPI } from '../services';
+import { AudioAPI } from '../common/services';
 import { AudioServiceInterface } from '../interfaces';
 
 export const AudioServiceContext = createContext<AudioServiceInterface>(

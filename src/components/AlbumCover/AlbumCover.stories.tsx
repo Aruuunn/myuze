@@ -16,5 +16,12 @@ export const AlbumCoverComponent = storyFactory(AlbumCover, {
   musicTitle: 'Positions',
 });
 
-export const Example1 = storyFactory(AlbumCover, { artistName: 'IU', imgURL, musicTitle: 'Celebrity' });
-export const Example2 = storyFactory(AlbumCover, { artistName: 'BTS', musicTitle: 'Dope' });
+export const Example1 = storyFactory(AlbumCover, {
+  artistName: 'IU',
+  imgURL,
+  musicTitle: 'Celebrity',
+});
+export const Example2 = storyFactory(AlbumCover, {
+  artistName: 'BTS',
+  musicTitle: 'Dope',
+});

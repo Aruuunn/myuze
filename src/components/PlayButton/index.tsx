@@ -2,7 +2,10 @@ import React, { ReactElement, useContext, useState } from 'react';
 import { IconButton, SvgIcon } from '@material-ui/core';
 import { motion } from 'framer-motion';
 
-import { AudioServiceContext } from '../../core/providers';
+import {
+  AudioServiceContext,
+  CurrentMusicDetailsContext,
+} from '../../providers';
 import { useStyles } from './styles';
 
 export interface PlayButtonProps {
@@ -13,7 +16,8 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
   const { size } = props;
   const audioService = useContext(AudioServiceContext);
   const [isPlaying, setIsPlaying] = useState(audioService.isPlaying());
-  const [disabled, setDisabled] = useState(Number.isNaN(audioService.duration));
+  const currentMusicDetails = useContext(CurrentMusicDetailsContext)?.[0];
+  const [disabled, setDisabled] = useState(!currentMusicDetails);
   const styles = useStyles();
 
   audioService.onPlay(() => {

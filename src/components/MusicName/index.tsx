@@ -8,10 +8,7 @@ export interface MusicNameProps {
 }
 
 export function MusicName(props: MusicNameProps): ReactElement {
-  const {
-    title,
-    artists,
-  } = props;
+  const { title, artists } = props;
 
   const styles = useStyles();
   const rootContainerElRef = useRef<HTMLDivElement>(null);
@@ -23,27 +20,31 @@ export function MusicName(props: MusicNameProps): ReactElement {
     if (!rootContainerElRef.current) return;
 
     const rootContainerEl = rootContainerElRef.current;
-    const primaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(`.${styles.primaryText}`);
-    const secondaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(`.${styles.secondaryText}`);
+    const primaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
+      `.${styles.primaryText}`,
+    );
+    const secondaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
+      `.${styles.secondaryText}`,
+    );
 
     if (rootContainerEl.clientWidth < rootContainerEl.scrollWidth) {
-      const textWithEl = [{ type: 'title', text: title }, { type: 'artists', text: ` - by ${secondaryText} - ` }];
+      const textWithEl = [
+        { type: 'title', text: title },
+        { type: 'artists', text: ` - by ${secondaryText} - ` },
+      ];
 
       interval = window.setInterval(() => {
         console.log(textWithEl.map((e) => e.text).join(' '));
         const firstElement = textWithEl[0];
 
         if (textWithEl[textWithEl.length - 1].type === firstElement.type) {
-          textWithEl[textWithEl.length - 1]
-            .text = textWithEl[textWithEl.length - 1].text + (firstElement.text[0] ?? '');
+          textWithEl[textWithEl.length - 1].text = textWithEl[textWithEl.length - 1].text
+            + (firstElement.text[0] ?? '');
         } else {
-          textWithEl
-            .push(
-              {
-                type: firstElement.type,
-                text: (firstElement.text[0] ?? ''),
-              },
-            );
+          textWithEl.push({
+            type: firstElement.type,
+            text: firstElement.text[0] ?? '',
+          });
         }
 
         if (firstElement.text.length === 0) textWithEl.shift();
@@ -64,9 +65,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
           // eslint-disable-next-line no-continue
           else continue;
 
-          ctn.appendChild(
-            child,
-          );
+          ctn.appendChild(child);
         }
 
         rootContainerEl.innerHTML = '';
@@ -85,7 +84,6 @@ export function MusicName(props: MusicNameProps): ReactElement {
       <span className={styles.primaryText}>{title}</span>
       <span className={styles.secondaryText}>
         -
-        {' '}
         {secondaryText}
       </span>
     </div>

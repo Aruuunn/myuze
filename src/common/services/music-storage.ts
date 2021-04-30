@@ -1,11 +1,15 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
-import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
+import { MusicDataInterface, MusicStorageInterface } from '../../interfaces';
 
-function getNewMusicData(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): MusicDataInterface {
-  return ({
-    ...musicData, createdAt: new Date(), id: uuid(),
-  });
+function getNewMusicData(
+  musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
+): MusicDataInterface {
+  return {
+    ...musicData,
+    createdAt: new Date(),
+    id: uuid(),
+  };
 }
 
 export class MusicStorage extends Dexie implements MusicStorageInterface {
@@ -23,21 +27,27 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return this.songs.count();
   }
 
-  async addNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): Promise<void> {
-    await this.songs
-      .add(getNewMusicData(musicData));
+  async addNewMusic(
+    musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
+  ): Promise<void> {
+    await this.songs.add(getNewMusicData(musicData));
   }
 
-  async addBulkNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[]): Promise<void> {
-    await this.songs
-      .bulkAdd(musicData.map((data) => getNewMusicData(data)));
+  async addBulkNewMusic(
+    musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[],
+  ): Promise<void> {
+    await this.songs.bulkAdd(musicData.map((data) => getNewMusicData(data)));
   }
 
   getMusicAt(
     index: number,
     filter: (obj: MusicDataInterface) => boolean = () => true,
   ): Promise<MusicDataInterface | undefined> {
-    return this.songs.orderBy('createdAt').filter(filter).reverse().offset(index)
+    return this.songs
+      .orderBy('createdAt')
+      .filter(filter)
+      .reverse()
+      .offset(index)
       .first();
   }
 

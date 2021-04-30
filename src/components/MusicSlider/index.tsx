@@ -7,22 +7,24 @@ import React, {
 } from 'react';
 
 import { Slider } from './components';
-import { AudioServiceContext } from '../../core/providers';
+import {
+  AudioServiceContext,
+  CurrentMusicDetailsContext,
+} from '../../providers';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';
 }
 
 export function MusicSlider(props: MusicSliderProps): ReactElement {
-  const {
-    size,
-  } = props;
+  const { size } = props;
   const [musicSliderState, setMusicSliderState] = useState({
     currentValue: 0,
     maxValue: 0,
   });
+  const currentMusicDetails = useContext(CurrentMusicDetailsContext)?.[0];
   const audioService = useContext(AudioServiceContext);
-  const [disabled, setDisabled] = useState(Number.isNaN(audioService.duration));
+  const [disabled, setDisabled] = useState(!currentMusicDetails);
 
   audioService.onLoad(() => {
     setDisabled(false);
@@ -73,9 +75,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
       updateSliderMaxValue(audioService.duration);
     };
 
-    if (!Number.isNaN(audioService.duration)) {
-      callback();
-    }
+    if (currentMusicDetails) callback();
 
     audioService.onLoad(callback);
 

@@ -3,10 +3,16 @@ import { Container, Grid, Typography } from '@material-ui/core';
 
 import { useHistory } from 'react-router-dom';
 import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
-import { CurrentMusicDetailsContext } from '../../core/providers';
+import {
+  AudioServiceContext,
+  CurrentMusicDetailsContext,
+  MusicStorageContext,
+} from '../../providers';
 
 export function HomePage(): ReactElement {
   const history = useHistory();
+  const db = useContext(MusicStorageContext);
+  const audioService = useContext(AudioServiceContext);
   const setCurrentMusicState = useContext(CurrentMusicDetailsContext)?.[1];
   return (
     <>
@@ -15,22 +21,39 @@ export function HomePage(): ReactElement {
           container
           alignItems="center"
           style={{
-            color: 'rgb(var(--primary))', marginTop: '50px', marginBottom: '10px', marginLeft: '10px',
+            color: 'rgb(var(--primary))',
+            marginTop: '50px',
+            marginBottom: '10px',
+            marginLeft: '10px',
           }}
         >
-          <Typography variant="h6" style={{ fontWeight: 'bold', fontFamily: '\'Open Sans\', sans-serif' }}>
+          <Typography
+            variant="h6"
+            style={{
+              fontWeight: 'bold',
+              fontFamily: "'Open Sans', sans-serif",
+            }}
+          >
             Your Songs
           </Typography>
           <UploadNewMusic />
         </Grid>
-        <MusicList onSelectItem={(musicData) => {
-          if (musicData) {
-            if (typeof setCurrentMusicState === 'function') {
-              setCurrentMusicState(musicData);
+        <MusicList
+          onSelectItem={(id: string | null) => {
+            if (id) {
+              if (typeof setCurrentMusicState === 'function') {
+                db.getMusicUsingId(id).then((musicData) => {
+                  if (musicData) {
+                    audioService.load(musicData.musicDataURL).then(() => {
+                      audioService.play();
+                      setCurrentMusicState(musicData);
+                      history.push(`/play/${id}`);
+                    });
+                  }
+                });
+              }
             }
-            history.push(`/play/${musicData.id}`);
-          }
-        }}
+          }}
         />
         {' '}
       </Container>

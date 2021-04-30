@@ -1,26 +1,29 @@
 import React, {
   CSSProperties,
-  ReactElement, useContext, useEffect, useState,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 
-import { CurrentMusicDetailsContext, MusicStorageContext } from '../../core/providers';
-import { MusicDataInterface } from '../../core/interfaces';
+import {
+  CurrentMusicDetailsContext,
+  MusicStorageContext,
+} from '../../providers';
+import { MusicDataInterface } from '../../interfaces';
 import { useStyles } from './styles';
 
 export interface MusicListItemProps {
   itemKey: string;
   index: number;
   style?: CSSProperties;
-  onSelectItem?: (musicData: Pick<MusicDataInterface, 'id' | 'title' | 'artists'> | null) => void;
+  onSelectItem?: (id: string | null) => void;
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
   const {
-    index,
-    itemKey,
-    style = {},
-    onSelectItem,
+    index, itemKey, style = {}, onSelectItem,
   } = props;
 
   const db = useContext(MusicStorageContext);
@@ -51,7 +54,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       <Paper
         className={styles.card}
         onClick={() => {
-          if (typeof onSelectItem === 'function') onSelectItem(musicData);
+          if (typeof onSelectItem === 'function') onSelectItem(musicData?.id ?? null);
         }}
       >
         <Grid container alignItems="center">
@@ -59,7 +62,9 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
             {musicData ? musicData.title : ''}
           </Grid>
           <Grid className={styles.artists} xs={12} item>
-            {musicData?.artists?.length ? musicData.artists.join(' , ') : 'unknown' }
+            {musicData?.artists?.length
+              ? musicData.artists.join(' , ')
+              : 'unknown'}
           </Grid>
         </Grid>
       </Paper>

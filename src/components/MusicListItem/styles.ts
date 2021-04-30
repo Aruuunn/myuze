@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 
-export const useStyles = makeStyles(({
+export const useStyles = makeStyles({
   root: {
     padding: '2px',
   },
@@ -17,4 +17,4 @@ export const useStyles = makeStyles(({
     marginTop: '5px',
     color: 'rgb(var(--primary-dark))',
   },
-}));
+});
