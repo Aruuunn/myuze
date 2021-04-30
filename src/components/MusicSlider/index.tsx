@@ -6,22 +6,27 @@ import React, {
   ChangeEvent,
 } from 'react';
 
+import { useService } from '@xstate/react';
+import { send } from 'xstate';
 import { Slider } from './components';
-import { AudioServiceContext } from '../../core/providers';
+import {
+  AudioServiceContext,
+} from '../../providers';
+import { MusicPlayerMachineEvents, MusicPlayerMachineStates, musicPlayerService } from '../../machines';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';
 }
 
 export function MusicSlider(props: MusicSliderProps): ReactElement {
-  // eslint-disable-next-line no-console
-  console.log(props);
+  const { size } = props;
   const [musicSliderState, setMusicSliderState] = useState({
     currentValue: 0,
     maxValue: 0,
   });
-
   const audioService = useContext(AudioServiceContext);
+  const [current] = useService(musicPlayerService);
+  const currentState = current.value;
 
   const updateSliderValue = (newCurrentValue: number) => {
     setMusicSliderState((state) => ({
@@ -31,6 +36,9 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   };
 
   const updateSliderMaxValue = (newMaxValue: number) => {
+    if (newMaxValue === Infinity) {
+      return;
+    }
     setMusicSliderState((state) => ({
       ...state,
       maxValue: newMaxValue ?? state.maxValue,
@@ -56,21 +64,32 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     if (typeof timeInSeconds !== 'number') return;
 
     audioService.goToTime(timeInSeconds);
-    audioService.play();
+    send({
+      type: MusicPlayerMachineEvents.PLAY,
+    });
     addTimeUpdateListener();
   };
 
   useEffect(() => {
-    audioService.onLoad(() => {
+    const callback = () => {
       updateSliderMaxValue(audioService.duration);
-      addTimeUpdateListener();
-    });
+    };
+
+    if (currentState !== MusicPlayerMachineStates.NOT_LOADED) callback();
+
+    audioService.onLoad(callback);
+
+    audioService.onDurationChange(callback);
+
+    addTimeUpdateListener();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [size]);
 
   return (
     <Slider
+      data-size={size}
+      disabled={currentState === MusicPlayerMachineStates.NOT_LOADED}
       aria-label="music slider"
       value={musicSliderState.currentValue}
       min={0}

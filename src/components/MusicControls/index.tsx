@@ -8,10 +8,10 @@ export interface MusicControllerProps {
   size: 'small' | 'large';
 }
 
-export function MusicController(props: MusicControllerProps): ReactElement {
+export function MusicControls(props: MusicControllerProps): ReactElement {
   const { size } = props;
 
-  const styles = useStyles();
+  const styles = useStyles({ size });
 
   return (
     <Grid container justify="center" className={styles.root}>
@@ -20,4 +20,4 @@ export function MusicController(props: MusicControllerProps): ReactElement {
   );
 }
 
-export default MusicController;
+export default MusicControls;

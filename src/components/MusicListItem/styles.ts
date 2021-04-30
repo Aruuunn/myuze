@@ -4,12 +4,13 @@ export const useStyles = makeStyles({
   root: {
     padding: '2px',
   },
-  card: {
+  card: ({ isCurrentPlayingMusic }: { isCurrentPlayingMusic: boolean }) => ({
     backgroundColor: 'rgb(var(--bg-color-lighter))',
     padding: '20px',
     textOverflow: 'ellipsis',
-    color: 'rgb(var(--primary))',
-  },
+    color: 'rgb(var(--primary-bright))',
+    fontWeight: isCurrentPlayingMusic ? 'bold' : 'normal',
+  }),
   artists: {
     fontWeight: 'normal',
     fontSize: '14px',

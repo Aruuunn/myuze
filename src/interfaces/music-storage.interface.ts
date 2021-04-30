@@ -10,14 +10,23 @@ export interface MusicStorageInterface {
    * */
   getMusicAt(
     index: number,
-    filter?: (obj: MusicDataInterface) => boolean
+    filter?: (obj: MusicDataInterface) => boolean,
   ): Promise<MusicDataInterface | undefined>;
 
   getMusicUsingId(id: string): Promise<MusicDataInterface | undefined>;
 
-  addNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>): Promise<void>;
+  addNewMusic(
+    musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
+  ): Promise<void>;
 
-  addBulkNewMusic(musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[]): Promise<void>;
+  addBulkNewMusic(
+    musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[],
+  ): Promise<void>;
 
   deleteMusicUsingId(id: number): Promise<void>;
+
+  /**
+   * Accept callback to call whenever stored data is deleted/updated or new data is added
+   * */
+  onChange(callback: () => void): void;
 }

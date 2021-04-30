@@ -1,46 +1,51 @@
 import React, {
-  ReactElement, useEffect, useContext, useState,
+  ReactElement, useEffect,
 } from 'react';
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, IconButton } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
+import { ExpandMoreOutlined } from '@material-ui/icons';
 
 import {
-  MusicSlider, MusicController, AlbumCover, MusicName,
+  MusicSlider,
+  MusicControls,
+  AlbumCover,
+  MusicName,
 } from '../../components';
 import { useStyles } from './styles';
-import { AudioServiceContext, MusicStorageContext } from '../../core/providers';
-import { MusicDataInterface } from '../../core/interfaces';
 
+import { useMusicPlayerMachine } from '../../hooks';
+import { MusicPlayerMachineEvents, MusicPlayerMachineStates } from '../../machines';
+
+/**
+ * @TODO handle the edge case when the id is invalid.
+ * */
 export function MusicPlayerPage(): ReactElement {
   const styles = useStyles();
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
-  const audioService = useContext(AudioServiceContext);
-  const db = useContext(MusicStorageContext);
-  const [musicData, setMusicData] = useState<MusicDataInterface | null>(null);
+  const [current, send] = useMusicPlayerMachine();
+  const {
+    currentPlayingMusic,
+  } = current.context;
 
   useEffect(() => {
-    if (id) {
-      db.getMusicUsingId(id).then((music) => {
-        if (music) {
-          setMusicData(music);
-          audioService.load(music.musicDataURL).then(() => {
-            audioService.play();
-          });
-        } else {
-          history.goBack();
-        }
-      }).catch(() => {
-        history.goBack();
+    if (id && current.value === MusicPlayerMachineStates.NOT_LOADED) {
+      send({
+        type: MusicPlayerMachineEvents.LOAD,
+        id,
       });
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
     <Container maxWidth="lg">
-      <Grid id="music-player-container" container className={styles.container}>
+      <Grid
+        id="music-player-container"
+        container
+        style={{ position: 'relative' }}
+        className={styles.container}
+      >
         <Grid
           id="music-player"
           justify="center"
@@ -49,19 +54,54 @@ export function MusicPlayerPage(): ReactElement {
           container
           xs={8}
         >
-          <Grid item container justify="center" alignItems="center" xs={12} style={{ marginBottom: '40px' }}>
-            <Grid container justify="center" alignItems="center" style={{ marginBottom: '60px' }} item xs={12}>
-              <AlbumCover artistName={(musicData?.artists ?? [])[0] || ''} imgURL={musicData?.imgURL ?? ''} />
+          <IconButton
+            size="medium"
+            style={{
+              color: 'rgb(var(--primary-dark))',
+              position: 'absolute',
+              top: '50px',
+              left: 0,
+            }}
+            onClick={() => {
+              history.push('/');
+            }}
+          >
+            <ExpandMoreOutlined fontSize="large" />
+          </IconButton>
+          <Grid
+            item
+            container
+            justify="center"
+            alignItems="center"
+            xs={12}
+            style={{ marginBottom: '40px' }}
+          >
+            <Grid
+              container
+              justify="center"
+              alignItems="center"
+              style={{ marginBottom: '60px' }}
+              item
+              xs={12}
+            >
+              <AlbumCover
+                musicTitle={currentPlayingMusic?.title ?? ''}
+                artistName={(currentPlayingMusic?.artists ?? [])[0]}
+                imgURL={currentPlayingMusic?.imgURL}
+              />
             </Grid>
             <Grid container justify="center" alignItems="center" item xs={12}>
-              <MusicName name={musicData?.title ?? ''} artistName={musicData?.artists ?? []} />
+              <MusicName
+                title={currentPlayingMusic?.title ?? ''}
+                artists={currentPlayingMusic?.artists ?? []}
+              />
             </Grid>
           </Grid>
           <Grid item xs={12}>
             <MusicSlider size="large" />
           </Grid>
           <Grid item xs={12}>
-            <MusicController size="large" />
+            <MusicControls size="large" />
           </Grid>
         </Grid>
       </Grid>

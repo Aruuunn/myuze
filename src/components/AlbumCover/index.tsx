@@ -4,32 +4,39 @@ import { useStyles } from './styles';
 export interface AlbumCoverProps {
   imgURL?: string;
   artistName?: string;
+  musicTitle: string;
 }
 
 export function AlbumCover(props: AlbumCoverProps): ReactElement {
-  const {
-    artistName, imgURL,
-  } = props;
+  const { artistName, imgURL, musicTitle } = props;
 
   const styles = useStyles({ imgURL });
 
-  const getArtistShortName = (): string => {
-    if (typeof artistName !== 'string') return '';
+  const getShortName = (str: string): string => {
+    const modifiedString = str.trim().toUpperCase();
 
-    const modifiedArtistName = artistName.trim().toUpperCase();
+    if (modifiedString.length <= 2) return modifiedString;
 
-    if (modifiedArtistName.length <= 2) return modifiedArtistName;
+    if (modifiedString.split(' ').length >= 2) {
+      return modifiedString
+        .split(' ')
+        .slice(0, 2)
+        .map((s) => s[0])
+        .join('');
+    }
 
-    if (modifiedArtistName.split(' ').length >= 2) return modifiedArtistName.split(' ').slice(0, 2).map((s) => s[0]).join('');
-
-    return modifiedArtistName.slice(0, 2);
+    return modifiedString.slice(0, 2);
   };
 
   return (
     <div className={styles.root}>
-      {artistName && !imgURL
-        ? <span className={styles.innerText}>{getArtistShortName()}</span>
-        : null}
+      {!imgURL ? (
+        <span className={styles.innerText}>
+          {typeof artistName === 'undefined'
+            ? getShortName(musicTitle)
+            : getShortName(artistName)}
+        </span>
+      ) : null}
     </div>
   );
 }

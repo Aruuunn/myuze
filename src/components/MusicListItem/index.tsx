@@ -1,57 +1,74 @@
 import React, {
   CSSProperties,
-  ReactElement, useContext, useEffect, useState,
+  ReactElement,
+  useEffect,
+  useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 
-import { MusicStorageContext } from '../../core/providers';
-import { MusicDataInterface } from '../../core/interfaces';
+import { MusicDataInterface } from '../../interfaces';
 import { useStyles } from './styles';
+import { useMusicPlayerMachine, useMusicStorage } from '../../hooks';
 
 export interface MusicListItemProps {
-  key: string;
   index: number;
+  itemKey: string;
   style?: CSSProperties;
+  onSelectItem?: (id: string | null) => void;
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
   const {
-    index,
-    key,
-    style = {},
+    index, itemKey, style = {}, onSelectItem,
   } = props;
 
-  const history = useHistory();
-  const db = useContext(MusicStorageContext);
+  const db = useMusicStorage();
+  const [{
+    context: {
+      currentPlayingMusic,
+    },
+  }] = useMusicPlayerMachine();
   const [musicData, setMusicData] = useState<Pick<
   MusicDataInterface,
   'title' | 'artists' | 'id'
   > | null>(null);
+  const [isCurrentPlayingMusic, setIsCurrentPlayingMusic] = useState(false);
 
   useEffect(() => {
-    db.getMusicAt(index).then((data) => {
-      if (data) setMusicData({ artists: data.artists, title: data.title, id: data.id });
+    const componentOnMount = () => db.getMusicAt(index).then((data) => {
+      if (data) {
+        setMusicData({ artists: data.artists, title: data.title, id: data.id });
+        if (currentPlayingMusic) {
+          if (data.id === currentPlayingMusic?.id) {
+            setIsCurrentPlayingMusic(true);
+          }
+        }
+      }
     });
-  }, []);
 
-  const styles = useStyles();
+    componentOnMount();
+
+    db.onChange(() => { componentOnMount(); });
+  }, [db, index, currentPlayingMusic]);
+
+  const styles = useStyles({ isCurrentPlayingMusic });
 
   return (
-    <div className={styles.root} key={key} style={style}>
+    <div className={styles.root} key={itemKey} style={style}>
       <Paper
         className={styles.card}
         onClick={() => {
-          if (!musicData) return;
-          history.push(`/play/${musicData.id}`);
+          if (typeof onSelectItem === 'function') onSelectItem(musicData?.id ?? null);
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12} alignItems="center">
+          <Grid item xs={12}>
             {musicData ? musicData.title : ''}
           </Grid>
-          <Grid className={styles.artists} xs={12} item alignItems="center">
-            {(musicData?.artists || []).join(' , ')}
+          <Grid className={styles.artists} xs={12} item>
+            {musicData?.artists?.length
+              ? musicData.artists.join(' , ')
+              : 'unknown'}
           </Grid>
         </Grid>
       </Paper>

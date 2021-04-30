@@ -1,19 +1,30 @@
 import React, {
-  ReactElement, useContext, useEffect, useState,
+  ReactElement, useEffect, useState,
 } from 'react';
 import { List } from 'react-virtualized';
 
-import { MusicStorageContext } from '../../core/providers';
 import { MusicListItem } from '../MusicListItem';
+import { useMusicStorage } from '../../hooks';
 
-export function MusicList(): ReactElement {
+export interface MusicListProps {
+  onSelectItem?: (id: string | null) => void;
+}
+
+export function MusicList(props: MusicListProps): ReactElement {
+  const { onSelectItem } = props;
   const [totalCount, setTotalCount] = useState(-1);
 
-  const db = useContext(MusicStorageContext);
+  const db = useMusicStorage();
 
   useEffect(() => {
-    db.getTotalCount().then(setTotalCount);
-  }, []);
+    const componentOnMount = () => db.getTotalCount().then(setTotalCount);
+
+    componentOnMount();
+
+    db.onChange(() => {
+      componentOnMount();
+    });
+  }, [db]);
 
   if (totalCount === -1) {
     return <div />;
@@ -24,11 +35,13 @@ export function MusicList(): ReactElement {
       <List
         rowCount={totalCount}
         width={500}
-        rowRenderer={
-          (rowProps) => (
-            <MusicListItem key={rowProps.key} index={rowProps.index} />
-          )
-        }
+        rowRenderer={(rowProps) => (
+          <MusicListItem
+            onSelectItem={onSelectItem}
+            itemKey={rowProps.key}
+            index={rowProps.index}
+          />
+        )}
         height={2000}
         rowHeight={100}
       />

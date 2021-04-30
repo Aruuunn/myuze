@@ -1,5 +1,7 @@
 import { AudioServiceInterface } from '../interfaces';
+import { Singleton } from '../decorators';
 
+@Singleton
 export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;
 
@@ -68,5 +70,9 @@ export class AudioAPI implements AudioServiceInterface {
 
   onPause(callback: () => void): void {
     this.audioEl.addEventListener('pause', () => callback());
+  }
+
+  onDurationChange(callback: () => void): void {
+    this.audioEl.addEventListener('durationchange', () => callback());
   }
 }

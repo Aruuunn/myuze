@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
-  root: {
-    padding: '30px',
-  },
+  root: ({ size }: { size: 'large' | 'small' }) => ({
+    padding: size === 'small' ? 0 : '30px',
+  }),
 });

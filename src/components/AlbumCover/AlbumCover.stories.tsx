@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { AlbumCover } from './index';
 
 import '../../styles';
@@ -11,9 +11,17 @@ export default {
   component: AlbumCover,
 } as Meta;
 
-export const AlbumCoverComponent: Story = storyFactory(AlbumCover, {
+export const AlbumCoverComponent = storyFactory(AlbumCover, {
   artistName: 'Ariana Grande',
+  musicTitle: 'Positions',
 });
 
-export const Example1 = storyFactory(AlbumCover, { artistName: 'IU', imgURL });
-export const Example2 = storyFactory(AlbumCover, { artistName: 'BTS' });
+export const Example1 = storyFactory(AlbumCover, {
+  artistName: 'IU',
+  imgURL,
+  musicTitle: 'Celebrity',
+});
+export const Example2 = storyFactory(AlbumCover, {
+  artistName: 'BTS',
+  musicTitle: 'Dope',
+});
