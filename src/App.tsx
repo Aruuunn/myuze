@@ -11,6 +11,7 @@ import {
   MusicDataInterface,
   MusicStorageInterface,
 } from './interfaces';
+import './machines/music-player.machine';
 import { Routes } from './Routes';
 
 function App(): ReactElement {
