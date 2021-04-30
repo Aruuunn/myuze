@@ -24,4 +24,9 @@ export interface MusicStorageInterface {
   ): Promise<void>;
 
   deleteMusicUsingId(id: number): Promise<void>;
+
+  /**
+   * Accept callback to call whenever stored data is deleted/updated or new data is added
+   * */
+  onChange(callback: () => void): void;
 }

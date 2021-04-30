@@ -9,14 +9,14 @@ import { Grid, Paper } from '@material-ui/core';
 
 import {
   CurrentMusicDetailsContext,
-  MusicStorageContext,
 } from '../../providers';
 import { MusicDataInterface } from '../../interfaces';
 import { useStyles } from './styles';
+import { useMusicStorage } from '../../hooks';
 
 export interface MusicListItemProps {
-  itemKey: string;
   index: number;
+  itemKey: string;
   style?: CSSProperties;
   onSelectItem?: (id: string | null) => void;
 }
@@ -26,7 +26,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     index, itemKey, style = {}, onSelectItem,
   } = props;
 
-  const db = useContext(MusicStorageContext);
+  const db = useMusicStorage();
   const currentMusicState = useContext(CurrentMusicDetailsContext)?.[0];
   const [musicData, setMusicData] = useState<Pick<
   MusicDataInterface,
@@ -35,7 +35,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   const [isCurrentPlayingMusic, setIsCurrentPlayingMusic] = useState(false);
 
   useEffect(() => {
-    db.getMusicAt(index).then((data) => {
+    const componentOnMount = () => db.getMusicAt(index).then((data) => {
       if (data) {
         setMusicData({ artists: data.artists, title: data.title, id: data.id });
         if (currentMusicState) {
@@ -45,6 +45,10 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
         }
       }
     });
+
+    componentOnMount();
+
+    db.onChange(() => { componentOnMount(); });
   }, [db, index, currentMusicState]);
 
   const styles = useStyles({ isCurrentPlayingMusic });

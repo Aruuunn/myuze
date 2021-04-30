@@ -6,12 +6,12 @@ import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
 import {
   AudioServiceContext,
   CurrentMusicDetailsContext,
-  MusicStorageContext,
 } from '../../providers';
+import { useMusicStorage } from '../../hooks/use-music-storage.hook';
 
 export function HomePage(): ReactElement {
   const history = useHistory();
-  const db = useContext(MusicStorageContext);
+  const db = useMusicStorage();
   const audioService = useContext(AudioServiceContext);
   const setCurrentMusicState = useContext(CurrentMusicDetailsContext)?.[1];
   return (

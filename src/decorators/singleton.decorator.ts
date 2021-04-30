@@ -1,6 +1,7 @@
 /**
  * code snippet from https://trevoratlas.com/posts/how-to-create-a-typescript-singleton-decorator
  * */
+/* eslint @typescript-eslint/no-explicit-any: 0 */
 
 export const SINGLETON_KEY = Symbol('SINGLETON_KEY');
 
@@ -8,6 +9,7 @@ export type ISingleton<T extends new (...args: any[]) => any> = T & {
   [SINGLETON_KEY]: T extends new (...args: any[]) => infer I ? I : never;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const Singleton = <T extends new (...args: any[]) => any>(type: T) => (
   new Proxy(type, {
     // this will hijack the constructor

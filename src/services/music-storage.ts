@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
 import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
-import { Singleton } from '../decorators';
+import { Singleton, dispatchEvent, addEventListener } from '../decorators';
 
 function getNewMusicData(
   musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
@@ -12,6 +12,9 @@ function getNewMusicData(
     id: uuid(),
   };
 }
+
+const DATA_CHANGE_EVENT_NAME = 'music-storage-data-change';
+const dispatchEventOnDataChange = dispatchEvent(DATA_CHANGE_EVENT_NAME);
 
 @Singleton
 export class MusicStorage extends Dexie implements MusicStorageInterface {
@@ -29,12 +32,14 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return this.songs.count();
   }
 
+  @dispatchEventOnDataChange
   async addNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
   ): Promise<void> {
     await this.songs.add(getNewMusicData(musicData));
   }
 
+  @dispatchEventOnDataChange
   async addBulkNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[],
   ): Promise<void> {
@@ -57,7 +62,15 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return (await this.songs.where('id').equals(id).limit(1).toArray())[0];
   }
 
+  @dispatchEventOnDataChange
   async deleteMusicUsingId(id: number): Promise<void> {
     await this.songs.where('id').equals(id).delete();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onChange(callback: () => void): void {
+    addEventListener(DATA_CHANGE_EVENT_NAME, () => {
+      callback();
+    });
   }
 }
