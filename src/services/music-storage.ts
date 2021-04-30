@@ -1,6 +1,7 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
-import { MusicDataInterface, MusicStorageInterface } from '../../interfaces';
+import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
+import { Singleton } from '../decorators';
 
 function getNewMusicData(
   musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
@@ -12,6 +13,7 @@ function getNewMusicData(
   };
 }
 
+@Singleton
 export class MusicStorage extends Dexie implements MusicStorageInterface {
   private songs: Dexie.Table<MusicDataInterface, number>;
 
@@ -52,7 +54,6 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
   }
 
   async getMusicUsingId(id: string): Promise<MusicDataInterface | undefined> {
-    console.log(`fetching ${id}`);
     return (await this.songs.where('id').equals(id).limit(1).toArray())[0];
   }
 

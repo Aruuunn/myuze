@@ -1,5 +1,7 @@
-import { AudioServiceInterface } from '../../interfaces';
+import { AudioServiceInterface } from '../interfaces';
+import { Singleton } from '../decorators';
 
+@Singleton
 export class AudioAPI implements AudioServiceInterface {
   private audioEl: HTMLAudioElement;
 

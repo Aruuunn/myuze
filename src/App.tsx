@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 
-import { AudioAPI, MusicStorage } from './common/services';
+import { AudioAPI, MusicStorage } from './services';
 import {
   AudioServiceContext,
   MusicStorageContext,
