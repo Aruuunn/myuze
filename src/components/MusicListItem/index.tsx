@@ -5,6 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 
 import { MusicDataInterface } from '../../interfaces';
 import { useStyles } from './styles';
@@ -37,7 +38,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   useEffect(() => {
     const componentOnMount = () => db.getMusicAt(index).then((data) => {
       if (data) {
-        setMusicData({ artists: data.artists, title: data.title, id: data.id });
+        setMusicData(data);
         if (currentPlayingMusic) {
           if (data.id === currentPlayingMusic?.id) {
             setIsCurrentPlayingMusic(true);
@@ -49,7 +50,6 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     componentOnMount();
 
     db.onChange(() => {
-      console.log(`remounting..${index}`);
       componentOnMount();
     });
   }, [db, index, currentPlayingMusic]);
@@ -66,12 +66,13 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       >
         <Grid container alignItems="center">
           <Grid item xs={12}>
-            {musicData ? musicData.title : ''}
+            {musicData ? musicData.title : <Skeleton />}
           </Grid>
-          <Grid className={styles.artists} xs={12} item>
-            {musicData?.artists?.length
+          <Grid className={styles.artists} item xs={12}>
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {musicData ? musicData?.artists?.length
               ? musicData.artists.join(' , ')
-              : 'unknown'}
+              : 'unknown' : <Skeleton style={{ width: '60%' }} /> }
           </Grid>
         </Grid>
       </Paper>

@@ -11,7 +11,7 @@ export interface MusicStorageInterface {
   getMusicAt(
     index: number,
     filter?: (obj: MusicDataInterface) => boolean,
-  ): Promise<MusicDataInterface | undefined>;
+  ): Promise<Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> | undefined>;
 
   getMusicUsingId(id: string): Promise<MusicDataInterface | undefined>;
 

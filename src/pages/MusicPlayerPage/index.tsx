@@ -1,6 +1,7 @@
 import React, {
   ReactElement, useEffect,
 } from 'react';
+import { motion } from 'framer-motion';
 import { Container, Grid, IconButton } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import { ExpandMoreOutlined } from '@material-ui/icons';
@@ -49,74 +50,84 @@ export function MusicPlayerPage(): ReactElement {
   }, [id]);
 
   return (
-    <Container maxWidth="lg">
-      <Grid
-        id="music-player-container"
-        container
-        style={{ position: 'relative' }}
-        className={styles.container}
-      >
+    <motion.div
+      initial={{
+        y: '100vh',
+        opacity: 0,
+      }}
+      transition={{
+        duration: 0.3,
+      }}
+      style={{ overflow: 'hidden' }}
+      animate={{ y: 0, opacity: 1 }}
+    >
+      <Container maxWidth="lg">
         <Grid
-          id="music-player"
-          justify="center"
-          alignItems="center"
-          item
+          id="music-player-container"
           container
-          xs={8}
+          style={{ position: 'relative' }}
+          className={styles.container}
         >
-          <IconButton
-            size="medium"
-            style={{
-              color: 'rgb(var(--primary-dark))',
-              position: 'absolute',
-              top: '50px',
-              left: 0,
-            }}
-            onClick={() => {
-              history.push('/');
-            }}
-          >
-            <ExpandMoreOutlined fontSize="large" />
-          </IconButton>
           <Grid
-            item
-            container
+            id="music-player"
             justify="center"
             alignItems="center"
-            xs={12}
-            style={{ marginBottom: '40px' }}
+            item
+            container
+            xs={8}
           >
+            <IconButton
+              size="medium"
+              style={{
+                color: 'rgb(var(--primary-dark))',
+                position: 'absolute',
+                top: '50px',
+                left: 0,
+              }}
+              onClick={() => {
+                history.push('/');
+              }}
+            >
+              <ExpandMoreOutlined fontSize="large" />
+            </IconButton>
             <Grid
+              item
               container
               justify="center"
               alignItems="center"
-              style={{ marginBottom: '60px' }}
-              item
               xs={12}
+              style={{ marginBottom: '40px' }}
             >
-              <AlbumCover
-                musicTitle={currentPlayingMusic?.title ?? ''}
-                artistName={(currentPlayingMusic?.artists ?? [])[0]}
-                imgURL={currentPlayingMusic?.imgURL}
-              />
+              <Grid
+                container
+                justify="center"
+                alignItems="center"
+                style={{ marginBottom: '60px' }}
+                item
+                xs={12}
+              >
+                <AlbumCover
+                  musicTitle={currentPlayingMusic?.title ?? ''}
+                  artistName={(currentPlayingMusic?.artists ?? [])[0]}
+                  imgURL={currentPlayingMusic?.imgURL}
+                />
+              </Grid>
+              <Grid container justify="center" alignItems="center" item xs={12}>
+                <MusicName
+                  title={currentPlayingMusic?.title ?? ''}
+                  artists={currentPlayingMusic?.artists ?? []}
+                />
+              </Grid>
             </Grid>
-            <Grid container justify="center" alignItems="center" item xs={12}>
-              <MusicName
-                title={currentPlayingMusic?.title ?? ''}
-                artists={currentPlayingMusic?.artists ?? []}
-              />
+            <Grid item xs={12}>
+              <MusicSlider size="large" />
             </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <MusicSlider size="large" />
-          </Grid>
-          <Grid item xs={12}>
-            <MusicControls size="large" />
+            <Grid item xs={12}>
+              <MusicControls size="large" />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </motion.div>
   );
 }
-
-export default MusicPlayerPage;

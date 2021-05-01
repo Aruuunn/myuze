@@ -1,9 +1,14 @@
+import sizeof from 'object-sizeof';
 import { CacheInterface } from '../interfaces';
 
 export class Cache implements CacheInterface {
-  private maxSize = 0;
+  private maxSize = 100 * 1e6; // Approx. 100MB
 
-  cache: Record<string, { data: any, promise: boolean }> = {};
+  private cache: Record<string, { data: any, promise: boolean }> = {};
+
+  private keys: string[] = [];
+
+  private size = 0;
 
   clear(): void {
     this.cache = {};
@@ -18,7 +23,23 @@ export class Cache implements CacheInterface {
   }
 
   put(key: string, value: any): void {
+    const valueSize = sizeof(value);
+
+    while (this.size + valueSize > this.maxSize) {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const key = this.keys.shift();
+
+      if (!key) {
+        break; // not supposed to happen tho
+      }
+
+      this.size -= sizeof(this.cache[key]);
+      delete this.cache[key];
+    }
+
     this.cache[key] = value;
+    this.size += valueSize;
+    this.keys.push(key);
   }
 
   static getCacheDecorator(cache: CacheInterface) {

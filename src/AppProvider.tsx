@@ -1,5 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 
+import { BrowserRouter } from 'react-router-dom';
 import { AudioAPI, MusicStorage } from './services';
 import {
   AudioServiceContext,
@@ -18,7 +19,7 @@ function AppProvider({ children }: { children: ReactNode }): ReactElement {
       <MusicPlayerInterpreterContext.Provider value={musicPlayerService}>
         <AudioServiceContext.Provider value={audioServiceInstance}>
           <MusicStorageContext.Provider value={musicStorage}>
-            {children}
+            <BrowserRouter>{children}</BrowserRouter>
           </MusicStorageContext.Provider>
         </AudioServiceContext.Provider>
       </MusicPlayerInterpreterContext.Provider>
