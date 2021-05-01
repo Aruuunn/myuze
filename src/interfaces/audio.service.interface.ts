@@ -13,4 +13,5 @@ export interface AudioServiceInterface {
   onPause: (callback: () => void) => void;
   onLoad: (callback: () => void) => void;
   onDurationChange: (callback: () => void) => void;
+  onEnd: (callback: () => void) => void;
 }

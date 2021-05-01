@@ -106,3 +106,15 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
 });
 
 export const musicPlayerService = interpret(musicPlayerMachine).start();
+
+audioService.onPause(() => {
+  musicPlayerService.send({
+    type: MusicPlayerMachineEvents.PAUSE,
+  });
+});
+
+audioService.onPlay(() => {
+  musicPlayerService.send({
+    type: MusicPlayerMachineEvents.PLAY,
+  });
+});

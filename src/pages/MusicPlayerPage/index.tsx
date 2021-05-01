@@ -5,6 +5,7 @@ import { Container, Grid, IconButton } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import { ExpandMoreOutlined } from '@material-ui/icons';
 
+import { State } from 'xstate';
 import {
   MusicSlider,
   MusicControls,
@@ -15,28 +16,36 @@ import { useStyles } from './styles';
 
 import { useMusicPlayerMachine } from '../../hooks';
 import { MusicPlayerMachineEvents, MusicPlayerMachineStates } from '../../machines';
+import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
 
-/**
- * @TODO handle the edge case when the id is invalid.
- * */
 export function MusicPlayerPage(): ReactElement {
   const styles = useStyles();
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
-  const [current, send] = useMusicPlayerMachine();
+  const [current, send, service] = useMusicPlayerMachine();
   const {
     currentPlayingMusic,
   } = current.context;
 
   useEffect(() => {
-    console.log(current.value);
     if (id && current.value === MusicPlayerMachineStates.NOT_LOADED) {
       send({
         type: MusicPlayerMachineEvents.LOAD,
         id,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    const onUnload = (state: State<MusicPlayerMachineContext>) => {
+      if (state.value === MusicPlayerMachineStates.NOT_LOADED) {
+        history.push('/');
+      }
+    };
+
+    service.onTransition(onUnload);
+
+    return () => {
+      service.off(onUnload);
+    };
   }, [id]);
 
   return (
