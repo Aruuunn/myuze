@@ -29,6 +29,7 @@ export function MusicPlayerPage(): ReactElement {
   } = current.context;
 
   useEffect(() => {
+    console.log(current.value);
     if (id && current.value === MusicPlayerMachineStates.NOT_LOADED) {
       send({
         type: MusicPlayerMachineEvents.LOAD,
