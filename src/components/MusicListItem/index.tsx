@@ -36,16 +36,18 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   const [isCurrentPlayingMusic, setIsCurrentPlayingMusic] = useState(false);
 
   useEffect(() => {
-    const componentOnMount = () => db.getMusicAt(index).then((data) => {
-      if (data) {
-        setMusicData(data);
-        if (currentPlayingMusic) {
-          if (data.id === currentPlayingMusic?.id) {
-            setIsCurrentPlayingMusic(true);
+    const componentOnMount = () => {
+      db.getMusicAt(index).then((data) => {
+        if (data) {
+          setMusicData(data);
+          if (currentPlayingMusic) {
+            if (data.id === currentPlayingMusic?.id) {
+              setIsCurrentPlayingMusic(true);
+            }
           }
         }
-      }
-    });
+      });
+    };
 
     componentOnMount();
 
