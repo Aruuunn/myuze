@@ -37,7 +37,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   useEffect(() => {
     const componentOnMount = () => db.getMusicAt(index).then((data) => {
       if (data) {
-        setMusicData({ artists: data.artists, title: data.title, id: data.id });
+        setMusicData(data);
         if (currentPlayingMusic) {
           if (data.id === currentPlayingMusic?.id) {
             setIsCurrentPlayingMusic(true);
@@ -49,7 +49,6 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     componentOnMount();
 
     db.onChange(() => {
-      console.log(`remounting..${index}`);
       componentOnMount();
     });
   }, [db, index, currentPlayingMusic]);
