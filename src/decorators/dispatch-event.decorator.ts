@@ -6,10 +6,11 @@ export function addEventListener(eventName: string, callback: () => void): void 
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function dispatchEvent(eventName: string) {
+export function DispatchEvent(eventName: string) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dispatch = () => {
     const event = new Event(eventName);
+    console.log('dispatching event..');
     window.dispatchEvent(event);
   };
 

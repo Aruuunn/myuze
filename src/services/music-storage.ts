@@ -1,7 +1,8 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
-import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
-import { Singleton, dispatchEvent, addEventListener } from '../decorators';
+import { CacheInterface, MusicDataInterface, MusicStorageInterface } from '../interfaces';
+import { Singleton, DispatchEvent, addEventListener } from '../decorators';
+import { StorageCache } from './storage-cache';
 
 function getNewMusicData(
   musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
@@ -14,7 +15,10 @@ function getNewMusicData(
 }
 
 const DATA_CHANGE_EVENT_NAME = 'music-storage-data-change';
-const dispatchEventOnDataChange = dispatchEvent(DATA_CHANGE_EVENT_NAME);
+const DispatchEventOnDataChange = DispatchEvent(DATA_CHANGE_EVENT_NAME);
+const cache: CacheInterface = new StorageCache();
+const CacheOutput = StorageCache.getCacheDecorator(cache);
+const ClearCache = StorageCache.getCacheClearDecorator(cache);
 
 @Singleton
 export class MusicStorage extends Dexie implements MusicStorageInterface {
@@ -32,21 +36,24 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return this.songs.count();
   }
 
-  @dispatchEventOnDataChange
+  @DispatchEventOnDataChange
+  @ClearCache
   async addNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
   ): Promise<void> {
     await this.songs.add(getNewMusicData(musicData));
   }
 
-  @dispatchEventOnDataChange
+  @DispatchEventOnDataChange
+  @ClearCache
   async addBulkNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[],
   ): Promise<void> {
     await this.songs.bulkAdd(musicData.map((data) => getNewMusicData(data)));
   }
 
-  getMusicAt(
+  @CacheOutput
+  async getMusicAt(
     index: number,
     filter: (obj: MusicDataInterface) => boolean = () => true,
   ): Promise<MusicDataInterface | undefined> {
@@ -58,11 +65,13 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
       .first();
   }
 
+  @CacheOutput
   async getMusicUsingId(id: string): Promise<MusicDataInterface | undefined> {
     return (await this.songs.where('id').equals(id).limit(1).toArray())[0];
   }
 
-  @dispatchEventOnDataChange
+  @DispatchEventOnDataChange
+  @ClearCache
   async deleteMusicUsingId(id: number): Promise<void> {
     await this.songs.where('id').equals(id).delete();
   }

@@ -75,7 +75,10 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
       updateSliderMaxValue(audioService.duration);
     };
 
-    if (currentState !== MusicPlayerMachineStates.NOT_LOADED) callback();
+    if (currentState !== MusicPlayerMachineStates.NOT_LOADED) {
+      callback();
+      updateSliderValue(audioService.currentTime);
+    }
 
     audioService.onLoad(callback);
 

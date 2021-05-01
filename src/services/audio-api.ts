@@ -75,4 +75,8 @@ export class AudioAPI implements AudioServiceInterface {
   onDurationChange(callback: () => void): void {
     this.audioEl.addEventListener('durationchange', () => callback());
   }
+
+  onEnd(callback: () => void): void {
+    this.audioEl.addEventListener('ended', () => callback());
+  }
 }

@@ -9,13 +9,17 @@ import { MusicPlayerMachineEvents, musicPlayerService } from '../../machines';
 import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
 
 export function HomePage(): ReactElement {
-  const [, send] = useService(musicPlayerService);
+  const [current, send] = useService(musicPlayerService);
   const history = useHistory();
+
+  const goToMusicPlayerPage = (id: string) => {
+    history.push(`/play/${id}`);
+  };
 
   useEffect(() => {
     const eventListener = (state: State<MusicPlayerMachineContext>) => {
       if (state.event.type === 'done.invoke.load-music' && state.context.currentPlayingMusic?.id) {
-        history.push(`/play/${state.context.currentPlayingMusic?.id}`);
+        goToMusicPlayerPage(state.context.currentPlayingMusic.id);
       }
     };
     musicPlayerService.onTransition(eventListener);
@@ -52,10 +56,14 @@ export function HomePage(): ReactElement {
         <MusicList
           onSelectItem={(id: string | null) => {
             if (id) {
-              send({
-                type: MusicPlayerMachineEvents.LOAD,
-                id,
-              });
+              if (current.context.currentPlayingMusic?.id === id) {
+                goToMusicPlayerPage(id);
+              } else {
+                send({
+                  type: MusicPlayerMachineEvents.LOAD,
+                  id,
+                });
+              }
             }
           }}
         />
