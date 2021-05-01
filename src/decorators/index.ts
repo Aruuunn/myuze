@@ -1,2 +1,2 @@
 export { Singleton } from './singleton.decorator';
-export { addEventListener, dispatchEvent } from './dispatch-event.decorator';
+export { addEventListener, DispatchEvent } from './dispatch-event.decorator';
