@@ -1,7 +1,9 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
 import { CacheInterface, MusicDataInterface, MusicStorageInterface } from '../interfaces';
-import { Singleton, DispatchEvent, addEventListener } from '../decorators';
+import {
+  Singleton, DispatchEvent, addEventListener, LogPerformance,
+} from '../decorators';
 import { StorageCache } from './storage-cache';
 
 function getNewMusicData(
@@ -27,11 +29,12 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
   constructor() {
     super('MusicDatabase');
     this.version(1).stores({
-      songs: '++id, imgURL, artists, createdAt, title, musicDataURL',
+      songs: 'id,createdAt,title',
     });
     this.songs = this.table('songs');
   }
 
+  @LogPerformance
   getTotalCount(): Promise<number> {
     return this.songs.count();
   }
@@ -44,6 +47,7 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     await this.songs.add(getNewMusicData(musicData));
   }
 
+  @LogPerformance
   @DispatchEventOnDataChange
   @ClearCache
   async addBulkNewMusic(
@@ -52,17 +56,15 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     await this.songs.bulkAdd(musicData.map((data) => getNewMusicData(data)));
   }
 
+  @LogPerformance
   @CacheOutput
   async getMusicAt(
     index: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     filter: (obj: MusicDataInterface) => boolean = () => true,
   ): Promise<Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> | undefined> {
     const result: (Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> & { musicDataURL?: string, imgURL?: string }) | undefined = await this.songs
-      .orderBy('createdAt')
-      .filter(filter)
-      .reverse()
-      .offset(index)
-      .first();
+      .offset(index).reverse().first();
 
     if (typeof result !== 'undefined') {
       delete result.musicDataURL;
@@ -73,6 +75,7 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return result;
   }
 
+  @LogPerformance
   @CacheOutput
   async getMusicUsingId(id: string): Promise<MusicDataInterface | undefined> {
     return (await this.songs.where('id').equals(id).limit(1).toArray())[0];
