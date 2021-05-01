@@ -131,5 +131,3 @@ export function MusicPlayerPage(): ReactElement {
     </motion.div>
   );
 }
-
-export default MusicPlayerPage;

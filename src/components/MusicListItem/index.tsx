@@ -5,6 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 
 import { MusicDataInterface } from '../../interfaces';
 import { useStyles } from './styles';
@@ -65,12 +66,13 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       >
         <Grid container alignItems="center">
           <Grid item xs={12}>
-            {musicData ? musicData.title : ''}
+            {musicData ? musicData.title : <Skeleton />}
           </Grid>
-          <Grid className={styles.artists} xs={12} item>
-            {musicData?.artists?.length
+          <Grid className={styles.artists} item xs={12}>
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {musicData ? musicData?.artists?.length
               ? musicData.artists.join(' , ')
-              : 'unknown'}
+              : 'unknown' : <Skeleton style={{ width: '60%' }} /> }
           </Grid>
         </Grid>
       </Paper>
