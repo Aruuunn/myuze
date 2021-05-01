@@ -48,7 +48,10 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
 
     componentOnMount();
 
-    db.onChange(() => { componentOnMount(); });
+    db.onChange(() => {
+      console.log(`remounting..${index}`);
+      componentOnMount();
+    });
   }, [db, index, currentPlayingMusic]);
 
   const styles = useStyles({ isCurrentPlayingMusic });

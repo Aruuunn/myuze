@@ -1,7 +1,6 @@
 export interface CacheInterface {
   clear(): void;
   config(maxSize: number): void;
-  getCacheDecorator(): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => any;
-  getCacheClearDecorator()
-  : (target: any, propertyKey: string, descriptor: PropertyDescriptor) => any;
+  get(key: string): any;
+  put(key: string, value: any): void;
 }

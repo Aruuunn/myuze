@@ -17,8 +17,8 @@ function getNewMusicData(
 const DATA_CHANGE_EVENT_NAME = 'music-storage-data-change';
 const DispatchEventOnDataChange = DispatchEvent(DATA_CHANGE_EVENT_NAME);
 const cache: CacheInterface = new StorageCache();
-const CacheOutput = cache.getCacheDecorator();
-const ClearCache = cache.getCacheClearDecorator();
+const CacheOutput = StorageCache.getCacheDecorator(cache);
+const ClearCache = StorageCache.getCacheClearDecorator(cache);
 
 @Singleton
 export class MusicStorage extends Dexie implements MusicStorageInterface {
@@ -36,16 +36,16 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return this.songs.count();
   }
 
-  @ClearCache
   @DispatchEventOnDataChange
+  @ClearCache
   async addNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
   ): Promise<void> {
     await this.songs.add(getNewMusicData(musicData));
   }
 
-  @ClearCache
   @DispatchEventOnDataChange
+  @ClearCache
   async addBulkNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[],
   ): Promise<void> {
@@ -70,8 +70,8 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     return (await this.songs.where('id').equals(id).limit(1).toArray())[0];
   }
 
-  @ClearCache
   @DispatchEventOnDataChange
+  @ClearCache
   async deleteMusicUsingId(id: number): Promise<void> {
     await this.songs.where('id').equals(id).delete();
   }
