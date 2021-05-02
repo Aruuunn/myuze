@@ -7,7 +7,7 @@ import { MusicListItem } from '../MusicListItem';
 import { useMusicStorage } from '../../hooks';
 
 export interface MusicListProps {
-  onSelectItem?: (id: string | null) => void;
+  onSelectItem?: (data: { id: string, index: number } | null) => void;
 }
 
 export function MusicList(props: MusicListProps): ReactElement {

@@ -1,11 +1,12 @@
 import {
-  assign, interpret, Machine,
+  assign, interpret, Machine, send,
 } from 'xstate';
 import { MusicDataInterface } from '../interfaces';
 import { AudioAPI, MusicStorage } from '../services';
 
 export interface MusicPlayerMachineContext {
   currentPlayingMusic: MusicDataInterface | null;
+  index: number;
 }
 
 export enum MusicPlayerMachineStates {
@@ -20,6 +21,8 @@ export enum MusicPlayerMachineEvents {
   LOAD = 'LOAD',
   PLAY = 'PLAY',
   PAUSE = 'PAUSE',
+  NEXT = 'NEXT',
+  PREV = 'PREV',
 }
 
 const {
@@ -37,10 +40,23 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
   initial: NOT_LOADED,
   context: {
     currentPlayingMusic: null,
+    index: -1,
   },
   on: {
     [MusicPlayerMachineEvents.LOAD]: {
       target: LOADING,
+    },
+    [MusicPlayerMachineEvents.NEXT]: {
+      actions: send((context) => ({
+        type: MusicPlayerMachineEvents.LOAD,
+        index: context.index + 1,
+      })),
+    },
+    [MusicPlayerMachineEvents.PREV]: {
+      actions: send((context) => ({
+        type: MusicPlayerMachineEvents.LOAD,
+        index: context.index - 1,
+      })),
     },
   },
   states: {
@@ -79,15 +95,30 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
       invoke: {
         id: 'load-music',
         src: async (_, event) => {
-          const { id } = event;
+          let { index } = event;
 
-          if (typeof id !== 'string') {
+          if (typeof index !== 'number') {
             return Promise.reject();
           }
+
+          const total = await db.getTotalCount();
+
+          if (index >= total) {
+            index = 0;
+          } else if (index < 0) {
+            index = total - 1;
+          }
+
+          const { id } = (await db.getMusicAt(index)) ?? {};
+
+          if (!id) {
+            return Promise.reject();
+          }
+
           const musicData = await db.getMusicUsingId(id);
 
           if (musicData) {
-            return audioService.load(musicData.musicDataURL).then(() => musicData);
+            return audioService.load(musicData.musicDataURL).then(() => ({ ...musicData, index }));
           }
           return Promise.reject();
         },
@@ -95,6 +126,7 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
           target: LOADED,
           actions: assign({
             currentPlayingMusic: (_, event) => event.data,
+            index: (_, event) => event.data?.index,
           }),
         },
         onError: {
@@ -116,5 +148,11 @@ audioService.onPause(() => {
 audioService.onPlay(() => {
   musicPlayerService.send({
     type: MusicPlayerMachineEvents.PLAY,
+  });
+});
+
+audioService.onEnd(() => {
+  musicPlayerService.send({
+    type: MusicPlayerMachineEvents.NEXT,
   });
 });
