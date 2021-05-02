@@ -42,7 +42,7 @@ export function MusicList(props: MusicListProps): ReactElement {
             index={rowProps.index}
           />
         )}
-        height={2000}
+        height={500}
         rowHeight={100}
       />
     </>
