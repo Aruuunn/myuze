@@ -65,7 +65,7 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     filter: (obj: MusicDataInterface) => boolean = () => true,
   ): Promise<Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> | undefined> {
     const result: (Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> & { musicDataURL?: string, imgURL?: string }) | undefined = await this.songs
-      .offset(index).reverse().first();
+      .orderBy('createdAt').offset(index).reverse().first();
 
     if (typeof result !== 'undefined') {
       delete result.musicDataURL;
