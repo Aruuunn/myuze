@@ -1,15 +1,25 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
-  root: {
+  root: (
+    { height, width }
+    : { height: number, width: number },
+  ) => ({
     padding: '2px',
-  },
-  card: ({ isCurrentPlayingMusic }: { isCurrentPlayingMusic: boolean }) => ({
+    boxSizing: 'border-box',
+    height: `${height}`,
+    width: `${width}`,
+  }),
+  card: (
+    { isCurrentPlayingMusic }
+    : { isCurrentPlayingMusic: boolean, height: number, width: number },
+  ) => ({
     backgroundColor: 'rgb(var(--bg-color-lighter))',
     padding: '20px',
     textOverflow: 'ellipsis',
     color: 'rgb(var(--primary-bright))',
     fontWeight: isCurrentPlayingMusic ? 'bold' : 'normal',
+    boxSizing: 'border-box',
   }),
   artists: {
     fontWeight: 'normal',

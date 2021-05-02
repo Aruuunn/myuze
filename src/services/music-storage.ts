@@ -56,8 +56,8 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     this.albumCoverDataURLs = this.table('albumCoverDataURLs');
   }
 
-  @CacheOutput
   @LogPerformance()
+  @CacheOutput
   getTotalCount(): Promise<number> {
     return this.songs.count();
   }
@@ -76,9 +76,9 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     ]);
   }
 
+  @LogPerformance('addBulkNewMusic')
   @DispatchEventOnDataChange
   @ClearCache
-  @LogPerformance('addBulkNewMusic')
   async addBulkNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[],
   ): Promise<void> {
@@ -100,8 +100,8 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     ]);
   }
 
-  @CacheOutput
   @LogPerformance('getMusicAt')
+  @CacheOutput
   async getMusicAt(
     index: number,
     filter: (obj: Song) => boolean = () => true,
@@ -111,8 +111,8 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
       .first();
   }
 
-  @CacheOutput
   @LogPerformance('getMusicUsingId')
+  @CacheOutput
   async getMusicUsingId(id: string): Promise<MusicDataInterface | undefined> {
     const songData = await this.songs.where('id').equals(id).first();
     if (songData) {
@@ -127,7 +127,7 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
       return {
         ...songData,
         musicDataURL: musicDataURLData.data,
-        imgURL: albumCoverDataURLData?.id,
+        imgURL: albumCoverDataURLData?.data,
       };
     }
 

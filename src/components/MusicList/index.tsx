@@ -1,7 +1,7 @@
 import React, {
   ReactElement, useEffect, useState,
 } from 'react';
-import { List } from 'react-virtualized';
+import { FixedSizeList as List } from 'react-window';
 
 import { MusicListItem } from '../MusicListItem';
 import { useMusicStorage } from '../../hooks';
@@ -15,6 +15,8 @@ export function MusicList(props: MusicListProps): ReactElement {
   const [totalCount, setTotalCount] = useState(-1);
 
   const db = useMusicStorage();
+  const itemSize = 85;
+  const width = 500;
 
   useEffect(() => {
     const componentOnMount = () => db.getTotalCount().then(setTotalCount);
@@ -33,18 +35,23 @@ export function MusicList(props: MusicListProps): ReactElement {
   return (
     <>
       <List
-        rowCount={totalCount}
-        width={500}
-        rowRenderer={(rowProps) => (
+        className="hide-scrollbar"
+        itemCount={totalCount}
+        width={width}
+        height={window.innerHeight - 200}
+        itemSize={itemSize}
+      >
+        {({ index, style }) => (
           <MusicListItem
+            height={itemSize}
+            width={width}
             onSelectItem={onSelectItem}
-            itemKey={rowProps.key}
-            index={rowProps.index}
+            itemKey={index.toString()}
+            index={index}
+            style={style}
           />
         )}
-        height={500}
-        rowHeight={100}
-      />
+      </List>
     </>
   );
 }
