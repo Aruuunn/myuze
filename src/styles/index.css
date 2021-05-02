@@ -7,3 +7,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(var(--bg-color));
 }
+
+
+.hide-scrollbar {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar ::-webkit-scrollbar { display: none; }

@@ -16,11 +16,14 @@ export interface MusicListItemProps {
   itemKey: string;
   style?: CSSProperties;
   onSelectItem?: (id: string | null) => void;
+  height: number;
+  width: number;
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
   const {
-    index, itemKey, style = {}, onSelectItem,
+    index, style = {}, onSelectItem,
+    height, width,
   } = props;
 
   const db = useMusicStorage();
@@ -33,19 +36,15 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   MusicDataInterface,
   'title' | 'artists' | 'id'
   > | null>(null);
-  const [isCurrentPlayingMusic, setIsCurrentPlayingMusic] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const componentOnMount = () => {
       db.getMusicAt(index).then((data) => {
         if (data) {
           setMusicData(data);
-          if (currentPlayingMusic) {
-            if (data.id === currentPlayingMusic?.id) {
-              setIsCurrentPlayingMusic(true);
-            }
-          }
         }
+        setLoading(false);
       });
     };
 
@@ -56,10 +55,16 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     });
   }, [db, index, currentPlayingMusic]);
 
-  const styles = useStyles({ isCurrentPlayingMusic });
+  const styles = useStyles(
+    {
+      isCurrentPlayingMusic: (!!currentPlayingMusic && musicData?.id === currentPlayingMusic?.id),
+      height,
+      width,
+    },
+  );
 
   return (
-    <div className={styles.root} key={itemKey} style={style}>
+    <div className={styles.root} key={index} style={style}>
       <Paper
         className={styles.card}
         onClick={() => {
@@ -67,12 +72,18 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
         }}
       >
         <Grid container alignItems="center">
-          <Grid item xs={12}>
-            {musicData ? musicData.title : <Skeleton />}
+          <Grid
+            item
+            xs={12}
+            style={{
+              whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden',
+            }}
+          >
+            {(!isLoading && musicData) ? musicData.title : <Skeleton />}
           </Grid>
           <Grid className={styles.artists} item xs={12}>
             {/* eslint-disable-next-line no-nested-ternary */}
-            {musicData ? musicData?.artists?.length
+            {(!isLoading && musicData) ? musicData?.artists?.length
               ? musicData.artists.join(' , ')
               : 'unknown' : <Skeleton style={{ width: '60%' }} /> }
           </Grid>
