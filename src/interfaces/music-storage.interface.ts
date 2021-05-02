@@ -10,7 +10,7 @@ export interface MusicStorageInterface {
    * */
   getMusicAt(
     index: number,
-    filter?: (obj: MusicDataInterface) => boolean,
+    filter?: (obj: Pick<MusicDataInterface, 'id' | 'title' | 'createdAt' | 'artists'>) => boolean,
   ): Promise<Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> | undefined>;
 
   getMusicUsingId(id: string): Promise<MusicDataInterface | undefined>;
