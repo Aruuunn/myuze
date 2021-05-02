@@ -9,6 +9,7 @@ export const useStyles = makeStyles({
     boxSizing: 'border-box',
     height: `${height}`,
     width: `${width}`,
+    maxWidth: '90vw',
   }),
   card: (
     { isCurrentPlayingMusic }
