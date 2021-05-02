@@ -56,7 +56,7 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     this.albumCoverDataURLs = this.table('albumCoverDataURLs');
   }
 
-  @LogPerformance()
+  @LogPerformance('getTotalCount')
   @CacheOutput
   getTotalCount(): Promise<number> {
     return this.songs.count();

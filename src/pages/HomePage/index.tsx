@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect } from 'react';
 import { Container, Grid, Typography } from '@material-ui/core';
 
-import { useService } from '@xstate/react';
 import { useHistory } from 'react-router-dom';
 import { State } from 'xstate';
 import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
@@ -9,7 +8,6 @@ import { MusicPlayerMachineEvents, musicPlayerService } from '../../machines';
 import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
 
 export function HomePage(): ReactElement {
-  const [current, send] = useService(musicPlayerService);
   const history = useHistory();
 
   const goToMusicPlayerPage = (id: string) => {
@@ -56,10 +54,10 @@ export function HomePage(): ReactElement {
         <MusicList
           onSelectItem={(id: string | null) => {
             if (id) {
-              if (current.context.currentPlayingMusic?.id === id) {
+              if (musicPlayerService.state.context.currentPlayingMusic?.id === id) {
                 goToMusicPlayerPage(id);
               } else {
-                send({
+                musicPlayerService.send({
                   type: MusicPlayerMachineEvents.LOAD,
                   id,
                 });

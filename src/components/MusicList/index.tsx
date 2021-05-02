@@ -12,13 +12,21 @@ export interface MusicListProps {
 
 export function MusicList(props: MusicListProps): ReactElement {
   const { onSelectItem } = props;
+
+  const getContainerHeight = () => window.innerHeight - 170;
+
   const [totalCount, setTotalCount] = useState(-1);
+  const [containerHeight, setContainerHeight] = useState(getContainerHeight());
 
   const db = useMusicStorage();
   const itemSize = 85;
   const width = 500;
 
   useEffect(() => {
+    window.onresize = () => {
+      setContainerHeight(getContainerHeight());
+    };
+
     const componentOnMount = () => db.getTotalCount().then(setTotalCount);
 
     componentOnMount();
@@ -26,7 +34,7 @@ export function MusicList(props: MusicListProps): ReactElement {
     db.onChange(() => {
       componentOnMount();
     });
-  }, [db]);
+  }, []);
 
   if (totalCount === -1) {
     return <div />;
@@ -38,7 +46,7 @@ export function MusicList(props: MusicListProps): ReactElement {
         className="hide-scrollbar"
         itemCount={totalCount}
         width={width}
-        height={window.innerHeight - 200}
+        height={containerHeight}
         itemSize={itemSize}
       >
         {({ index, style }) => (

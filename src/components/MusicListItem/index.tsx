@@ -36,7 +36,6 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   MusicDataInterface,
   'title' | 'artists' | 'id'
   > | null>(null);
-  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const componentOnMount = () => {
@@ -44,7 +43,6 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
         if (data) {
           setMusicData(data);
         }
-        setLoading(false);
       });
     };
 
@@ -79,11 +77,11 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
               whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden',
             }}
           >
-            {(!isLoading && musicData) ? musicData.title : <Skeleton />}
+            {(musicData) ? musicData.title : <Skeleton />}
           </Grid>
           <Grid className={styles.artists} item xs={12}>
             {/* eslint-disable-next-line no-nested-ternary */}
-            {(!isLoading && musicData) ? musicData?.artists?.length
+            {(musicData) ? musicData?.artists?.length
               ? musicData.artists.join(' , ')
               : 'unknown' : <Skeleton style={{ width: '60%' }} /> }
           </Grid>
