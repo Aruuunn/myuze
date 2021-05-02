@@ -52,14 +52,16 @@ export function HomePage(): ReactElement {
           <UploadNewMusic />
         </Grid>
         <MusicList
-          onSelectItem={(id: string | null) => {
+          onSelectItem={(selectedItem: { id: string, index: number } | null) => {
+            if (!selectedItem) return;
+            const { id, index } = selectedItem;
             if (id) {
               if (musicPlayerService.state.context.currentPlayingMusic?.id === id) {
                 goToMusicPlayerPage(id);
               } else {
                 musicPlayerService.send({
                   type: MusicPlayerMachineEvents.LOAD,
-                  id,
+                  index,
                 });
               }
             }

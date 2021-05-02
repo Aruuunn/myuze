@@ -15,7 +15,7 @@ export interface MusicListItemProps {
   index: number;
   itemKey: string;
   style?: CSSProperties;
-  onSelectItem?: (id: string | null) => void;
+  onSelectItem?: (data: { id: string, index: number } | null) => void;
   height: number;
   width: number;
 }
@@ -66,7 +66,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       <Paper
         className={styles.card}
         onClick={() => {
-          if (typeof onSelectItem === 'function') onSelectItem(musicData?.id ?? null);
+          if (typeof onSelectItem === 'function') onSelectItem(musicData?.id ? ({ id: musicData.id, index }) : null);
         }}
       >
         <Grid container alignItems="center">
