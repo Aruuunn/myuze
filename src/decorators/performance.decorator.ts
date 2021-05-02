@@ -2,6 +2,8 @@
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const LogPerformance = (
+  funcName?: string,
+): any => (
   target: any,
   propertyKey: string,
   descriptor: PropertyDescriptor,
@@ -16,7 +18,8 @@ export const LogPerformance = (
       const result = original.apply(this, args);
 
       const log = () => {
-        console.log('[', (this as any).name, ']', performance.now() - start, 'ms  ', original.name, ' to finish', args);
+        // eslint-disable-next-line no-console
+        console.log(`[${(this as any).name}] ${funcName ?? original.name} took ${performance.now() - start} ms to execute w/ args: ${args}`);
       };
 
       if (result instanceof Promise) {
