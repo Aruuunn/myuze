@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
-  Container, Grid, IconButton,
+  Container, Grid, Hidden, IconButton,
 } from '@material-ui/core';
 import { ExpandLessRounded } from '@material-ui/icons';
 
@@ -31,7 +31,9 @@ export function BottomControlsBar(): ReactElement {
             container
             alignItems="center"
             justify="space-between"
-            xs={4}
+            lg={4}
+            xs={12}
+            sm={7}
           >
             <Grid item xs={1}>
               {' '}
@@ -57,11 +59,15 @@ export function BottomControlsBar(): ReactElement {
               />
             </Grid>
           </Grid>
-          <Grid item xs={4}>
-            <MusicControls size="small" />
+          <Grid item sm={5} lg={4}>
+            <Hidden only={['xs']}>
+              <MusicControls size="small" />
+            </Hidden>
           </Grid>
-          <Grid item xs={4}>
-            <MusicSlider size="small" />
+          <Grid item lg={4}>
+            <Hidden only={['xs', 'sm', 'md']}>
+              <MusicSlider size="small" />
+            </Hidden>
           </Grid>
         </Grid>
       </Container>
