@@ -48,6 +48,7 @@ export function MusicList(props: MusicListProps): ReactElement {
         width={width}
         height={containerHeight}
         itemSize={itemSize}
+        style={{ maxWidth: '100%' }}
       >
         {({ index, style }) => (
           <MusicListItem

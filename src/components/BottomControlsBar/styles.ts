@@ -7,7 +7,7 @@ export const useStyles = makeStyles({
     backgroundColor: 'rgb(var(--primary-darker))',
     bottom: 0,
     left: 0,
-    width: '100vw',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
   },
