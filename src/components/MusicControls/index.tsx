@@ -22,7 +22,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         size="medium"
         className={styles.controls}
       >
-        <SkipPreviousRounded fontSize={size} />
+        <SkipPreviousRounded fontSize="large" />
       </IconButton>
       <PlayButton size={size} />
       <IconButton
@@ -30,7 +30,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         size="medium"
         className={styles.controls}
       >
-        <SkipNextRounded fontSize={size} />
+        <SkipNextRounded fontSize="large" />
       </IconButton>
     </Grid>
   );

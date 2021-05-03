@@ -83,6 +83,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
       <span className={styles.primaryText}>{title}</span>
       <span className={styles.secondaryText}>
         -
+        {' '}
         {secondaryText}
       </span>
     </div>

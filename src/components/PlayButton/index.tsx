@@ -34,7 +34,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
             ? MusicPlayerMachineEvents.PAUSE : MusicPlayerMachineEvents.PLAY,
         })}
       >
-        <SvgIcon fontSize={size}>
+        <SvgIcon>
           {currentState === MusicPlayerMachineStates.PLAYING ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
