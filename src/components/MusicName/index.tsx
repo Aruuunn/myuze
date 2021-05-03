@@ -93,9 +93,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
     <div ref={rootContainerElRef} className={styles.root}>
       <span className={styles.primaryText}>{title ?? ''}</span>
       <span className={styles.secondaryText}>
-        -
-        {' '}
-        {typeof artists?.length !== 'undefined' && artists.length !== 0 ? secondaryText : ''}
+        {typeof artists?.length !== 'undefined' && artists.length !== 0 ? ` - ${secondaryText}` : ''}
       </span>
     </div>
   );
