@@ -5,12 +5,13 @@ import { useStyles } from './styles';
 export interface MusicNameProps {
   title: string;
   artists: string[];
+  size: 'small' | 'large';
 }
 
 export function MusicName(props: MusicNameProps): ReactElement {
-  const { title, artists } = props;
+  const { title, artists, size } = props;
 
-  const styles = useStyles();
+  const styles = useStyles({ size });
   const rootContainerElRef = useRef<HTMLDivElement>(null);
   const secondaryText = artists.length === 0 ? 'unknown' : artists.join(' , ');
 

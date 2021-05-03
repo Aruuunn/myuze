@@ -60,8 +60,7 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
     },
   },
   states: {
-    [NOT_LOADED]: {
-    },
+    [NOT_LOADED]: {},
     [LOADED]: {
       on: {
         '': {
@@ -118,7 +117,9 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
           const musicData = await db.getMusicUsingId(id);
 
           if (musicData) {
-            return audioService.load(musicData.musicDataURL).then(() => ({ ...musicData, index }));
+            return audioService
+              .load(musicData.musicDataURL)
+              .then(() => ({ ...musicData, index }));
           }
           return Promise.reject();
         },
@@ -156,3 +157,5 @@ audioService.onEnd(() => {
     type: MusicPlayerMachineEvents.NEXT,
   });
 });
+
+(window as any).musicPlayerService = musicPlayerService;
