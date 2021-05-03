@@ -21,6 +21,10 @@ export const useStyles = makeStyles({
     color: 'rgb(var(--primary-bright))',
     fontWeight: isCurrentPlayingMusic ? 'bold' : 'normal',
     boxSizing: 'border-box',
+    opacity: isCurrentPlayingMusic ? 1 : 0.8,
+    '&:hover': {
+      opacity: 1,
+    },
   }),
   artists: {
     fontWeight: 'normal',

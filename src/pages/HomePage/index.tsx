@@ -7,6 +7,8 @@ import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
 import { MusicPlayerMachineEvents, musicPlayerService } from '../../machines';
 import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
 
+let autoOpenedMusicPlayerPage = false;
+
 export function HomePage(): ReactElement {
   const history = useHistory();
 
@@ -16,7 +18,8 @@ export function HomePage(): ReactElement {
 
   useEffect(() => {
     const eventListener = (state: State<MusicPlayerMachineContext>) => {
-      if (state.event.type === 'done.invoke.load-music' && state.context.currentPlayingMusic?.id) {
+      if (state.event.type === 'done.invoke.load-music' && state.context.currentPlayingMusic?.id && !autoOpenedMusicPlayerPage) {
+        autoOpenedMusicPlayerPage = true;
         goToMusicPlayerPage(state.context.currentPlayingMusic.id);
       }
     };
@@ -41,13 +44,14 @@ export function HomePage(): ReactElement {
           }}
         >
           <Typography
-            variant="h6"
             style={{
               fontWeight: 'bold',
               fontFamily: "'Open Sans', sans-serif",
+              opacity: 0.6,
+              fontSize: '14px',
             }}
           >
-            Your Songs
+            My Songs
           </Typography>
           <UploadNewMusic />
         </Grid>

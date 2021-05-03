@@ -70,16 +70,11 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     addTimeUpdateListener();
   };
 
+  const callback = () => {
+    updateSliderMaxValue(audioService.duration);
+  };
+
   useEffect(() => {
-    const callback = () => {
-      updateSliderMaxValue(audioService.duration);
-    };
-
-    if (currentState !== MusicPlayerMachineStates.NOT_LOADED) {
-      callback();
-      updateSliderValue(audioService.currentTime);
-    }
-
     audioService.onLoad(callback);
 
     audioService.onDurationChange(callback);
@@ -87,7 +82,14 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     addTimeUpdateListener();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [size]);
+  }, []);
+
+  useEffect(() => {
+    if (currentState !== MusicPlayerMachineStates.NOT_LOADED) {
+      callback();
+      updateSliderValue(audioService.currentTime);
+    }
+  }, [current]);
 
   return (
     <Slider

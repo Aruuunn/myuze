@@ -116,6 +116,7 @@ export function MusicPlayerPage(): ReactElement {
                 <MusicName
                   title={currentPlayingMusic?.title ?? ''}
                   artists={currentPlayingMusic?.artists ?? []}
+                  size="large"
                 />
               </Grid>
             </Grid>

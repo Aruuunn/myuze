@@ -5,12 +5,13 @@ import { useStyles } from './styles';
 export interface MusicNameProps {
   title: string;
   artists: string[];
+  size: 'small' | 'large';
 }
 
 export function MusicName(props: MusicNameProps): ReactElement {
-  const { title, artists } = props;
+  const { title, artists, size } = props;
 
-  const styles = useStyles();
+  const styles = useStyles({ size });
   const rootContainerElRef = useRef<HTMLDivElement>(null);
   const secondaryText = artists.length === 0 ? 'unknown' : artists.join(' , ');
 
@@ -23,9 +24,19 @@ export function MusicName(props: MusicNameProps): ReactElement {
     const primaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
       `.${styles.primaryText}`,
     );
+    if (primaryTextEl) primaryTextEl.innerText = title;
+
     const secondaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
       `.${styles.secondaryText}`,
     );
+
+    if (secondaryTextEl) secondaryTextEl.innerText = ` - by ${secondaryText}`;
+
+    if (primaryTextEl && secondaryTextEl) {
+      rootContainerEl.innerHTML = '';
+      rootContainerEl.appendChild(primaryTextEl);
+      rootContainerEl.appendChild(secondaryTextEl);
+    }
 
     if (rootContainerEl.clientWidth < rootContainerEl.scrollWidth) {
       const textWithEl = [
@@ -83,6 +94,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
       <span className={styles.primaryText}>{title}</span>
       <span className={styles.secondaryText}>
         -
+        {' '}
         {secondaryText}
       </span>
     </div>

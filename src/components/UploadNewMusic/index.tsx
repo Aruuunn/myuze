@@ -4,9 +4,11 @@ import { Add } from '@material-ui/icons';
 
 import { OnMusicUpload } from '../../common';
 import { MusicStorageContext } from '../../providers';
+import { useStyles } from './styles';
 
 export function UploadNewMusic(): ReactElement {
   const db = useContext(MusicStorageContext);
+  const styles = useStyles();
 
   const handleFileSelected = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -27,8 +29,8 @@ export function UploadNewMusic(): ReactElement {
       />
       <label htmlFor="upload-file">
         {' '}
-        <IconButton component="span" color="primary" aria-label="upload music">
-          <Add style={{ fill: 'rgb(var(--primary-dark))' }} />
+        <IconButton className={styles.addBtn} component="span" color="primary" aria-label="upload music">
+          <Add fontSize="small" />
         </IconButton>
       </label>
     </>

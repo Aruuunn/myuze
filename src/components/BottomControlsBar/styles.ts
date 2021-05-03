@@ -11,4 +11,13 @@ export const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
+  expandBtn: {
+    color: 'rgb(var(--primary-dark))',
+    '&:hover, &:focus': {
+      color: 'rgb(var(--primary))',
+    },
+  },
+  musicTitle: {
+    color: 'rgb(var(--primary))',
+  },
 });
