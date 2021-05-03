@@ -3,8 +3,8 @@ import React, { ReactElement, useEffect, useRef } from 'react';
 import { useStyles } from './styles';
 
 export interface MusicNameProps {
-  title: string;
-  artists: string[];
+  title?: string;
+  artists?: string[];
   size: 'small' | 'large';
 }
 
@@ -13,18 +13,18 @@ export function MusicName(props: MusicNameProps): ReactElement {
 
   const styles = useStyles({ size });
   const rootContainerElRef = useRef<HTMLDivElement>(null);
-  const secondaryText = artists.length === 0 ? 'unknown' : artists.join(' , ');
+  const secondaryText = (artists ?? []).length === 0 ? 'unknown' : (artists ?? []).join(' , ');
 
   useEffect(() => {
     let interval = -1;
 
-    if (!rootContainerElRef.current) return;
+    if (!rootContainerElRef.current || !title || !artists) return;
 
     const rootContainerEl = rootContainerElRef.current;
     const primaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
       `.${styles.primaryText}`,
     );
-    if (primaryTextEl) primaryTextEl.innerText = title;
+    if (primaryTextEl) primaryTextEl.innerText = title ?? '';
 
     const secondaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
       `.${styles.secondaryText}`,
@@ -49,16 +49,16 @@ export function MusicName(props: MusicNameProps): ReactElement {
 
         if (textWithEl[textWithEl.length - 1].type === firstElement.type) {
           textWithEl[textWithEl.length - 1].text = textWithEl[textWithEl.length - 1].text
-            + (firstElement.text[0] ?? '');
+            + (firstElement?.text?.[0] ?? '');
         } else {
           textWithEl.push({
             type: firstElement.type,
-            text: firstElement.text[0] ?? '',
+            text: firstElement?.text?.[0] ?? '',
           });
         }
 
-        if (firstElement.text.length === 0) textWithEl.shift();
-        else firstElement.text = firstElement.text.slice(1);
+        if (firstElement.text?.length === 0) textWithEl.shift();
+        else firstElement.text = firstElement.text?.slice(1);
 
         const ctn = document.createDocumentFragment();
 
@@ -91,11 +91,11 @@ export function MusicName(props: MusicNameProps): ReactElement {
 
   return (
     <div ref={rootContainerElRef} className={styles.root}>
-      <span className={styles.primaryText}>{title}</span>
+      <span className={styles.primaryText}>{title ?? ''}</span>
       <span className={styles.secondaryText}>
         -
         {' '}
-        {secondaryText}
+        {typeof artists?.length !== 'undefined' && artists.length !== 0 ? secondaryText : ''}
       </span>
     </div>
   );

@@ -114,8 +114,8 @@ export function MusicPlayerPage(): ReactElement {
               </Grid>
               <Grid container justify="center" alignItems="center" item xs={12}>
                 <MusicName
-                  title={currentPlayingMusic?.title ?? ''}
-                  artists={currentPlayingMusic?.artists ?? []}
+                  title={currentPlayingMusic?.title}
+                  artists={currentPlayingMusic?.artists}
                   size="large"
                 />
               </Grid>

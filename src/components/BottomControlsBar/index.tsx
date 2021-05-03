@@ -53,8 +53,8 @@ export function BottomControlsBar(): ReactElement {
             </Grid>
             <Grid item xs={10} style={{ marginLeft: '5px', boxSizing: 'border-box' }}>
               <MusicName
-                title={currentPlayingMusic?.title ?? ''}
-                artists={currentPlayingMusic?.artists ?? []}
+                title={currentPlayingMusic?.title}
+                artists={currentPlayingMusic?.artists}
                 size="small"
               />
             </Grid>
