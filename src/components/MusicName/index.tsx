@@ -23,9 +23,19 @@ export function MusicName(props: MusicNameProps): ReactElement {
     const primaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
       `.${styles.primaryText}`,
     );
+    if (primaryTextEl) primaryTextEl.innerText = title;
+
     const secondaryTextEl = rootContainerEl?.querySelector<HTMLSpanElement>(
       `.${styles.secondaryText}`,
     );
+
+    if (secondaryTextEl) secondaryTextEl.innerText = ` - by ${secondaryText}`;
+
+    if (primaryTextEl && secondaryTextEl) {
+      rootContainerEl.innerHTML = '';
+      rootContainerEl.appendChild(primaryTextEl);
+      rootContainerEl.appendChild(secondaryTextEl);
+    }
 
     if (rootContainerEl.clientWidth < rootContainerEl.scrollWidth) {
       const textWithEl = [
