@@ -36,11 +36,11 @@ export function BottomControlsBar(): ReactElement {
             container
             alignItems="center"
             justify="space-between"
-            lg={4}
+            lg={5}
             xs={12}
             sm={7}
           >
-            <Grid item xs={1}>
+            <Grid item style={{ justifySelf: 'flex-start' }} xs={1}>
               {' '}
               <IconButton
                 disabled={
@@ -68,7 +68,7 @@ export function BottomControlsBar(): ReactElement {
               <MusicControls size="small" />
             </Hidden>
           </Grid>
-          <Grid item lg={4}>
+          <Grid item lg={3}>
             <Hidden only={['xs', 'sm', 'md']}>
               <MusicSlider size="small" />
             </Hidden>

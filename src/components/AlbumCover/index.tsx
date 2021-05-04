@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useMediaQuery, useTheme } from '@material-ui/core';
 import { useStyles } from './styles';
 
 export interface AlbumCoverProps {
@@ -10,7 +11,9 @@ export interface AlbumCoverProps {
 export function AlbumCover(props: AlbumCoverProps): ReactElement {
   const { artistName, imgURL, musicTitle } = props;
 
-  const styles = useStyles({ imgURL });
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down('sm'));
+  const styles = useStyles({ imgURL, sm });
 
   const getShortName = (str: string): string => {
     const modifiedString = str.trim().toUpperCase();

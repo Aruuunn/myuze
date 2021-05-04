@@ -25,6 +25,7 @@ export const useStyles = makeStyles({
     '&:hover, &:focus': {
       opacity: 1,
     },
+    cursor: 'pointer',
   }),
   artists: {
     fontWeight: 'normal',
