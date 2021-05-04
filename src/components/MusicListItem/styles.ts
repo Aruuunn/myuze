@@ -22,7 +22,7 @@ export const useStyles = makeStyles({
     fontWeight: isCurrentPlayingMusic ? 'bold' : 'normal',
     boxSizing: 'border-box',
     opacity: isCurrentPlayingMusic ? 1 : 0.8,
-    '&:hover': {
+    '&:hover, &:focus': {
       opacity: 1,
     },
   }),

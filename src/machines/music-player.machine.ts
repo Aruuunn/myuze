@@ -4,11 +4,6 @@ import {
 import { MusicDataInterface } from '../interfaces';
 import { AudioAPI, MusicStorage } from '../services';
 
-export interface MusicPlayerMachineContext {
-  currentPlayingMusic: MusicDataInterface | null;
-  index: number;
-}
-
 export enum MusicPlayerMachineStates {
   NOT_LOADED = 'NOT_LOADED',
   LOADED = 'LOADED',
@@ -23,7 +18,22 @@ export enum MusicPlayerMachineEvents {
   PAUSE = 'PAUSE',
   NEXT = 'NEXT',
   PREV = 'PREV',
+  CHANGE_MODE = 'CHANGE_MODE',
 }
+
+export enum MusicPlayerModes {
+  NORMAL = 'NORMAL',
+  SHUFFLE = 'SHUFFLE',
+  ON_REPEAT = 'ON_REPEAT',
+}
+
+export interface MusicPlayerMachineContext {
+  currentPlayingMusic: MusicDataInterface | null;
+  index: number;
+  mode: MusicPlayerModes;
+}
+
+const getRandom = (): number => Math.ceil(Math.random() * 1e6);
 
 const {
   LOADED,
@@ -41,6 +51,7 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
   context: {
     currentPlayingMusic: null,
     index: -1,
+    mode: MusicPlayerModes.NORMAL,
   },
   on: {
     [MusicPlayerMachineEvents.LOAD]: {
@@ -49,13 +60,21 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
     [MusicPlayerMachineEvents.NEXT]: {
       actions: send((context) => ({
         type: MusicPlayerMachineEvents.LOAD,
-        index: context.index + 1,
+        // eslint-disable-next-line no-nested-ternary
+        index: context.mode === MusicPlayerModes.NORMAL
+          ? context.index + 1 : context.mode === MusicPlayerModes.SHUFFLE
+            ? getRandom() : context.index,
       })),
     },
     [MusicPlayerMachineEvents.PREV]: {
       actions: send((context) => ({
         type: MusicPlayerMachineEvents.LOAD,
         index: context.index - 1,
+      })),
+    },
+    [MusicPlayerMachineEvents.CHANGE_MODE]: {
+      actions: assign((context, event) => ({
+        mode: event.mode in MusicPlayerModes ? event.mode : context.mode,
       })),
     },
   },
@@ -103,7 +122,7 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
           const total = await db.getTotalCount();
 
           if (index >= total) {
-            index = 0;
+            index %= total;
           } else if (index < 0) {
             index = total - 1;
           }
@@ -157,5 +176,3 @@ audioService.onEnd(() => {
     type: MusicPlayerMachineEvents.NEXT,
   });
 });
-
-(window as any).musicPlayerService = musicPlayerService;

@@ -8,10 +8,11 @@ import { MusicPlayerMachineEvents, musicPlayerService, MusicPlayerMachineStates 
 
 export interface PlayButtonProps {
   size: 'small' | 'large';
+  className?: string;
 }
 
 export function PlayButton(props: PlayButtonProps): ReactElement {
-  const { size } = props;
+  const { size, className } = props;
   const [current, send] = useService(musicPlayerService);
   const styles = useStyles();
 
@@ -26,7 +27,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
       whileHover={{ scale: isDisabled() ? 1 : 1.05 }}
     >
       <IconButton
-        className={`${styles.root} ${styles[size]}`}
+        className={`${styles.root} ${styles[size]} ${className ?? ''}`}
         color="primary"
         disabled={isDisabled()}
         onClick={() => send({

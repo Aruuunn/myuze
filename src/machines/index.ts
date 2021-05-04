@@ -1,4 +1,7 @@
 export {
-  musicPlayerMachine, MusicPlayerMachineEvents, MusicPlayerMachineStates,
+  musicPlayerMachine,
+  MusicPlayerMachineEvents,
+  MusicPlayerMachineStates,
   musicPlayerService,
+  MusicPlayerModes,
 } from './music-player.machine';
