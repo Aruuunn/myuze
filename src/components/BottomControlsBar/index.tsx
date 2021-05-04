@@ -22,6 +22,11 @@ export function BottomControlsBar(): ReactElement {
     },
   } = current;
 
+  const gotoMusicPlayerPage = () => {
+    if (!currentPlayingMusic?.id) return;
+    history.push(`/play/${currentPlayingMusic?.id}`);
+  };
+
   return (
     <div className={styles.root}>
       <Container>
@@ -42,17 +47,16 @@ export function BottomControlsBar(): ReactElement {
                   !currentPlayingMusic
                 }
                 onClick={
-                  () => {
-                    history.push(`/play/${currentPlayingMusic?.id}`);
-                  }
+                  gotoMusicPlayerPage
                 }
                 className={styles.expandBtn}
               >
                 <ExpandLessRounded />
               </IconButton>
             </Grid>
-            <Grid item xs={10} style={{ marginLeft: '5px', boxSizing: 'border-box' }}>
+            <Grid item xs={10} onClick={gotoMusicPlayerPage} style={{ marginLeft: '5px', boxSizing: 'border-box' }}>
               <MusicName
+                onClick={gotoMusicPlayerPage}
                 title={currentPlayingMusic?.title}
                 artists={currentPlayingMusic?.artists}
                 size="small"

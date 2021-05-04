@@ -63,7 +63,9 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
 
   return (
     <div className={styles.root} key={index} style={style}>
+      {/* eslint-disable jsx-a11y/tabindex-no-positive */}
       <Paper
+        tabIndex={1}
         className={styles.card}
         onClick={() => {
           if (typeof onSelectItem === 'function') onSelectItem(musicData?.id ? ({ id: musicData.id, index }) : null);

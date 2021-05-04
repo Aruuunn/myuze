@@ -1,10 +1,13 @@
 import React, { ReactElement } from 'react';
 import { Grid, IconButton } from '@material-ui/core';
-import { SkipNextRounded, SkipPreviousRounded } from '@material-ui/icons';
+import {
+  SkipNextRounded, SkipPreviousRounded, ShuffleRounded, RepeatRounded,
+} from '@material-ui/icons';
 
 import { PlayButton } from '../PlayButton';
 import { useStyles } from './styles';
-import { MusicPlayerMachineEvents, musicPlayerService } from '../../machines';
+import { MusicPlayerMachineEvents, MusicPlayerModes } from '../../machines';
+import { useMusicPlayerMachine } from '../../hooks';
 
 export interface MusicControllerProps {
   size: 'small' | 'large';
@@ -12,25 +15,50 @@ export interface MusicControllerProps {
 
 export function MusicControls(props: MusicControllerProps): ReactElement {
   const { size } = props;
+  const [current, send] = useMusicPlayerMachine();
 
-  const styles = useStyles({ size });
+  const styles = useStyles({ size, mode: current.context.mode });
 
   return (
     <Grid container justify="center" className={styles.root}>
       <IconButton
-        onClick={() => { musicPlayerService.send({ type: MusicPlayerMachineEvents.PREV }); }}
+        onClick={() => {
+          send({
+            type: MusicPlayerMachineEvents.CHANGE_MODE,
+            mode: MusicPlayerModes.SHUFFLE,
+          });
+        }}
         size="medium"
-        className={styles.controls}
+        className={styles.shuffle}
       >
-        <SkipPreviousRounded fontSize="large" />
+        <ShuffleRounded fontSize={size} />
       </IconButton>
-      <PlayButton size={size} />
       <IconButton
-        onClick={() => { musicPlayerService.send({ type: MusicPlayerMachineEvents.NEXT }); }}
+        onClick={() => { send({ type: MusicPlayerMachineEvents.PREV }); }}
         size="medium"
         className={styles.controls}
       >
-        <SkipNextRounded fontSize="large" />
+        <SkipPreviousRounded fontSize={size} />
+      </IconButton>
+      <PlayButton className={styles.controls} size={size} />
+      <IconButton
+        onClick={() => { send({ type: MusicPlayerMachineEvents.NEXT }); }}
+        size="medium"
+        className={styles.controls}
+      >
+        <SkipNextRounded fontSize={size} />
+      </IconButton>
+      <IconButton
+        onClick={() => {
+          send({
+            type: MusicPlayerMachineEvents.CHANGE_MODE,
+            mode: MusicPlayerModes.ON_REPEAT,
+          });
+        }}
+        size="medium"
+        className={styles.onRepeat}
+      >
+        <RepeatRounded fontSize={size} />
       </IconButton>
     </Grid>
   );

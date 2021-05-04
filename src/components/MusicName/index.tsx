@@ -6,10 +6,13 @@ export interface MusicNameProps {
   title?: string;
   artists?: string[];
   size: 'small' | 'large';
+  onClick?: () => void;
 }
 
 export function MusicName(props: MusicNameProps): ReactElement {
-  const { title, artists, size } = props;
+  const {
+    title, artists, size,
+  } = props;
 
   const styles = useStyles({ size });
   const rootContainerElRef = useRef<HTMLDivElement>(null);
@@ -90,7 +93,10 @@ export function MusicName(props: MusicNameProps): ReactElement {
   }, [title, artists]);
 
   return (
-    <div ref={rootContainerElRef} className={styles.root}>
+    <div
+      ref={rootContainerElRef}
+      className={styles.root}
+    >
       <span className={styles.primaryText}>{title ?? ''}</span>
       <span className={styles.secondaryText}>
         {typeof artists?.length !== 'undefined' && artists.length !== 0 ? ` - ${secondaryText}` : ''}
