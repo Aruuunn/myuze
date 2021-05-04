@@ -9,12 +9,15 @@ export const useStyles = makeStyles({
   }),
   controls: ({ size }: { size: 'large' | 'small' }) => ({
     color: 'rgb(var(--primary-dark))',
-    margin: `0 ${size === 'small' ? 5 : 20}px 0 ${size === 'small' ? 5 : 20}px`,
+    margin: `0 ${size === 'small' ? 0 : 20}px 0 ${size === 'small' ? 0 : 20}px`,
+    opacity: size === 'small' ? 0.8 : 1,
   }),
-  shuffle: ({ mode }: { mode: MusicPlayerModes }) => ({
+  shuffle: ({ mode, size }: { mode: MusicPlayerModes, size: 'large' | 'small', }) => ({
     color: mode === MusicPlayerModes.SHUFFLE ? 'rgb(var(--primary))' : 'rgb(var(--primary-dark))',
+    opacity: size === 'small' ? 0.8 : 1,
   }),
-  onRepeat: ({ mode }: { mode: MusicPlayerModes }) => ({
+  onRepeat: ({ mode, size }: { mode: MusicPlayerModes, size: 'large' | 'small', }) => ({
     color: mode === MusicPlayerModes.ON_REPEAT ? 'rgb(var(--primary))' : 'rgb(var(--primary-dark))',
+    opacity: size === 'small' ? 0.8 : 1,
   }),
 });
