@@ -25,13 +25,14 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         onClick={() => {
           send({
             type: MusicPlayerMachineEvents.CHANGE_MODE,
-            mode: MusicPlayerModes.SHUFFLE,
+            mode: current.context.mode === MusicPlayerModes.SHUFFLE
+              ? MusicPlayerModes.NORMAL : MusicPlayerModes.SHUFFLE,
           });
         }}
         size="medium"
         className={styles.shuffle}
       >
-        <ShuffleRounded fontSize={size} />
+        <ShuffleRounded style={{ transform: size === 'large' ? 'scale(0.7)' : '' }} fontSize={size} />
       </IconButton>
       <IconButton
         onClick={() => { send({ type: MusicPlayerMachineEvents.PREV }); }}
@@ -52,13 +53,14 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         onClick={() => {
           send({
             type: MusicPlayerMachineEvents.CHANGE_MODE,
-            mode: MusicPlayerModes.ON_REPEAT,
+            mode: current.context.mode === MusicPlayerModes.ON_REPEAT
+              ? MusicPlayerModes.NORMAL : MusicPlayerModes.ON_REPEAT,
           });
         }}
         size="medium"
         className={styles.onRepeat}
       >
-        <RepeatRounded fontSize={size} />
+        <RepeatRounded style={{ transform: size === 'large' ? 'scale(0.7)' : '' }} fontSize={size} />
       </IconButton>
     </Grid>
   );
