@@ -32,7 +32,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         size="medium"
         className={styles.shuffle}
       >
-        <ShuffleRounded fontSize={size} />
+        <ShuffleRounded style={{ transform: size === 'large' ? 'scale(0.7)' : '' }} fontSize={size} />
       </IconButton>
       <IconButton
         onClick={() => { send({ type: MusicPlayerMachineEvents.PREV }); }}
@@ -60,7 +60,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         size="medium"
         className={styles.onRepeat}
       >
-        <RepeatRounded fontSize={size} />
+        <RepeatRounded style={{ transform: size === 'large' ? 'scale(0.7)' : '' }} fontSize={size} />
       </IconButton>
     </Grid>
   );
