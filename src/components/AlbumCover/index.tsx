@@ -16,7 +16,7 @@ export function AlbumCover(props: AlbumCoverProps): ReactElement {
   const styles = useStyles({ imgURL, sm });
 
   const getShortName = (str: string): string => {
-    const modifiedString = str.trim().toUpperCase();
+    const modifiedString = str.replace(/[\W_]+/g, ' ').trim().toUpperCase();
 
     if (modifiedString.length <= 2) return modifiedString;
 

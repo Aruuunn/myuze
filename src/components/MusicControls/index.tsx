@@ -24,9 +24,22 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
   const styles = useStyles({ size, mode: current.context.mode });
 
   return (
-    <Grid container justify="center" className={styles.root}>
-      <Grid container style={{ marginBottom: sm ? '20px' : 'auto' }} item lg={2} md={2} xs={12} justify={sm ? 'center' : 'flex-end'}>
-        <Hidden only={size === 'small' ? ['sm'] : []}>
+    <Grid
+      container
+      justify="center"
+      alignItems="center"
+      className={styles.root}
+    >
+      <Grid
+        container
+        style={{ marginBottom: sm ? '10px' : 'auto' }}
+        item
+        lg={2}
+        md={2}
+        xs={12}
+        justify={sm ? 'center' : 'flex-end'}
+      >
+        <Hidden only={['xs', 'sm']}>
           <IconButton
             onClick={() => {
               send({
@@ -42,7 +55,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
           </IconButton>
         </Hidden>
       </Grid>
-      <Grid container item lg={5} md={6} xs={12} wrap="nowrap" justify={sm ? 'center' : 'space-between'}>
+      <Grid container item lg={4} md={5} xs={12} wrap="nowrap" justify={sm ? 'center' : 'space-between'}>
         <IconButton
           onClick={() => { send({ type: MusicPlayerMachineEvents.PREV }); }}
           size="medium"
@@ -59,8 +72,34 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
           <SkipNextRounded style={{ transform: size === 'small' ? 'scale(1.4)' : '' }} fontSize={size} />
         </IconButton>
       </Grid>
-      <Grid container item lg={2} md={2} style={{ marginTop: sm ? '20px' : 'auto' }} xs={12} justify={sm ? 'center' : 'flex-start'}>
+      <Grid
+        container
+        item
+        lg={2}
+        md={2}
+        wrap="nowrap"
+        alignItems="center"
+        style={{ marginTop: sm ? '10px' : 'auto' }}
+        xs={12}
+        justify={sm ? 'center' : 'flex-start'}
+      >
         <Hidden only={size === 'small' ? ['sm'] : []}>
+          <Hidden mdUp>
+            <IconButton
+              onClick={() => {
+                send({
+                  type: MusicPlayerMachineEvents.CHANGE_MODE,
+                  mode: current.context.mode === MusicPlayerModes.SHUFFLE
+                    ? MusicPlayerModes.NORMAL : MusicPlayerModes.SHUFFLE,
+                });
+              }}
+              size="medium"
+              style={{ marginRight: '30px' }}
+              className={styles.shuffle}
+            >
+              <ShuffleRounded style={{ transform: size === 'large' ? 'scale(0.7)' : '' }} fontSize={size} />
+            </IconButton>
+          </Hidden>
           <IconButton
             onClick={() => {
               send({
