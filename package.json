@@ -47,7 +47,9 @@
     "./src/*.{js,jsx,ts,tsx}": [
       "npx prettier --write",
       "eslint src/*.{ts,js,tsx,jsx} --fix"
-    ]
+    ],
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   },
   "scripts": {
     "start": "REACT_APP_ENV=dev react-scripts start",

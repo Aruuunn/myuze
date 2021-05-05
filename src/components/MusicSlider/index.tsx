@@ -8,7 +8,6 @@ import React, {
 
 import { useService } from '@xstate/react';
 import { send } from 'xstate';
-import { useMediaQuery, useTheme } from '@material-ui/core';
 import { Slider } from './components';
 import {
   AudioServiceContext,
@@ -28,8 +27,6 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   const audioService = useContext(AudioServiceContext);
   const [current] = useService(musicPlayerService);
   const currentState = current.value;
-  const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down('xs'));
 
   const updateSliderValue = (newCurrentValue: number) => {
     setMusicSliderState((state) => ({
