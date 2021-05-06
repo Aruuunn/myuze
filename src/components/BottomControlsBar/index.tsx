@@ -2,13 +2,14 @@ import React, { ReactElement } from 'react';
 import {
   Container, Grid, Hidden, IconButton,
 } from '@material-ui/core';
-import { ExpandLessRounded } from '@material-ui/icons';
-
+import { ExpandLessRounded as ExpandIcon } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+
+import { useStyles } from './styles';
+import { isTruthy } from '../../utils';
+import { useMusicPlayerMachine } from '../../hooks';
 import { MusicControls } from '../MusicControls';
 import { MusicSlider } from '../MusicSlider';
-import { useStyles } from './styles';
-import { useMusicPlayerMachine } from '../../hooks';
 import { MusicName } from '../MusicName';
 
 export function BottomControlsBar(): ReactElement {
@@ -23,8 +24,9 @@ export function BottomControlsBar(): ReactElement {
   } = current;
 
   const gotoMusicPlayerPage = () => {
-    if (!currentPlayingMusic?.id) return;
-    history.push(`/play/${currentPlayingMusic?.id}`);
+    if (isTruthy(currentPlayingMusic?.id)) {
+      history.push(`/play/${currentPlayingMusic?.id}`);
+    }
   };
 
   return (
@@ -40,21 +42,25 @@ export function BottomControlsBar(): ReactElement {
             xs={12}
             sm={7}
           >
-            <Grid item style={{ justifySelf: 'flex-start' }} xs={1}>
-              {' '}
+            <Grid
+              item
+              className={styles.expandBtnCtn}
+              xs={1}
+            >
               <IconButton
-                disabled={
-                  !currentPlayingMusic
-                }
-                onClick={
-                  gotoMusicPlayerPage
-                }
+                disabled={!currentPlayingMusic}
+                onClick={gotoMusicPlayerPage}
                 className={styles.expandBtn}
               >
-                <ExpandLessRounded />
+                <ExpandIcon />
               </IconButton>
             </Grid>
-            <Grid item xs={10} onClick={gotoMusicPlayerPage} style={{ marginLeft: '5px', boxSizing: 'border-box' }}>
+            <Grid
+              item
+              xs={10}
+              onClick={gotoMusicPlayerPage}
+              className={styles.musicTitleCtn}
+            >
               <MusicName
                 onClick={gotoMusicPlayerPage}
                 title={currentPlayingMusic?.title}

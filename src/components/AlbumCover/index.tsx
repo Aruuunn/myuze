@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { CSSProperties, ReactElement } from 'react';
 import { useMediaQuery, useTheme } from '@material-ui/core';
 import { useStyles } from './styles';
 
@@ -6,10 +6,14 @@ export interface AlbumCoverProps {
   imgURL?: string;
   artistName?: string;
   musicTitle: string;
+  className?: string;
+  style?: CSSProperties;
 }
 
 export function AlbumCover(props: AlbumCoverProps): ReactElement {
-  const { artistName, imgURL, musicTitle } = props;
+  const {
+    artistName, imgURL, musicTitle, className = '', style = {},
+  } = props;
 
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down('sm'));
@@ -32,12 +36,13 @@ export function AlbumCover(props: AlbumCoverProps): ReactElement {
   };
 
   return (
-    <div className={styles.root}>
+    <div
+      style={style}
+      className={`${styles.root} ${className}`}
+    >
       {!imgURL ? (
         <span className={styles.innerText}>
-          {typeof artistName === 'undefined'
-            ? getShortName(musicTitle)
-            : getShortName(artistName)}
+          {getShortName(typeof artistName === 'undefined' ? musicTitle : artistName)}
         </span>
       ) : null}
     </div>
