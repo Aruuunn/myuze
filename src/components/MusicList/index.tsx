@@ -15,25 +15,29 @@ export function MusicList(props: MusicListProps): ReactElement {
 
   const getContainerHeight = () => window.innerHeight - 170;
 
+  const db = useMusicStorage();
   const [totalCount, setTotalCount] = useState(-1);
   const [containerHeight, setContainerHeight] = useState(getContainerHeight());
 
-  const db = useMusicStorage();
   const itemSize = 85;
   const width = 500;
 
   useEffect(() => {
-    window.onresize = () => {
+    const onWindowResize = () => {
       setContainerHeight(getContainerHeight());
     };
 
+    window.addEventListener('resize', onWindowResize);
+
     const componentOnMount = () => db.getTotalCount().then(setTotalCount);
-
     componentOnMount();
-
     db.onChange(() => {
       componentOnMount();
     });
+
+    return () => {
+      window.removeEventListener('resize', onWindowResize);
+    };
   }, []);
 
   if (totalCount === -1) {

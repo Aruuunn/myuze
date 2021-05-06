@@ -1,14 +1,14 @@
 import React, {
   ReactElement, useEffect,
 } from 'react';
+import { State } from 'xstate';
 import { motion } from 'framer-motion';
+import { useParams, useHistory } from 'react-router-dom';
+import { ExpandMoreOutlined as ExpandLessIcon } from '@material-ui/icons';
 import {
   Container, Grid, IconButton, useMediaQuery, useTheme,
 } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
-import { ExpandMoreOutlined } from '@material-ui/icons';
 
-import { State } from 'xstate';
 import {
   MusicSlider,
   MusicControls,
@@ -16,7 +16,6 @@ import {
   MusicName,
 } from '../../components';
 import { useStyles } from './styles';
-
 import { useMusicPlayerMachine } from '../../hooks';
 import { MusicPlayerMachineEvents, MusicPlayerMachineStates } from '../../machines';
 import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
@@ -26,16 +25,17 @@ export function MusicPlayerPage(): ReactElement {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const [current, send, service] = useMusicPlayerMachine();
-  const {
-    currentPlayingMusic,
-  } = current.context;
+  const { currentPlayingMusic } = current.context;
 
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down('xs'));
   const smallScreenHeight = useMediaQuery('(max-height: 625px)');
 
   useEffect(() => {
-    if (id && current.value === MusicPlayerMachineStates.NOT_LOADED) {
+    if (id
+        && (current.value === MusicPlayerMachineStates.NOT_LOADED
+        || currentPlayingMusic?.id !== id)
+    ) {
       send({
         type: MusicPlayerMachineEvents.LOAD,
         id,
@@ -94,7 +94,7 @@ export function MusicPlayerPage(): ReactElement {
                 history.push('/');
               }}
             >
-              <ExpandMoreOutlined fontSize="large" />
+              <ExpandLessIcon fontSize="large" />
             </IconButton>
             <Grid
               item

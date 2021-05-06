@@ -1,1 +1,1 @@
-export const isTruthy = (val: any): boolean => typeof val !== 'undefined' && val !== null;
+export const isTruthy = <T>(val: T | undefined | null): val is T => typeof val !== 'undefined' && val !== null;

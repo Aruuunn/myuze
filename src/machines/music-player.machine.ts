@@ -3,6 +3,7 @@ import {
 } from 'xstate';
 import { MusicDataInterface } from '../interfaces';
 import { AudioAPI, MusicStorage } from '../services';
+import { isTruthy } from '../utils';
 
 export enum MusicPlayerMachineStates {
   NOT_LOADED = 'NOT_LOADED',
@@ -113,24 +114,24 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
       invoke: {
         id: 'load-music',
         src: async (_, event) => {
-          let { index } = event;
+          let { index, id } = event;
 
-          if (typeof index !== 'number') {
+          if (typeof index !== 'number' && typeof id !== 'string') {
             return Promise.reject();
           }
 
-          const total = await db.getTotalCount();
+          if (!isTruthy<string>(id)) {
+            const total = await db.getTotalCount();
+            if (index >= total) {
+              index %= total;
+            } else if (index < 0) {
+              index = total - 1;
+            }
+            id = (await db.getMusicAt(index))?.id ?? null;
 
-          if (index >= total) {
-            index %= total;
-          } else if (index < 0) {
-            index = total - 1;
-          }
-
-          const { id } = (await db.getMusicAt(index)) ?? {};
-
-          if (!id) {
-            return Promise.reject();
+            if (!isTruthy<string>(id)) {
+              return Promise.reject();
+            }
           }
 
           const musicData = await db.getMusicUsingId(id);
@@ -140,13 +141,14 @@ export const musicPlayerMachine = Machine<MusicPlayerMachineContext>({
               .load(musicData.musicDataURL)
               .then(() => ({ ...musicData, index }));
           }
+
           return Promise.reject();
         },
         onDone: {
           target: LOADED,
           actions: assign({
             currentPlayingMusic: (_, event) => event.data,
-            index: (_, event) => event.data?.index,
+            index: (context, event) => event.data?.index ?? context.index,
           }),
         },
         onError: {
