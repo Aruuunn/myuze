@@ -10,14 +10,17 @@ import { Skeleton } from '@material-ui/lab';
 import { MusicDataInterface } from '../../interfaces';
 import { useStyles } from './styles';
 import { useMusicPlayerMachine, useMusicStorage } from '../../hooks';
+import { isTruthy } from '../../utils';
+
+type MusicDetails = Pick<MusicDataInterface, 'title' | 'artists' | 'id'> | null;
 
 export interface MusicListItemProps {
   index: number;
   itemKey: string;
-  style?: CSSProperties;
-  onSelectItem?: (data: { id: string, index: number } | null) => void;
   height: number;
   width: number;
+  style?: CSSProperties;
+  onSelectItem?: (data: { id: string, index: number } | null) => void;
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
@@ -27,23 +30,24 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   } = props;
 
   const db = useMusicStorage();
-  const [{
-    context: {
-      currentPlayingMusic,
-    },
-  }] = useMusicPlayerMachine();
-  const [musicData, setMusicData] = useState<Pick<
-  MusicDataInterface,
-  'title' | 'artists' | 'id'
-  > | null>(null);
+  const [current] = useMusicPlayerMachine();
+  const [musicDetails, setMusicDetails] = useState<MusicDetails>(null);
+  const { currentPlayingMusic } = current.context;
+  const { artists } = currentPlayingMusic ?? {};
+
+  const loading = !isTruthy(musicDetails);
+  let artistsName = isTruthy(artists) ? artists.join(' , ') : '';
+
+  if (artistsName.length === 0) {
+    artistsName = 'unknown';
+  }
 
   useEffect(() => {
-    const componentOnMount = () => {
-      db.getMusicAt(index).then((data) => {
-        if (data) {
-          setMusicData(data);
-        }
-      });
+    const componentOnMount = async () => {
+      const fetchedMusicDetails = await db.getMusicAt(index);
+      if (isTruthy(fetchedMusicDetails)) {
+        setMusicDetails(fetchedMusicDetails);
+      }
     };
 
     componentOnMount();
@@ -55,7 +59,8 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
 
   const styles = useStyles(
     {
-      isCurrentPlayingMusic: (!!currentPlayingMusic && musicData?.id === currentPlayingMusic?.id),
+      isCurrentPlayingMusic: (!!currentPlayingMusic
+          && musicDetails?.id === currentPlayingMusic?.id),
       height,
       width,
     },
@@ -68,7 +73,11 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
         tabIndex={1}
         className={styles.card}
         onClick={() => {
-          if (typeof onSelectItem === 'function') onSelectItem(musicData?.id ? ({ id: musicData.id, index }) : null);
+          if (typeof onSelectItem === 'function') {
+            if (isTruthy(musicDetails)) {
+              onSelectItem({ id: musicDetails.id, index });
+            }
+          }
         }}
       >
         <Grid container alignItems="center">
@@ -79,13 +88,10 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
               whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden',
             }}
           >
-            {(musicData) ? musicData.title : <Skeleton />}
+            {!loading ? musicDetails?.title : <Skeleton />}
           </Grid>
           <Grid className={styles.artists} item xs={12}>
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {(musicData) ? musicData?.artists?.length
-              ? musicData.artists.join(' , ')
-              : 'unknown' : <Skeleton style={{ width: '60%' }} /> }
+            {!loading ? artistsName : <Skeleton style={{ width: '60%' }} /> }
           </Grid>
         </Grid>
       </Paper>

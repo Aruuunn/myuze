@@ -17,7 +17,11 @@ export const useStyles = makeStyles({
       color: 'rgb(var(--primary))',
     },
   },
-  musicTitle: {
-    color: 'rgb(var(--primary))',
+  musicTitleCtn: {
+    marginLeft: '5px',
+    boxSizing: 'border-box',
+  },
+  expandBtnCtn: {
+    justifySelf: 'flex-start',
   },
 });

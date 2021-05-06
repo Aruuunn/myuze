@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   ReactElement,
   useState,
   useEffect,
@@ -10,9 +9,10 @@ import { useService } from '@xstate/react';
 import { send } from 'xstate';
 import { Slider } from './components';
 import {
-  AudioServiceContext,
-} from '../../providers';
-import { MusicPlayerMachineEvents, MusicPlayerMachineStates, musicPlayerService } from '../../machines';
+  MusicPlayerMachineEvents,
+  MusicPlayerMachineStates, musicPlayerService,
+} from '../../machines';
+import { useAudioService } from '../../hooks';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';
@@ -24,7 +24,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     currentValue: 0,
     maxValue: 0,
   });
-  const audioService = useContext(AudioServiceContext);
+  const audioService = useAudioService();
   const [current] = useService(musicPlayerService);
   const currentState = current.value;
 
@@ -36,7 +36,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
   };
 
   const updateSliderMaxValue = (newMaxValue: number) => {
-    if (newMaxValue === Infinity) {
+    if (!Number.isFinite(newMaxValue)) {
       return;
     }
     setMusicSliderState((state) => ({
@@ -74,6 +74,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     updateSliderMaxValue(audioService.duration);
   };
 
+  // Run only once
   useEffect(() => {
     audioService.onLoad(callback);
 
