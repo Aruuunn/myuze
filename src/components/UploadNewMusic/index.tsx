@@ -25,6 +25,7 @@ export function UploadNewMusic(): ReactElement {
         style={{ display: 'none' }}
         onChange={handleFileSelected}
         type="file"
+        accept="audio/*"
         id="upload-file"
       />
       <label htmlFor="upload-file">
