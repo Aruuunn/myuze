@@ -33,7 +33,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   const [current] = useMusicPlayerMachine();
   const [musicDetails, setMusicDetails] = useState<MusicDetails>(null);
   const { currentPlayingMusic } = current.context;
-  const { artists } = currentPlayingMusic ?? {};
+  const { artists } = musicDetails ?? {};
 
   const loading = !isTruthy(musicDetails);
   let artistsName = isTruthy(artists) ? artists.join(' , ') : '';
@@ -55,7 +55,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     db.onChange(() => {
       componentOnMount();
     });
-  }, [db, index, currentPlayingMusic]);
+  }, [db, index]);
 
   const styles = useStyles(
     {
