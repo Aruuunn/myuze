@@ -39,6 +39,7 @@ export function AlbumCover(props: AlbumCoverProps): ReactElement {
     <div
       style={style}
       className={`${styles.root} ${className}`}
+      data-testid="album-cover"
     >
       {!imgURL ? (
         <span className={styles.innerText}>
