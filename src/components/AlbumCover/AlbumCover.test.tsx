@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { AlbumCover, AlbumCoverProps } from './index';
-import { renderTestComponent } from '../../utils';
+import { renderTestComponent } from '../../utils/test-wrapper';
 
 const imgURL = 'imageURl';
 

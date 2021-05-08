@@ -82,16 +82,14 @@ export function getMusicPlayerMachine(
     states: {
       [NOT_LOADED]: {},
       [LOADED]: {
-        on: {
-          '': {
-            target: PLAYING,
-          },
+        always: {
+          target: PLAYING,
         },
       },
       [PLAYING]: {
         invoke: {
           id: 'play-music',
-          src: () => audioService.play(),
+          src: 'playMusic',
         },
         on: {
           [MusicPlayerMachineEvents.PAUSE]: {
@@ -102,7 +100,7 @@ export function getMusicPlayerMachine(
       [PAUSED]: {
         invoke: {
           id: 'pause-music',
-          src: () => audioService.pause(),
+          src: 'pauseMusic',
         },
         on: {
           [MusicPlayerMachineEvents.PLAY]: {
@@ -113,37 +111,7 @@ export function getMusicPlayerMachine(
       [LOADING]: {
         invoke: {
           id: 'load-music',
-          src: async (_, event) => {
-            let { index, id } = event;
-
-            if (typeof index !== 'number' && typeof id !== 'string') {
-              return Promise.reject();
-            }
-
-            if (!isTruthy<string>(id)) {
-              const total = await db.getTotalCount();
-              if (index >= total) {
-                index %= total;
-              } else if (index < 0) {
-                index = total - 1;
-              }
-              id = (await db.getMusicAt(index))?.id ?? null;
-
-              if (!isTruthy<string>(id)) {
-                return Promise.reject();
-              }
-            }
-
-            const musicData = await db.getMusicUsingId(id);
-
-            if (musicData) {
-              return audioService
-                .load(musicData.musicDataURL)
-                .then(() => ({ ...musicData, index }));
-            }
-
-            return Promise.reject();
-          },
+          src: 'loadMusic',
           onDone: {
             target: LOADED,
             actions: assign({
@@ -156,6 +124,42 @@ export function getMusicPlayerMachine(
           },
         },
       },
+    },
+  }, {
+    services: {
+      loadMusic: async (_, event) => {
+        let { index, id } = event;
+
+        if (typeof index !== 'number' && typeof id !== 'string') {
+          return Promise.reject();
+        }
+
+        if (!isTruthy<string>(id)) {
+          const total = await db.getTotalCount();
+          if (index >= total) {
+            index %= total;
+          } else if (index < 0) {
+            index = total - 1;
+          }
+          id = (await db.getMusicAt(index))?.id ?? null;
+
+          if (!isTruthy<string>(id)) {
+            return Promise.reject();
+          }
+        }
+
+        const musicData = await db.getMusicUsingId(id);
+
+        if (musicData) {
+          return audioService
+            .load(musicData.musicDataURL)
+            .then(() => ({ ...musicData, index }));
+        }
+
+        return Promise.reject();
+      },
+      playMusic: () => audioService.play(),
+      pauseMusic: () => audioService.pause(),
     },
   });
 }
