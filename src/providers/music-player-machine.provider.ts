@@ -1,7 +1,11 @@
 import { createContext } from 'react';
-import { Interpreter } from 'xstate';
-import { MusicPlayerMachineContext, musicPlayerService } from '../machines/music-player.machine';
+import { interpret } from 'xstate';
+import { getMusicPlayerMachine } from '../machines';
+import { AudioAPI, MusicStorage } from '../services';
 
-export const MusicPlayerInterpreterContext = createContext<Interpreter<MusicPlayerMachineContext>>(
-  musicPlayerService,
+const db = new MusicStorage();
+const audioService = new AudioAPI();
+
+export const MusicPlayerInterpreterContext = createContext(
+  interpret(getMusicPlayerMachine(db, audioService)),
 );

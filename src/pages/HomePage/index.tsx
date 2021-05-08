@@ -4,13 +4,14 @@ import { Container, Grid, Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { State } from 'xstate';
 import { UploadNewMusic, MusicList, BottomControlsBar } from '../../components';
-import { MusicPlayerMachineEvents, musicPlayerService } from '../../machines';
-import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
+import { MusicPlayerMachineEvents, MusicPlayerMachineContext } from '../../machines';
+import { useMusicPlayerService } from '../../hooks';
 
 let autoOpenedMusicPlayerPage = false;
 
 export function HomePage(): ReactElement {
   const history = useHistory();
+  const musicPlayerService = useMusicPlayerService();
 
   const goToMusicPlayerPage = (id: string) => {
     history.push(`/play/${id}`);

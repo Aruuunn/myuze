@@ -1,7 +1,9 @@
 export {
-  musicPlayerMachine,
+  getMusicPlayerMachine,
   MusicPlayerMachineEvents,
   MusicPlayerMachineStates,
-  musicPlayerService,
   MusicPlayerModes,
+  addMusicPlayListeners,
 } from './music-player.machine';
+
+export type { MusicPlayerMachineContext } from './music-player.machine';

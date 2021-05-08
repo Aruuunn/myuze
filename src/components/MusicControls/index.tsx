@@ -15,10 +15,10 @@ export interface MusicControllerProps {
 
 export function MusicControls(props: MusicControllerProps): ReactElement {
   const { size } = props;
-  const [current] = useMusicPlayerMachine();
-
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down('sm'));
+  const [current] = useMusicPlayerMachine();
+
   const styles = useStyles({ size, mode: current.context.mode });
 
   return (

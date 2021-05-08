@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { useService } from '@xstate/react';
 import { IconButton, SvgIcon } from '@material-ui/core';
 import { PlayArrowRounded, PauseRounded } from '@material-ui/icons';
 import { motion } from 'framer-motion';
@@ -7,8 +6,9 @@ import { motion } from 'framer-motion';
 import { useStyles } from './styles';
 import {
   MusicPlayerMachineEvents,
-  musicPlayerService, MusicPlayerMachineStates,
+  MusicPlayerMachineStates,
 } from '../../../../machines';
+import { useMusicPlayerMachine } from '../../../../hooks';
 
 export interface PlayButtonProps {
   size: 'small' | 'large';
@@ -17,7 +17,7 @@ export interface PlayButtonProps {
 
 export function PlayButton(props: PlayButtonProps): ReactElement {
   const { size, className } = props;
-  const [current, send] = useService(musicPlayerService);
+  const [current, send] = useMusicPlayerMachine();
   const styles = useStyles();
 
   const { currentPlayingMusic } = current.context;

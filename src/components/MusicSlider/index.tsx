@@ -5,14 +5,13 @@ import React, {
   ChangeEvent,
 } from 'react';
 
-import { useService } from '@xstate/react';
 import { send } from 'xstate';
 import { Slider } from './components';
 import {
   MusicPlayerMachineEvents,
-  MusicPlayerMachineStates, musicPlayerService,
+  MusicPlayerMachineStates,
 } from '../../machines';
-import { useAudioService } from '../../hooks';
+import { useAudioService, useMusicPlayerMachine } from '../../hooks';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';
@@ -25,7 +24,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     maxValue: 0,
   });
   const audioService = useAudioService();
-  const [current] = useService(musicPlayerService);
+  const [current] = useMusicPlayerMachine();
   const currentState = current.value;
 
   const updateSliderValue = (newCurrentValue: number) => {

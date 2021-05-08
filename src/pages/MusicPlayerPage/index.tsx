@@ -17,8 +17,10 @@ import {
 } from '../../components';
 import { useStyles } from './styles';
 import { useMusicPlayerMachine } from '../../hooks';
-import { MusicPlayerMachineEvents, MusicPlayerMachineStates } from '../../machines';
-import { MusicPlayerMachineContext } from '../../machines/music-player.machine';
+import {
+  MusicPlayerMachineEvents,
+  MusicPlayerMachineStates, MusicPlayerMachineContext,
+} from '../../machines';
 
 export function MusicPlayerPage(): ReactElement {
   const styles = useStyles();
