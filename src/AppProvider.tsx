@@ -10,6 +10,8 @@ import {
 import { AudioServiceInterface, MusicStorageInterface } from './interfaces';
 import { musicPlayerService } from './machines';
 
+import './styles';
+
 function AppProvider({ children }: { children: ReactNode }): ReactElement {
   const audioServiceInstance: AudioServiceInterface = new AudioAPI();
   const musicStorage: MusicStorageInterface = new MusicStorage();
