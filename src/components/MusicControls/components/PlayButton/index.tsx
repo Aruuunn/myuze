@@ -55,6 +55,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
         color="primary"
         disabled={isDisabled()}
         onClick={togglePlay}
+        data-testid="play-button"
       >
         <SvgIcon>
           {isPlaying() ? (

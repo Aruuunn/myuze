@@ -1,8 +1,7 @@
-import React from 'react';
 import '@testing-library/jest-dom';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import { AlbumCover, AlbumCoverProps } from './index';
-import { TestComponent } from '../../utils';
+import { renderTestComponent } from '../../utils';
 
 const imgURL = 'imageURl';
 
@@ -10,7 +9,7 @@ describe('AlbumCover', () => {
   afterEach(cleanup);
 
   const renderAlbumCover = (props: AlbumCoverProps) => {
-    const renderResult = render(TestComponent(AlbumCover, props));
+    const { renderResult } = renderTestComponent(AlbumCover, props);
     const rootElement = renderResult.getByTestId('album-cover');
     return ({
       ...renderResult,

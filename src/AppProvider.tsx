@@ -1,7 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 
 import { BrowserRouter } from 'react-router-dom';
-import { AudioAPI, MusicStorage } from './services';
 import {
   AudioServiceContext,
   MusicStorageContext,
@@ -9,17 +8,20 @@ import {
 } from './providers';
 import { AudioServiceInterface, MusicStorageInterface } from './interfaces';
 import { musicPlayerService } from './machines';
-
 import './styles';
 
-function AppProvider({ children }: { children: ReactNode }): ReactElement {
-  const audioServiceInstance: AudioServiceInterface = new AudioAPI();
-  const musicStorage: MusicStorageInterface = new MusicStorage();
+export interface AppProviderProps {
+  children: ReactNode;
+  audioService: AudioServiceInterface;
+  musicStorage: MusicStorageInterface;
+}
 
+export function AppProvider(props: AppProviderProps): ReactElement {
+  const { audioService, musicStorage, children } = props;
   return (
     <>
       <MusicPlayerInterpreterContext.Provider value={musicPlayerService}>
-        <AudioServiceContext.Provider value={audioServiceInstance}>
+        <AudioServiceContext.Provider value={audioService}>
           <MusicStorageContext.Provider value={musicStorage}>
             <BrowserRouter>{children}</BrowserRouter>
           </MusicStorageContext.Provider>
