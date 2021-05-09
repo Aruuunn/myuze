@@ -1,13 +1,13 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import { IconButton } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
 import { OnMusicUpload } from '../../common';
-import { MusicStorageContext } from '../../providers';
+import { useMusicStorage } from '../../hooks';
 import { useStyles } from './styles';
 
 export function UploadNewMusic(): ReactElement {
-  const db = useContext(MusicStorageContext);
+  const db = useMusicStorage();
   const styles = useStyles();
 
   const handleFileSelected = (

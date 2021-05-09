@@ -16,6 +16,7 @@ export function PlayNextButton(props: PlayNextButtonProps): ReactElement {
 
   return (
     <IconButton
+      data-testid="play-next-button"
       onClick={() => { send({ type: MusicPlayerMachineEvents.NEXT }); }}
       size="medium"
       style={style}

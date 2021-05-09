@@ -29,6 +29,7 @@ export function ToggleOnRepeatButton(props: ToggleOnRepeatButtonProps): ReactEle
 
   return (
     <IconButton
+      data-testid="toggle-on-repeat-button"
       onClick={toggleOnRepeatMode}
       size="medium"
       style={style}

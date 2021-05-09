@@ -29,6 +29,7 @@ export function ToggleShufflePlayButton(props: ToggleShufflePlayButtonProps): Re
 
   return (
     <IconButton
+      data-testid="toggle-shuffle-button"
       onClick={toggleShuffleMode}
       size="medium"
       style={style}

@@ -1,23 +1,36 @@
 import React, { ReactElement, ReactNode } from 'react';
 
 import { BrowserRouter } from 'react-router-dom';
-import { AudioAPI, MusicStorage } from './services';
+import { Interpreter } from 'xstate';
 import {
   AudioServiceContext,
   MusicStorageContext,
   MusicPlayerInterpreterContext,
 } from './providers';
 import { AudioServiceInterface, MusicStorageInterface } from './interfaces';
-import { musicPlayerService } from './machines';
+import { MusicPlayerMachineContext } from './machines';
+import './styles';
 
-function AppProvider({ children }: { children: ReactNode }): ReactElement {
-  const audioServiceInstance: AudioServiceInterface = new AudioAPI();
-  const musicStorage: MusicStorageInterface = new MusicStorage();
+export interface AppProviderProps {
+  children: ReactNode;
+  audioService: AudioServiceInterface;
+  musicStorage: MusicStorageInterface;
+  musicPlayerMachineInterpreter: Interpreter<MusicPlayerMachineContext>;
+}
 
+export function AppProvider(props: AppProviderProps): ReactElement {
+  const {
+    audioService,
+    musicStorage,
+    musicPlayerMachineInterpreter,
+    children,
+  } = props;
   return (
     <>
-      <MusicPlayerInterpreterContext.Provider value={musicPlayerService}>
-        <AudioServiceContext.Provider value={audioServiceInstance}>
+      <MusicPlayerInterpreterContext.Provider
+        value={musicPlayerMachineInterpreter}
+      >
+        <AudioServiceContext.Provider value={audioService}>
           <MusicStorageContext.Provider value={musicStorage}>
             <BrowserRouter>{children}</BrowserRouter>
           </MusicStorageContext.Provider>
