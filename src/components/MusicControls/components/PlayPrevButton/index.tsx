@@ -16,6 +16,7 @@ export function PlayPrevButton(props: PlayPrevButtonProps): ReactElement {
 
   return (
     <IconButton
+      data-testid="play-prev-button"
       onClick={() => { send({ type: MusicPlayerMachineEvents.PREV }); }}
       size="medium"
       style={style}
