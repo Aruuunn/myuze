@@ -1,27 +1,27 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { AlbumCover, AlbumCoverProps } from './index';
-import { renderTestComponent } from '../../utils/test-wrapper';
+import { componentRenderFactory, ServiceConfig } from '../../utils/test-wrapper';
 
 const imgURL = 'imageURl';
 
 describe('AlbumCover', () => {
   afterEach(cleanup);
 
-  const renderAlbumCover = (props: AlbumCoverProps) => {
-    const { renderResult } = renderTestComponent(AlbumCover, props);
-    const rootElement = renderResult.getByTestId('album-cover');
-    return ({
-      ...renderResult,
-      rootElement,
-    });
+  const serviceConfig: ServiceConfig = {
+    machines: {
+      musicPlayerMachine: {
+      },
+    },
   };
+
+  const renderAlbumCover = componentRenderFactory('album-cover', AlbumCover);
 
   describe('Should render an shortcode of artist name if imgURL has not been passed', () => {
     const testShortCodeRendered = (props: AlbumCoverProps, expectedTextContent: string) => {
       it(`Should have ${expectedTextContent} text inside`, () => {
         // eslint-disable-next-line react/jsx-props-no-spreading
-        const { rootElement } = renderAlbumCover(props);
+        const { rootElement } = renderAlbumCover(props, serviceConfig);
         expect(rootElement).toHaveTextContent(expectedTextContent);
       });
     };
@@ -33,11 +33,11 @@ describe('AlbumCover', () => {
   });
 
   it('Should render an image if imgURL has been passed', () => {
-    const { rootElement } = renderAlbumCover({ musicTitle: 'Celebrity', imgURL });
+    const { rootElement } = renderAlbumCover({ musicTitle: 'Celebrity', imgURL }, serviceConfig);
     expect(rootElement).toHaveStyle(`backgroundImage: url(${imgURL})`);
   });
   it('Should render an image if imgURL has been passed', () => {
-    const { rootElement } = renderAlbumCover({ musicTitle: 'Celebrity', imgURL, artistName: 'IU' });
+    const { rootElement } = renderAlbumCover({ musicTitle: 'Celebrity', imgURL, artistName: 'IU' }, serviceConfig);
     expect(rootElement).toHaveStyle(`backgroundImage: url(${imgURL})`);
   });
 });

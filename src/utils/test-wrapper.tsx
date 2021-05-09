@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { FC } from 'react';
 import { interpret, Interpreter, MachineOptions } from 'xstate';
 import { render, RenderResult } from '@testing-library/react';
 
@@ -19,11 +19,29 @@ type RenderTestComponentResult = {
 jest.mock('../services/audio-api');
 jest.mock('../services/music-storage');
 
+export type ServiceConfig = {
+  machines: {
+    musicPlayerMachine:{
+      config?: Partial<MachineOptions<MusicPlayerMachineContext, any>>,
+      context?: MusicPlayerMachineContext,
+      initialState?: MusicPlayerMachineStates,
+    }
+  }
+};
+
 export function getMockedServices(
-  configMusicPlayerMachine?: Partial<MachineOptions<MusicPlayerMachineContext, any>>,
-  musicPlayerMachineContext?: MusicPlayerMachineContext,
-  initialState?: MusicPlayerMachineStates,
+  config: ServiceConfig,
 ): Omit<RenderTestComponentResult, 'renderResult'> {
+  const {
+    machines: {
+      musicPlayerMachine: {
+        config: musicPlayerMachineConfig,
+        context: musicPlayerMachineContext,
+        initialState,
+      },
+    },
+  } = config;
+
   const audioService = new AudioAPI();
   const musicStorage = new MusicStorage();
   let musicPlayerMachine = getMusicPlayerMachine(musicStorage, audioService);
@@ -32,7 +50,7 @@ export function getMockedServices(
     musicPlayerMachine = musicPlayerMachine.withContext(musicPlayerMachineContext);
   }
 
-  musicPlayerMachine = musicPlayerMachine.withConfig(configMusicPlayerMachine ?? ({
+  musicPlayerMachine = musicPlayerMachine.withConfig(musicPlayerMachineConfig ?? ({
     services: {
       loadMusic: () => Promise.reject(),
     },
@@ -45,16 +63,14 @@ export function getMockedServices(
 }
 
 export function renderTestComponent<Props>(
-  Component: (props: Props) => ReactElement, props: Props,
-  configMusicPlayerMachine?: Partial<MachineOptions<MusicPlayerMachineContext, any>>,
-  musicPlayerMachineContext?: MusicPlayerMachineContext,
-  initialState?: MusicPlayerMachineStates,
+  Component: FC<Props>, props: Props,
+  config: ServiceConfig,
 ): RenderTestComponentResult {
   const {
     audioService,
     musicStorage,
     musicPlayerMachineService,
-  } = getMockedServices(configMusicPlayerMachine, musicPlayerMachineContext, initialState);
+  } = getMockedServices(config);
   const renderResult = render(
     <AppProvider
       audioService={audioService}
@@ -68,5 +84,22 @@ export function renderTestComponent<Props>(
 
   return {
     renderResult, audioService, musicStorage, musicPlayerMachineService,
+  };
+}
+export function componentRenderFactory<Props>(testId: string, Component: FC<Props>)
+  : (props: Props, config: ServiceConfig) => (Omit<RenderTestComponentResult, 'renderResult'> & { rootElement: HTMLElement } & RenderResult) {
+  return (
+    props: Props,
+    config: ServiceConfig,
+  ) => {
+    const { renderResult, ...rest } = renderTestComponent(
+      Component, props, config,
+    );
+    const rootElement = renderResult.getByTestId(testId);
+    return {
+      ...rest,
+      ...renderResult,
+      rootElement,
+    };
   };
 }
