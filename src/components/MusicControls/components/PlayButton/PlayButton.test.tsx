@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { cleanup, fireEvent } from '@testing-library/react';
 import { MachineOptions } from 'xstate';
+import { act } from 'react-dom/test-utils';
 import { PlayButton, PlayButtonProps } from './index';
 import {
   MusicPlayerMachineContext,
@@ -50,37 +51,49 @@ describe('<PlayButton/> should be able to toggle playing state of music player',
     expect(rootElement).not.toBeDisabled();
   });
 
-  it('machine state should go to paused state on click from playing state', () => {
-    let playing = true;
-    const { rootElement } = renderPlayButton({ size: 'large' }, {
-      services: {
-        playMusic: async () => {
-          playing = false;
-        },
-      },
-    }, undefined, MusicPlayerMachineStates.PLAYING);
-
-    fireEvent.click(rootElement);
-
-    setTimeout(() => {
-      expect(playing).toEqual(false);
-    });
-  });
-
-  it('machine state should go to playing state on click from paused state', () => {
-    let playing = false;
+  it('machine state should go to paused state on click from playing state', (done) => {
     const { rootElement } = renderPlayButton({ size: 'large' }, {
       services: {
         pauseMusic: async () => {
-          playing = true;
+          done();
         },
       },
-    }, undefined, MusicPlayerMachineStates.PAUSED);
+    }, {
+      mode: MusicPlayerModes.NORMAL,
+      index: 0,
+      currentPlayingMusic: {
+        musicDataURL: '',
+        createdAt: new Date(),
+        title: 'Dope',
+        id: 'id',
+      },
+    }, MusicPlayerMachineStates.PLAYING);
 
-    fireEvent.click(rootElement);
+    act(() => {
+      fireEvent.click(rootElement);
+    });
+  });
 
-    setTimeout(() => {
-      expect(playing).toEqual(true);
+  it('machine state should go to playing state on click from paused state', (done) => {
+    const { rootElement } = renderPlayButton({ size: 'large' }, {
+      services: {
+        playMusic: async () => {
+          done();
+        },
+      },
+    }, {
+      mode: MusicPlayerModes.NORMAL,
+      index: 0,
+      currentPlayingMusic: {
+        musicDataURL: '',
+        createdAt: new Date(),
+        title: 'Dope',
+        id: 'id',
+      },
+    }, MusicPlayerMachineStates.PAUSED);
+
+    act(() => {
+      fireEvent.click(rootElement);
     });
   });
 });
