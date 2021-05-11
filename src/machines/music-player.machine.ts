@@ -3,6 +3,7 @@ import {
 } from 'xstate';
 import { AudioServiceInterface, MusicDataInterface, MusicStorageInterface } from '../interfaces';
 import { isTruthy } from '../utils';
+import { notify } from '../common/notify';
 
 export enum MusicPlayerMachineStates {
   NOT_LOADED = 'NOT_LOADED',
@@ -153,7 +154,15 @@ export function getMusicPlayerMachine(
         if (musicData) {
           return audioService
             .load(musicData.musicDataURL)
-            .then(() => ({ ...musicData, index }));
+            .then(() => {
+              notify(musicData.title,
+                {
+                  image: musicData.imgURL,
+                  silent: true,
+                  requireInteraction: false,
+                });
+              return ({ ...musicData, index });
+            });
         }
 
         return Promise.reject();
