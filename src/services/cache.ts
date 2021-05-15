@@ -1,6 +1,10 @@
 import sizeof from 'object-sizeof';
 import { CacheInterface } from '../interfaces';
+import { swap } from '../utils';
 
+/**
+ *  Implementation of LRU cache
+ * */
 export class Cache implements CacheInterface {
   private maxSize = 100 * 1e6; // Approx. 100MB
 
@@ -19,7 +23,17 @@ export class Cache implements CacheInterface {
   }
 
   get(key: string): any {
-    return this.cache[key];
+    const indexOfKey = this.keys.indexOf(key);
+
+    if (indexOfKey !== -1) {
+      const lastIndex = this.keys.length - 1;
+
+      // bring the recently accessed key to the last
+      this.keys = swap(this.keys, indexOfKey, lastIndex);
+
+      return this.cache[key];
+    }
+    return null;
   }
 
   put(key: string, value: any): void {
