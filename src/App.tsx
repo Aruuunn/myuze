@@ -5,15 +5,14 @@ import { AppProvider } from './AppProvider';
 import { Routes } from './Routes';
 import { AudioServiceInterface, MusicStorageInterface } from './interfaces';
 import { AudioAPI, MusicStorage } from './services';
-import { addMusicPlayListeners, getMusicPlayerMachine } from './machines';
+import { addMusicPlayListeners, musicPlayerMachine } from './machines';
 
 function App(): ReactElement {
   const audioService: AudioServiceInterface = new AudioAPI();
   const musicStorage: MusicStorageInterface = new MusicStorage();
-  const musicPlayerMachine = getMusicPlayerMachine(musicStorage, audioService);
   const musicPlayerMachineService = interpret(musicPlayerMachine).start();
 
-  addMusicPlayListeners(audioService, musicPlayerMachineService);
+  addMusicPlayListeners(musicPlayerMachineService);
 
   return (
     <>
