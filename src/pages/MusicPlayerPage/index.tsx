@@ -120,7 +120,7 @@ export function MusicPlayerPage(): ReactElement {
                   imgURL={currentPlayingMusic?.imgURL}
                 />
               </Grid>
-              <Grid container justify="center" alignItems="center" item xs={12}>
+              <Grid container justify="center" alignItems="center" style={{ maxWidth: '90%' }} item xs={12}>
                 <MusicName
                   title={currentPlayingMusic?.title}
                   artists={currentPlayingMusic?.artists}
