@@ -46,6 +46,7 @@ export function BottomControlsBar(): ReactElement {
               item
               className={styles.expandBtnCtn}
               xs={1}
+              sm={2}
             >
               <IconButton
                 disabled={!currentPlayingMusic}
@@ -58,6 +59,7 @@ export function BottomControlsBar(): ReactElement {
             <Grid
               item
               xs={10}
+              sm={9}
               onClick={gotoMusicPlayerPage}
               className={styles.musicTitleCtn}
             >

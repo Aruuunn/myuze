@@ -3,10 +3,13 @@ import { interpret, Interpreter, MachineOptions } from 'xstate';
 import { render, RenderResult } from '@testing-library/react';
 
 import { AppProvider } from '../AppProvider';
-import { AudioAPI } from '../services/audio-api';
-import { MusicStorage } from '../services/music-storage';
+import { AudioAPI, MusicStorage } from '../services';
+
 import { AudioServiceInterface, MusicStorageInterface } from '../interfaces';
-import { getMusicPlayerMachine, MusicPlayerMachineContext, MusicPlayerMachineStates } from '../machines';
+import {
+  musicPlayerMachine,
+  MusicPlayerMachineContext, MusicPlayerMachineStates,
+} from '../machines';
 import { isTruthy } from './is-truthy.util';
 
 type RenderTestComponentResult = {
@@ -44,18 +47,18 @@ export function getMockedServices(
 
   const audioService = new AudioAPI();
   const musicStorage = new MusicStorage();
-  let musicPlayerMachine = getMusicPlayerMachine(musicStorage, audioService);
+  let musicPlayerMachineForTest = musicPlayerMachine;
 
   if (isTruthy(musicPlayerMachineContext)) {
-    musicPlayerMachine = musicPlayerMachine.withContext(musicPlayerMachineContext);
+    musicPlayerMachineForTest = musicPlayerMachineForTest.withContext(musicPlayerMachineContext);
   }
 
-  musicPlayerMachine = musicPlayerMachine.withConfig(musicPlayerMachineConfig ?? ({
+  musicPlayerMachineForTest = musicPlayerMachineForTest.withConfig(musicPlayerMachineConfig ?? ({
     services: {
       loadMusic: () => Promise.reject(),
     },
   }));
-  const musicPlayerMachineService = interpret(musicPlayerMachine)
+  const musicPlayerMachineService = interpret(musicPlayerMachineForTest)
     .start(initialState ?? MusicPlayerMachineStates.NOT_LOADED);
   return {
     audioService, musicStorage, musicPlayerMachineService,

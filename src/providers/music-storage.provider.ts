@@ -1,7 +1,9 @@
 import { createContext } from 'react';
-import { MusicStorage } from '../services';
+import { getMusicStorage } from '../services';
 import { MusicStorageInterface } from '../interfaces';
 
+const db = getMusicStorage();
+
 export const MusicStorageContext = createContext<MusicStorageInterface>(
-  new MusicStorage(),
+  db,
 );

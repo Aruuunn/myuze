@@ -4,7 +4,7 @@ import {
   EventObject, Interpreter, PayloadSender, State,
 } from 'xstate';
 import { MusicPlayerInterpreterContext } from '../providers';
-import { MusicPlayerMachineContext } from '../machines/music-player.machine';
+import { MusicPlayerMachineContext } from '../machines';
 
 export function useMusicPlayerMachine():
 [
