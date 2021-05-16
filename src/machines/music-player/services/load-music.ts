@@ -2,9 +2,9 @@ import { AnyEventObject } from 'xstate';
 import { isTruthy } from '../../../utils';
 import { notify } from '../../../common/notify';
 import { MusicPlayerMachineContext as Context } from '../context.interface';
-import { getAudiService, getMusicStorage } from '../../../services';
+import { getAudioService, getMusicStorage } from '../../../services';
 
-const audioService = getAudiService();
+const audioService = getAudioService();
 const db = getMusicStorage();
 
 export async function loadMusic(_: Context, event: AnyEventObject) {

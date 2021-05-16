@@ -6,7 +6,7 @@ import { MusicPlayerMachineEvents } from './events.enum';
 import { MusicPlayerModes } from './modes.enum';
 import { MusicPlayerMachineStates } from './states.enum';
 import { MusicPlayerMachineContext as Context } from './context.interface';
-import { getAudiService } from '../../services';
+import { getAudioService } from '../../services';
 
 import { loadMusic } from './services';
 
@@ -20,7 +20,7 @@ const {
   LOADING,
 } = MusicPlayerMachineStates;
 
-const audioService = getAudiService();
+const audioService = getAudioService();
 
 export const config: MachineConfig<Context, any, AnyEventObject> = {
   initial: NOT_LOADED,
