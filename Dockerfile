@@ -20,5 +20,5 @@ COPY --from=builder /app/packages/api .
 
 RUN go build main.go
 
-CMD ["main"]
+CMD ["/app/main"]
 
