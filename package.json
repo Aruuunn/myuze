@@ -1,12 +1,15 @@
 {
-"repository": "git@github.com:ArunMurugan78/open-music-player.git",
-"author": "Arun Murugan <arunmurugan.official@gmail.com>",
- "private": true,
- "workspaces": [
-   "packages/*"
- ],
- "volta": {
-   "node": "14.17.0",
-     "yarn": "1.22.10"
-   }
+  "repository": "git@github.com:ArunMurugan78/open-music-player.git",
+  "author": "Arun Murugan <arunmurugan.official@gmail.com>",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "volta": {
+    "node": "14.17.0",
+    "yarn": "1.22.10"
+  }
 }
