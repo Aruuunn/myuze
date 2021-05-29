@@ -1,6 +1,7 @@
 {
     "files": [],
     "references": [
-        { "path": "web" }
+        { "path": "core" },
+        { "path": "web" },
     ]
 }

@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "go:build": "go build main.go",
+    "clean": "rimraf main"
+  }
+}

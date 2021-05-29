@@ -21,7 +21,7 @@ module.exports = {
       {
         devDependencies: [
           '**/*.stories.tsx',
-            'src/utils/story-template-factory.tsx'
+            'src/story-template-factory.tsx'
         ],
       },
     ],

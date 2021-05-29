@@ -1,12 +1,21 @@
 {
+  "name": "open-music-player",
   "repository": "git@github.com:ArunMurugan78/open-music-player.git",
   "author": "Arun Murugan <arunmurugan.official@gmail.com>",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "install": "lerna bootstrap",
+    "prebuild": "yarn clean",
+    "clean": "lerna run clean",
+    "build": "lerna run build --stream",
+    "build:web": "docker build"
+  },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "rimraf": "^3.0.2"
   },
   "volta": {
     "node": "14.17.0",

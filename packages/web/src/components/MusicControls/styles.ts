@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles';
-import { MusicPlayerModes } from '../../machines';
+import { MusicPlayerModes } from '@open-music-player/core';
 
 export const useStyles = makeStyles({
   root: ({ size }: { size: 'large' | 'small', mode: MusicPlayerModes }) => ({

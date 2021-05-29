@@ -2,9 +2,8 @@ import React, {
   ReactElement, useEffect, useState,
 } from 'react';
 import { FixedSizeList as List } from 'react-window';
-
+import { useMusicStorage } from '@open-music-player/core';
 import { MusicListItem } from '../MusicListItem';
-import { useMusicStorage } from '../../hooks';
 
 export interface MusicListProps {
   onSelectItem?: (data: { id: string, index: number } | null) => void;

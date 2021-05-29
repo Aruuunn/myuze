@@ -3,8 +3,8 @@ import { act, cleanup, fireEvent } from '@testing-library/react';
 import { PlayPrevButton } from './index';
 import {
   MusicPlayerModes,
-} from '../../../../machines';
-import { componentRenderFactory } from '../../../../utils/test-wrapper';
+} from '../../../../../../core/src/machines';
+import { componentRenderFactory } from '../../../../test-wrapper';
 
 describe('<PlayPrevButton/> should be able to play prev song', () => {
   afterEach(cleanup);

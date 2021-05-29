@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import { act, cleanup, fireEvent } from '@testing-library/react';
 import { ToggleShufflePlayButton } from './index';
-import { MusicPlayerModes } from '../../../../machines';
-import { componentRenderFactory } from '../../../../utils/test-wrapper';
+import { MusicPlayerModes } from '../../../../../../core/src/machines';
+import { componentRenderFactory } from '../../../../test-wrapper';
 
 describe('<ToggleShufflePlayButton/>', () => {
   afterEach(cleanup);

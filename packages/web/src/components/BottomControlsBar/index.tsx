@@ -3,11 +3,10 @@ import {
   Container, Grid, Hidden, IconButton,
 } from '@material-ui/core';
 import { ExpandLessRounded as ExpandIcon } from '@material-ui/icons';
+import { useMusicPlayerMachine, isTruthy } from '@open-music-player/core';
 import { useHistory } from 'react-router-dom';
 
 import { useStyles } from './styles';
-import { isTruthy } from '../../utils';
-import { useMusicPlayerMachine } from '../../hooks';
 import { MusicControls } from '../MusicControls';
 import { MusicSlider } from '../MusicSlider';
 import { MusicName } from '../MusicName';

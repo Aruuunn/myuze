@@ -3,11 +3,11 @@ import { Container, Grid, Typography } from '@material-ui/core';
 
 import { useHistory } from 'react-router-dom';
 import { State } from 'xstate';
+import { MusicPlayerMachineEvents, MusicPlayerMachineContext, useMusicPlayerService } from '@open-music-player/core';
+
 import {
   UploadNewMusic, MusicList, BottomControlsBar,
 } from '../../components';
-import { MusicPlayerMachineEvents, MusicPlayerMachineContext } from '../../machines';
-import { useMusicPlayerService } from '../../hooks';
 
 let autoOpenedMusicPlayerPage = false;
 

@@ -6,8 +6,8 @@ import {
   MusicPlayerMachineContext,
   MusicPlayerMachineStates,
   MusicPlayerModes,
-} from '../../../../machines';
-import { componentRenderFactory } from '../../../../utils/test-wrapper';
+} from '../../../../../../core/src/machines';
+import { componentRenderFactory } from '../../../../test-wrapper';
 
 describe('<PlayButton/> should be able to toggle playing state of music player', () => {
   afterEach(cleanup);

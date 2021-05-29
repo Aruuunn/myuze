@@ -7,10 +7,9 @@ import React, {
 import { Grid, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
-import { MusicDataInterface } from '../../interfaces';
+import { useMusicPlayerMachine, useMusicStorage, isTruthy } from '@open-music-player/core';
+import { MusicDataInterface } from '../../../../core/src/interfaces';
 import { useStyles } from './styles';
-import { useMusicPlayerMachine, useMusicStorage } from '../../hooks';
-import { isTruthy } from '../../utils';
 
 type MusicDetails = Pick<MusicDataInterface, 'title' | 'artists' | 'id'> | null;
 

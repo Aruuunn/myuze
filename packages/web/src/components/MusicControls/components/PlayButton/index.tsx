@@ -3,12 +3,12 @@ import { IconButton, SvgIcon } from '@material-ui/core';
 import { PlayArrowRounded, PauseRounded } from '@material-ui/icons';
 import { motion } from 'framer-motion';
 
-import { useStyles } from './styles';
 import {
   MusicPlayerMachineEvents,
   MusicPlayerMachineStates,
-} from '../../../../machines';
-import { useMusicPlayerMachine } from '../../../../hooks';
+  useMusicPlayerMachine,
+} from '@open-music-player/core';
+import { useStyles } from './styles';
 
 export interface PlayButtonProps {
   size: 'small' | 'large';

@@ -6,12 +6,13 @@ import React, {
 } from 'react';
 
 import { send } from 'xstate';
-import { Slider } from './components';
 import {
   MusicPlayerMachineEvents,
   MusicPlayerMachineStates,
-} from '../../machines';
-import { useAudioService, useMusicPlayerMachine } from '../../hooks';
+  useAudioService, useMusicPlayerMachine,
+} from '@open-music-player/core';
+
+import { Slider } from './components';
 
 export interface MusicSliderProps {
   size: 'small' | 'large';

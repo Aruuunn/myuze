@@ -3,11 +3,11 @@ import {
   Grid, Hidden, useMediaQuery, useTheme,
 } from '@material-ui/core';
 
+import { useMusicPlayerMachine } from '@open-music-player/core';
 import {
   PlayButton, PlayNextButton, PlayPrevButton, ToggleOnRepeatButton, ToggleShufflePlayButton,
 } from './components';
 import { useStyles } from './styles';
-import { useMusicPlayerMachine } from '../../hooks';
 
 export interface MusicControllerProps {
   size: 'small' | 'large';

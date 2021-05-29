@@ -1,8 +1,10 @@
 import React, { CSSProperties, ReactElement } from 'react';
 import { IconButton } from '@material-ui/core';
 import { SkipPreviousRounded as PlayPrevIcon } from '@material-ui/icons';
-import { MusicPlayerMachineEvents } from '../../../../machines';
-import { useMusicPlayerMachine } from '../../../../hooks';
+import {
+  MusicPlayerMachineEvents,
+  useMusicPlayerMachine,
+} from '@open-music-player/core';
 
 export interface PlayPrevButtonProps {
   className?: string;

@@ -1,8 +1,8 @@
 import React, { CSSProperties, ReactElement } from 'react';
 import { IconButton } from '@material-ui/core';
 import { ShuffleRounded } from '@material-ui/icons';
-import { MusicPlayerMachineEvents, MusicPlayerModes } from '../../../../machines';
-import { useMusicPlayerMachine } from '../../../../hooks';
+import { MusicPlayerMachineEvents, MusicPlayerModes, useMusicPlayerMachine } from '@open-music-player/core';
+
 import { useStyles } from './styles';
 
 export interface ToggleShufflePlayButtonProps {

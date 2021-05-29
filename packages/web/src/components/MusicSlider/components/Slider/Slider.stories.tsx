@@ -1,6 +1,6 @@
 import React from 'react';
 import { SliderProps } from '@material-ui/core';
-import { storyFactory } from '../../../../utils';
+import { storyFactory } from '../../../../story-template-factory';
 
 import { Slider } from './index';
 

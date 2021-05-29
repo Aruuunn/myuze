@@ -10,17 +10,17 @@ import {
 } from '@material-ui/core';
 
 import {
+  useMusicPlayerMachine,
+  MusicPlayerMachineEvents,
+  MusicPlayerMachineStates, MusicPlayerMachineContext,
+} from '@open-music-player/core';
+import {
   MusicSlider,
   MusicControls,
   AlbumCover,
   MusicName,
 } from '../../components';
 import { useStyles } from './styles';
-import { useMusicPlayerMachine } from '../../hooks';
-import {
-  MusicPlayerMachineEvents,
-  MusicPlayerMachineStates, MusicPlayerMachineContext,
-} from '../../machines';
 
 export function MusicPlayerPage(): ReactElement {
   const { id } = useParams<{ id: string }>();

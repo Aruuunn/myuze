@@ -1,11 +1,16 @@
 import React, { ReactElement } from 'react';
 
 import { interpret } from 'xstate';
-import { AppProvider } from './AppProvider';
+import {
+  AudioServiceInterface,
+  MusicStorageInterface,
+  AudioAPI, MusicStorage,
+  addMusicPlayListeners,
+  musicPlayerMachine,
+} from '@open-music-player/core';
+
 import { Routes } from './Routes';
-import { AudioServiceInterface, MusicStorageInterface } from './interfaces';
-import { AudioAPI, MusicStorage } from './services';
-import { addMusicPlayListeners, musicPlayerMachine } from './machines';
+import { AppProvider } from './AppProvider';
 
 function App(): ReactElement {
   const audioService: AudioServiceInterface = new AudioAPI();

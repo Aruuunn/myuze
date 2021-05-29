@@ -6,9 +6,9 @@ import {
   AudioServiceContext,
   MusicStorageContext,
   MusicPlayerInterpreterContext,
-} from './providers';
-import { AudioServiceInterface, MusicStorageInterface } from './interfaces';
-import { MusicPlayerMachineContext } from './machines';
+  AudioServiceInterface, MusicStorageInterface, MusicPlayerMachineContext,
+} from '@open-music-player/core';
+
 import './styles';
 
 export interface AppProviderProps {
