@@ -1,12 +1,12 @@
 import React, {
-  ReactElement, useEffect,
+  ReactElement, useEffect, useState,
 } from 'react';
 import { State } from 'xstate';
 import { motion } from 'framer-motion';
 import { useParams, useHistory } from 'react-router-dom';
 import { ExpandMoreOutlined as ExpandLessIcon } from '@material-ui/icons';
 import {
-  Container, Grid, IconButton, useMediaQuery, useTheme,
+  Container, Fade, Grid, IconButton, useMediaQuery, useTheme,
 } from '@material-ui/core';
 
 import {
@@ -23,11 +23,12 @@ import {
 } from '../../machines';
 
 export function MusicPlayerPage(): ReactElement {
-  const styles = useStyles();
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const [current, send, service] = useMusicPlayerMachine();
   const { currentPlayingMusic } = current.context;
+  const styles = useStyles({ imgURL: currentPlayingMusic?.imgURL });
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down('xs'));
@@ -68,12 +69,17 @@ export function MusicPlayerPage(): ReactElement {
       }}
       style={{ overflow: 'hidden' }}
       animate={{ y: 0, opacity: 1 }}
+      onAnimationComplete={() => {
+        setTimeout(() => {
+          setAnimationComplete(true);
+        }, 100);
+      }}
     >
-      <Container maxWidth="lg" style={{ ...(xs ? { margin: 0, padding: 0 } : {}) }}>
+      {animationComplete && <Fade in timeout={3000}><div className={styles.blurBg} /></Fade>}
+      <Container maxWidth="lg" style={{ ...(xs ? { margin: 0, padding: 0 } : {}), position: 'relative' }}>
         <Grid
           id="music-player-container"
           container
-          style={{ position: 'relative' }}
           className={styles.container}
         >
           <Grid
@@ -106,6 +112,7 @@ export function MusicPlayerPage(): ReactElement {
               xs={12}
               style={{ marginBottom: smallScreenHeight ? '20px' : '40px' }}
             >
+
               <Grid
                 container
                 justify="center"
@@ -114,6 +121,7 @@ export function MusicPlayerPage(): ReactElement {
                 item
                 xs={12}
               >
+
                 <AlbumCover
                   musicTitle={currentPlayingMusic?.title ?? ''}
                   artistName={(currentPlayingMusic?.artists ?? [])[0]}
