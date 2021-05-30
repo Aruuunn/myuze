@@ -8,7 +8,7 @@ RUN yarn
 
 RUN yarn run install
 
-RUN yarn run build
+RUN yarn run build:web
 
 FROM golang
 

@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  web:
+    stdin_open: true
+    tty: true
+    image:
+      build:
+        context: .
+        image: Dockerfile.web.dev
+    ports:
+      - "3000:3000"
+      - "8000:8000"
+    volumes:
+      - "./:/app"
+      - "/app/node_modules"
+
+  npm-registry:
+    image: verdaccio/verdaccio
+    ports:
+      - "4873:4873"

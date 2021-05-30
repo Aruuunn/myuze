@@ -10,11 +10,13 @@
     "install": "lerna bootstrap",
     "prebuild": "yarn clean",
     "clean": "lerna run clean",
-    "build": "lerna run build --stream",
-    "build:web": "docker build"
+    "build:all": "lerna run build --stream",
+    "build:web": "lerna run build --stream --scope=@open-music-player/{core,web}",
+    "dev:web": "lerna run dev --stream --scope=@open-music-player/{core,web,api} --parallel"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
+    "nodemon": "^2.0.7",
     "rimraf": "^3.0.2"
   },
   "volta": {

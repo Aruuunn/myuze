@@ -1,0 +1,18 @@
+FROM golang:1.16
+RUN apt-get update
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
+RUN apt-get update && apt-get install -y nodejs
+RUN npm install yarn -g
+RUN npm install volta -g
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn
+
+RUN yarn run install
+
+CMD  ["yarn", "run", "dev:web"]
+
+
