@@ -12,9 +12,11 @@
     "clean": "lerna run clean",
     "build:all": "lerna run build --stream",
     "build:web": "lerna run build --stream --scope=@open-music-player/{core,web}",
-    "dev:web": "lerna run dev --stream --scope=@open-music-player/{core,web,api} --parallel"
+    "dev:web": "lerna run dev --stream --scope=@open-music-player/{core,web,api} --parallel",
+    "cypress:open": "cypress open"
   },
   "devDependencies": {
+    "cypress": "^7.4.0",
     "lerna": "^4.0.0",
     "nodemon": "^2.0.7",
     "rimraf": "^3.0.2"
