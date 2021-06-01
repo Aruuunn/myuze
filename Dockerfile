@@ -1,6 +1,7 @@
 FROM cypress/included:7.4.0
 WORKDIR /app
 COPY . .
+RUN npm install --global yarn
 RUN yarn
 RUN yarn run install
 RUN yarn run build:web
