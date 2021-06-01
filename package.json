@@ -14,7 +14,7 @@
     "build:web": "lerna run build --stream --scope=@open-music-player/{core,web}",
     "dev:web": "lerna run dev --stream --scope=@open-music-player/{core,web,api} --parallel",
     "cypress:open": "cypress open",
-    "test-build:web": "http-server packages/web/build & cypress run --headless --browser chrome"
+    "test-build:web": "node scripts/test-build-web.js"
   },
   "devDependencies": {
     "@types/cypress": "^1.1.3",

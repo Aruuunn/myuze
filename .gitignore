@@ -29,3 +29,5 @@ yarn-error.log*
 
 tsconfig.tsbuildinfo
 .netlify
+
+cypress/videos/
