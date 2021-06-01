@@ -30,7 +30,13 @@ export function UploadNewMusic(): ReactElement {
       />
       <label htmlFor="upload-file">
         {' '}
-        <IconButton className={styles.addBtn} component="span" color="primary" aria-label="upload music">
+        <IconButton
+          className={styles.addBtn}
+          id="upload-file-button"
+          component="span"
+          color="primary"
+          aria-label="upload music"
+        >
           <Add fontSize="small" />
         </IconButton>
       </label>
