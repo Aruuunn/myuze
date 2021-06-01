@@ -70,6 +70,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       {/* eslint-disable jsx-a11y/tabindex-no-positive */}
       <Paper
         tabIndex={1}
+        data-testid="music-list-item"
         className={styles.card}
         onClick={() => {
           if (typeof onSelectItem === 'function') {

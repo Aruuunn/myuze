@@ -1,6 +1,9 @@
 {
+  "name": "@open-music-player/api",
+  "author": "Arun Murugan",
   "scripts": {
-    "go:build": "go build main.go",
-    "clean": "rimraf main"
+    "build": "go build main.go",
+    "clean": "rimraf main",
+    "dev": "PORT=8000 nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run main.go"
   }
 }
