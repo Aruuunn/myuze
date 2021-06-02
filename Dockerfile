@@ -1,4 +1,4 @@
-FROM cypress/included:7.4.0
+FROM cypress/included:7.4.0 AS builder
 WORKDIR /app
 COPY . . 
 RUN npm install -g yarn
@@ -16,9 +16,8 @@ RUN go build main.go
 
 FROM alpine
 WORKDIR /app
+COPY --from=go-builder . .
 COPY --from=builder /app/packages/web/build client
-COPY --from=go-builder /app/main .
-
 
 CMD ["/app/main"]
 
