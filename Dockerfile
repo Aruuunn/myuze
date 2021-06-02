@@ -11,13 +11,8 @@ RUN yarn run test-build:web
 FROM golang AS go-builder
 WORKDIR /app
 COPY --from=builder /app/packages/api .
-RUN go build main.go
-
-
-FROM alpine
-WORKDIR /app
-COPY --from=go-builder . .
 COPY --from=builder /app/packages/web/build client
+RUN go build main.go
 
 CMD ["/app/main"]
 
