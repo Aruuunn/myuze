@@ -99,6 +99,7 @@ export function MusicName(props: MusicNameProps): ReactElement {
       window.clearInterval(interval);
       window.removeEventListener('resize', onComponentMount);
     };
+    // eslint-disable-next-line
   }, [title, artists]);
 
   return (

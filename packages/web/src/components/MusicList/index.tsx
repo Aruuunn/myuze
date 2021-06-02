@@ -37,6 +37,7 @@ export function MusicList(props: MusicListProps): ReactElement {
     return () => {
       window.removeEventListener('resize', onWindowResize);
     };
+    /* eslint-disable-next-line */
   }, []);
 
   if (totalCount === -1) {

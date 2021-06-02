@@ -31,6 +31,8 @@ export function HomePage(): ReactElement {
     return () => {
       musicPlayerService.off(eventListener);
     };
+
+    // eslint-disable-next-line
   }, []);
 
   return (

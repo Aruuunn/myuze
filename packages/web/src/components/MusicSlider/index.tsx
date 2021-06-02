@@ -74,7 +74,6 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
     updateSliderMaxValue(audioService.duration);
   };
 
-  // Run only once
   useEffect(() => {
     audioService.onLoad(callback);
 
@@ -82,7 +81,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
 
     addTimeUpdateListener();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -90,6 +89,7 @@ export function MusicSlider(props: MusicSliderProps): ReactElement {
       callback();
       updateSliderValue(audioService.currentTime);
     }
+    // eslint-disable-next-line
   }, [current]);
 
   return (

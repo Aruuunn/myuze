@@ -56,6 +56,8 @@ export function MusicPlayerPage(): ReactElement {
     return () => {
       service.off(onUnload);
     };
+
+    // eslint-disable-next-line
   }, [id]);
 
   return (
