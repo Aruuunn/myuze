@@ -1,4 +1,4 @@
-FROM cypress/included:7.4.0
+FROM cypress/included:7.4.0 AS builder
 WORKDIR /app
 COPY . . 
 RUN npm install -g yarn
