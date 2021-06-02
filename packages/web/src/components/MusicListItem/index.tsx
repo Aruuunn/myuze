@@ -1,13 +1,14 @@
 import React, {
-  CSSProperties,
-  ReactElement,
-  useEffect,
-  useState,
+  CSSProperties, ReactElement, useEffect, useState,
 } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
-import { useMusicPlayerMachine, useMusicStorage, isTruthy } from '@open-music-player/core';
+import {
+  useMusicPlayerMachine,
+  useMusicStorage,
+  isTruthy,
+} from '@open-music-player/core';
 import { MusicDataInterface } from '../../../../core/src/interfaces';
 import { useStyles } from './styles';
 
@@ -19,13 +20,12 @@ export interface MusicListItemProps {
   height: number;
   width: number;
   style?: CSSProperties;
-  onSelectItem?: (data: { id: string, index: number } | null) => void;
+  onSelectItem?: (data: { id: string; index: number } | null) => void;
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
   const {
-    index, style = {}, onSelectItem,
-    height, width,
+    index, style = {}, onSelectItem, height, width,
   } = props;
 
   const db = useMusicStorage();
@@ -56,14 +56,12 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     });
   }, [db, index]);
 
-  const styles = useStyles(
-    {
-      isCurrentPlayingMusic: (!!currentPlayingMusic
-          && musicDetails?.id === currentPlayingMusic?.id),
-      height,
-      width,
-    },
-  );
+  const styles = useStyles({
+    isCurrentPlayingMusic:
+      !!currentPlayingMusic && musicDetails?.id === currentPlayingMusic?.id,
+    height,
+    width,
+  });
 
   return (
     <div className={styles.root} key={index} style={style}>
@@ -71,6 +69,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       <Paper
         tabIndex={1}
         data-testid="music-list-item"
+        data-loading={loading.toString()}
         className={styles.card}
         onClick={() => {
           if (typeof onSelectItem === 'function') {
@@ -85,13 +84,15 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
             item
             xs={12}
             style={{
-              whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
             }}
           >
             {!loading ? musicDetails?.title : <Skeleton />}
           </Grid>
           <Grid className={styles.artists} item xs={12}>
-            {!loading ? artistsName : <Skeleton style={{ width: '60%' }} /> }
+            {!loading ? artistsName : <Skeleton style={{ width: '60%' }} />}
           </Grid>
         </Grid>
       </Paper>
