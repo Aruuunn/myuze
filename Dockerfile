@@ -6,10 +6,11 @@ RUN yarn
 RUN yarn run install
 RUN yarn run build:web
 RUN yarn run test-build:web
+RUN yarn run bundle:web
 
-FROM node:alpine
-COPY --from=builder /app/packages/api/dist .
-COPY --from=builder /app/packages/web/build public
+FROM alpine
+WORKDIR /app
+COPY --from=builder /app/dist .
 
-CMD ["node", "index.js"]
+CMD ["/app/main"]
 

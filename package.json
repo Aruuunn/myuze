@@ -8,14 +8,15 @@
   ],
   "scripts": {
     "install": "lerna bootstrap",
-    "prebuild": "yarn clean",
-    "clean": "lerna run clean",
+    "prebuild:web": "yarn clean",
+    "clean": "rimraf dist && lerna run clean",
     "build:all": "lerna run build --stream",
     "build:web": "lerna run build --stream --scope=@open-music-player/{core,web,api}",
     "dev:web": "lerna run dev --stream --scope=@open-music-player/{core,web,api} --parallel",
     "cypress:open": "cypress open",
     "test-build:web": "node scripts/test-build-web.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "bundle:web": "node scripts/bundle-web.js"
   },
   "lint-staged": {
     "packages/**/src/**/*.{ts,js,tsx,jsx}": [
