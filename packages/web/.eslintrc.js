@@ -1,13 +1,13 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-        project: './tsconfig.json',
-    },
+    project: './tsconfig.json',
+  },
   plugins: ['@typescript-eslint', 'react-hooks', 'react', 'react-hooks'],
   extends: [
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-    'airbnb-typescript'
+    'airbnb-typescript',
   ],
   rules: {
     'react-hooks/rules-of-hooks': 'error',
@@ -19,13 +19,9 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: [
-          '**/*.stories.tsx',
-            'src/story-template-factory.tsx'
-        ],
+        devDependencies: ['**/*.stories.tsx', 'src/story-template-factory.tsx'],
       },
     ],
-
   },
   settings: {
     react: {

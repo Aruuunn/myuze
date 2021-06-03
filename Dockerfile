@@ -8,8 +8,8 @@ RUN yarn run build:web
 RUN yarn run test-build:web
 
 FROM node:alpine
-COPY --from=builder packages/api/dist .
-COPY --from=builder packages/web/build public
+COPY --from=builder /app/packages/api/dist .
+COPY --from=builder /app/packages/web/build public
 
 CMD ["node", "index.js"]
 
