@@ -12,5 +12,5 @@ FROM alpine
 WORKDIR /app
 COPY --from=builder /app/dist .
 
-CMD ["/app/dist/main"]
+CMD ["ls -al /app"]
 
