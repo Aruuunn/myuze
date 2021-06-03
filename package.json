@@ -11,10 +11,33 @@
     "prebuild": "yarn clean",
     "clean": "lerna run clean",
     "build:all": "lerna run build --stream",
-    "build:web": "lerna run build --stream --scope=@open-music-player/{core,web, api}",
+    "build:web": "lerna run build --stream --scope=@open-music-player/{core,web,api}",
     "dev:web": "lerna run dev --stream --scope=@open-music-player/{core,web,api} --parallel",
     "cypress:open": "cypress open",
-    "test-build:web": "node scripts/test-build-web.js"
+    "test-build:web": "node scripts/test-build-web.js",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "packages/**/src/**/*.{ts,js,tsx,jsx}": [
+      "npx prettier --write",
+      "eslint packages/**/src/**/*.{ts,js,tsx,jsx} --fix"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
   },
   "devDependencies": {
     "@types/cypress": "^1.1.3",
@@ -24,7 +47,16 @@
     "http-server": "^0.12.3",
     "lerna": "^4.0.0",
     "nodemon": "^2.0.7",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1"
   },
   "volta": {
     "node": "14.17.0",
