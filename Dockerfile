@@ -7,12 +7,9 @@ RUN yarn run install
 RUN yarn run build:web
 RUN yarn run test-build:web
 
+FROM node:alpine
+COPY --from=builder packages/api/dist .
+COPY --from=builder packages/web/build public
 
-FROM golang AS go-builder
-WORKDIR /app
-COPY --from=builder /app/packages/api .
-COPY --from=builder /app/packages/web/build client
-RUN go build main.go
-
-CMD ["/app/main"]
+CMD ["node", "index.js"]
 

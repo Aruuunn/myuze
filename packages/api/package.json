@@ -1,9 +1,19 @@
 {
   "name": "@open-music-player/api",
-  "author": "Arun Murugan",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "license": "MIT",
   "scripts": {
-    "build": "go build main.go",
-    "clean": "rimraf main",
-    "dev": "PORT=8000 nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run main.go"
+    "build": "tsc -b .",
+    "clean": "rimraf 'tsconfig.tsbuildinfo' 'dist'",
+    "dev": "tsc -b -w ."
+  },
+  "dependencies": {
+    "fastify": "^3.17.0",
+    "fastify-etag": "^2.1.0",
+    "fastify-static": "^4.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2"
   }
 }
