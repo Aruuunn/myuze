@@ -13,7 +13,7 @@
     "scripts": "dist/**/*.js",
     "assets": "dist/public/**/*",
     "targets": [
-      "node14-linux"
+      "node14-alpine"
     ],
     "outputPath": "dist"
   },
