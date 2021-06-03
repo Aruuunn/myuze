@@ -6,14 +6,25 @@
   "scripts": {
     "build": "tsc -b .",
     "clean": "rimraf 'tsconfig.tsbuildinfo' 'dist'",
-    "dev": "tsc -b -w ."
+    "dev": "tsc -b -w .",
+    "bundle": "pkg -c package.json dist/index.js"
+  },
+  "pkg": {
+    "scripts": "dist/**/*.js",
+    "assets": "dist/public/**/*",
+    "targets": [
+      "node14-linux"
+    ],
+    "outputPath": "dist"
   },
   "dependencies": {
     "fastify": "^3.17.0",
     "fastify-etag": "^2.1.0",
-    "fastify-static": "^4.2.2"
+    "fastify-static": "^4.2.2",
+    "typescript": "^4.3.2"
   },
   "devDependencies": {
+    "pkg": "^5.2.1",
     "typescript": "^4.3.2"
   }
 }
