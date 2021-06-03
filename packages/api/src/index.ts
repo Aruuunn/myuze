@@ -4,11 +4,8 @@ import { Server, IncomingMessage, ServerResponse } from 'http';
 
 function bootstrap() {
   const PORT = process.env.PORT || '8000';
-  const server: FastifyInstance<
-    Server,
-    IncomingMessage,
-    ServerResponse
-  > = fastify({ logger: true });
+  const server: FastifyInstance<Server, IncomingMessage, ServerResponse> =
+    fastify({ logger: true });
 
   server.register(require('fastify-static'), {
     root: path.join(__dirname, 'public'),
@@ -16,7 +13,7 @@ function bootstrap() {
 
   server.register(require('fastify-etag'));
 
-  server.listen(PORT);
+  server.listen(PORT, '0.0.0.0');
 }
 
 bootstrap();

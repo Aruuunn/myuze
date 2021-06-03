@@ -1,0 +1,15 @@
+{
+  "name": "@open-music-player/serverless",
+  "author": "Arun Murugan",
+  "scripts": {},
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@netlify/functions": "^0.7.2",
+    "@types/puppeteer-core": "^5.4.0",
+    "chrome-aws-lambda": "^9.1.0",
+    "puppeteer": "^9.1.1",
+    "puppeteer-core": "4.0.1"
+  }
+}
