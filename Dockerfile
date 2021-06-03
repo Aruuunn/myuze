@@ -8,7 +8,7 @@ RUN yarn run build:web
 RUN yarn run test-build:web
 RUN yarn run bundle:web
 
-FROM node:alpine
+FROM alpine
 COPY --from=builder /app/dist .
 
 CMD ["/app/main"]
