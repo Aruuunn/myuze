@@ -9,6 +9,7 @@ RUN yarn run test-build:web
 RUN yarn run bundle:web
 
 FROM alpine
+WORKDIR /app
 COPY --from=builder /app/dist .
 
 CMD ["/app/main"]
