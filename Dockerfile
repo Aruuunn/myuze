@@ -8,9 +8,9 @@ RUN yarn run build:web
 RUN yarn run test-build:web
 RUN yarn run bundle:web
 
-FROM alpine
+FROM node:alpine
 WORKDIR /app
 COPY --from=builder /app/dist .
 
-CMD ["/app/main"]
+CMD ["node", "/app/bundle.js"]
 

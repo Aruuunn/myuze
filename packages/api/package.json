@@ -4,10 +4,11 @@
   "main": "src/index.ts",
   "license": "MIT",
   "scripts": {
+    "prebuild": "yarn run clean",
     "build": "tsc -b .",
-    "clean": "rimraf 'tsconfig.tsbuildinfo' 'dist'",
+    "clean": "rimraf 'tsconfig.tsbuildinfo' 'dist' 'bundle'",
     "dev": "tsc -b -w .",
-    "bundle": "pkg -c package.json dist/index.js"
+    "bundle": "webpack"
   },
   "pkg": {
     "scripts": "dist/**/*.js",
@@ -24,7 +25,9 @@
     "typescript": "^4.3.2"
   },
   "devDependencies": {
-    "pkg": "^5.2.1",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
