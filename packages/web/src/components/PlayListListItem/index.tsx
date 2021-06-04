@@ -6,7 +6,6 @@ import {
   isTruthy,
 } from '@open-music-player/core';
 import { MusicDataInterface } from '@open-music-player/core';
-import { useStyles } from './styles';
 import { ListItem } from '../ListItem';
 
 type MusicDetails = Pick<MusicDataInterface, 'title' | 'artists' | 'id'> | null;
@@ -55,8 +54,6 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
     currentPlayingMusic?.id && currentPlayingMusic.id === musicDetails?.id,
   );
 
-  const styles = useStyles({ isCurrentPlayingMusic });
-
   const clickHandler = () => {
     if (typeof onSelectItem === 'function') {
       if (isTruthy(musicDetails)) {
@@ -71,7 +68,6 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       style={style}
       height={height}
       loading={loading}
-      className={styles.root}
       itemKey={index.toString()}
       secondaryText={artistsName}
       primaryText={musicDetails?.title}

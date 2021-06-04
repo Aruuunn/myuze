@@ -6,6 +6,7 @@ export { UploadNewMusic } from './UploadNewMusic';
 export { MusicList } from './MusicList';
 export { MusicListItem } from './MusicListItem';
 export { BottomControlsBar } from './BottomControlsBar';
+export { ListItem } from './ListItem';
 
 export type { MusicSliderProps } from './MusicSlider';
 export type { MusicControllerProps } from './MusicControls';
@@ -13,3 +14,4 @@ export type { AlbumCoverProps } from './AlbumCover';
 export type { MusicNameProps } from './MusicName';
 export type { MusicListItemProps } from './MusicListItem';
 export type { MusicListProps } from './MusicList';
+export type { ListItemProps } from './ListItem';

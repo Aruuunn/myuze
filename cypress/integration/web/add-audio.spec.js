@@ -31,7 +31,7 @@ context("Add Music File", async () => {
         .wait(1000)
 
         .then(() => {
-          cy.get('[data-testid="music-list-item"][data-loading="false"]')
+          cy.get('[data-testid="list-item"][data-loading="false"]')
             .first()
             .should("contain.text", musicFile.musicTitle ?? musicFile.fileName)
             .should("contain.text", musicFile.artistName ?? "");
