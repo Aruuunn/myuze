@@ -21,4 +21,13 @@ export interface PlaylistStorageInterface {
     playlistId: string,
     index: number,
   ): Promise<PlaylistMusicInterface | undefined>;
+
+  getTotalCount(): Promise<number>;
+
+  getMusicCount(playlistId: string): Promise<number>;
+
+  /**
+   * Accept callback to call whenever stored data is deleted/updated or new data is added
+   * */
+  onChange(callback: () => void): void;
 }

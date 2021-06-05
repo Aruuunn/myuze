@@ -1,9 +1,14 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
-import { PlaylistStorageInterface } from '../interfaces/playlist-storage';
-import { PlaylistInterface } from '../interfaces/playlist.interface';
-import { PlaylistMusicInterface } from '../interfaces/playlist-music.interface';
-import { Singleton } from '../decorators';
+import {
+  PlaylistStorageInterface,
+  PlaylistInterface,
+  PlaylistMusicInterface,
+} from '../interfaces';
+import { addEventListener, DispatchEvent, Singleton } from '../decorators';
+
+const PLAYLIST_DATA_CHANGE_EVENT = 'PLAYLIST_DATA_CHANGE_EVENT';
+const DispatchEventOnDataChange = DispatchEvent(PLAYLIST_DATA_CHANGE_EVENT);
 
 @Singleton
 export class PlaylistStorage extends Dexie implements PlaylistStorageInterface {
@@ -20,6 +25,7 @@ export class PlaylistStorage extends Dexie implements PlaylistStorageInterface {
     this.playlistMusic = this.table('playlistMusic');
   }
 
+  @DispatchEventOnDataChange
   async addNewPlaylist(playlistName: string): Promise<void> {
     await this.playlist.add({
       name: playlistName,
@@ -28,6 +34,7 @@ export class PlaylistStorage extends Dexie implements PlaylistStorageInterface {
     });
   }
 
+  @DispatchEventOnDataChange
   async deletePlaylist(playlistId: string): Promise<void> {
     await this.playlist.where('id').equals(playlistId).delete();
     await this.playlistMusic.where('playlistId').equals(playlistId).delete();
@@ -64,5 +71,17 @@ export class PlaylistStorage extends Dexie implements PlaylistStorageInterface {
       .filter((playlistMusic) => playlistMusic.playlistId === playlistId)
       .offset(index)
       .first();
+  }
+
+  getMusicCount(playlistId: string): Promise<number> {
+    return this.playlistMusic.where('playlistId').equals(playlistId).count();
+  }
+
+  getTotalCount(): Promise<number> {
+    return this.playlist.count();
+  }
+
+  onChange(callback: () => void) {
+    addEventListener(PLAYLIST_DATA_CHANGE_EVENT, callback);
   }
 }

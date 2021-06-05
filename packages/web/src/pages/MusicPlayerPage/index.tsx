@@ -1,18 +1,22 @@
-import React, {
-  ReactElement, useEffect, useState,
-} from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { State } from 'xstate';
 import { motion } from 'framer-motion';
 import { useParams, useHistory } from 'react-router-dom';
 import { ExpandMoreOutlined as ExpandLessIcon } from '@material-ui/icons';
 import {
-  Container, Fade, Grid, IconButton, useMediaQuery, useTheme,
+  Container,
+  Fade,
+  Grid,
+  IconButton,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 
 import {
   useMusicPlayerMachine,
   MusicPlayerMachineEvents,
-  MusicPlayerMachineStates, MusicPlayerMachineContext,
+  MusicPlayerMachineStates,
+  MusicPlayerMachineContext,
 } from '@open-music-player/core';
 import {
   MusicSlider,
@@ -35,9 +39,10 @@ export function MusicPlayerPage(): ReactElement {
   const smallScreenHeight = useMediaQuery('(max-height: 625px)');
 
   useEffect(() => {
-    if (id
-        && (current.value === MusicPlayerMachineStates.NOT_LOADED
-        || currentPlayingMusic?.id !== id)
+    if (
+      id &&
+      (current.value === MusicPlayerMachineStates.NOT_LOADED ||
+        currentPlayingMusic?.id !== id)
     ) {
       send({
         type: MusicPlayerMachineEvents.LOAD,
@@ -75,23 +80,29 @@ export function MusicPlayerPage(): ReactElement {
         setTimeout(() => {
           setAnimationComplete(true);
         }, 100);
-      }}
-    >
-      {animationComplete && <Fade in timeout={3000}><div className={styles.blurBg} /></Fade>}
-      <Container maxWidth="lg" style={{ ...(xs ? { margin: 0, padding: 0 } : {}), position: 'relative' }}>
+      }}>
+      {animationComplete && (
+        <Fade in timeout={3000}>
+          <div className={styles.blurBg} />
+        </Fade>
+      )}
+      <Container
+        maxWidth="lg"
+        style={{
+          ...(xs ? { margin: 0, padding: 0 } : {}),
+          position: 'relative',
+        }}>
         <Grid
           id="music-player-container"
           container
-          className={styles.container}
-        >
+          className={styles.container}>
           <Grid
             id="music-player"
             justify="center"
             alignItems="center"
             item
             container
-            xs={8}
-          >
+            xs={8}>
             <IconButton
               size="medium"
               style={{
@@ -101,9 +112,8 @@ export function MusicPlayerPage(): ReactElement {
                 left: xs ? '10px' : 0,
               }}
               onClick={() => {
-                history.push('/');
-              }}
-            >
+                history.goBack();
+              }}>
               <ExpandLessIcon fontSize="large" />
             </IconButton>
             <Grid
@@ -112,25 +122,27 @@ export function MusicPlayerPage(): ReactElement {
               justify="center"
               alignItems="center"
               xs={12}
-              style={{ marginBottom: smallScreenHeight ? '20px' : '40px' }}
-            >
-
+              style={{ marginBottom: smallScreenHeight ? '20px' : '40px' }}>
               <Grid
                 container
                 justify="center"
                 alignItems="center"
                 style={{ marginBottom: smallScreenHeight ? '20px' : '60px' }}
                 item
-                xs={12}
-              >
-
+                xs={12}>
                 <AlbumCover
                   musicTitle={currentPlayingMusic?.title ?? ''}
                   artistName={(currentPlayingMusic?.artists ?? [])[0]}
                   imgURL={currentPlayingMusic?.imgURL}
                 />
               </Grid>
-              <Grid container justify="center" alignItems="center" style={{ maxWidth: '90%' }} item xs={12}>
+              <Grid
+                container
+                justify="center"
+                alignItems="center"
+                style={{ maxWidth: '90%' }}
+                item
+                xs={12}>
                 <MusicName
                   title={currentPlayingMusic?.title}
                   artists={currentPlayingMusic?.artists}

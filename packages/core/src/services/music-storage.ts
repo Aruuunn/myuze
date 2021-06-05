@@ -1,17 +1,22 @@
 import Dexie from 'dexie';
 import { v1 as uuid } from 'uuid';
-import { CacheInterface, MusicDataInterface, MusicStorageInterface } from '../interfaces';
 import {
-  Singleton, DispatchEvent, addEventListener, LogPerformance,
+  CacheInterface,
+  MusicDataInterface,
+  MusicStorageInterface,
+} from '../interfaces';
+import {
+  Singleton,
+  DispatchEvent,
+  addEventListener,
+  LogPerformance,
 } from '../decorators';
 import { StorageCache } from './storage-cache';
 
 function getNewMusicData(
   musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
 ) {
-  const {
-    imgURL, artists, title, musicDataURL,
-  } = musicData;
+  const { imgURL, artists, title, musicDataURL } = musicData;
   const albumCoverDataURLData = imgURL ? { id: uuid(), data: imgURL } : null;
   const musicDataURLData = { id: uuid(), data: musicDataURL };
   const songData = {
@@ -32,9 +37,12 @@ const cache: CacheInterface = new StorageCache();
 const CacheOutput = StorageCache.getCacheDecorator(cache);
 const ClearCache = StorageCache.getCacheClearDecorator(cache);
 
-type Song = Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> & { musicDataURLDataId: string, albumCoverDataURLId: string | null };
-type MusicDataURL = { data: string, id: string };
-type AlbumCoverDataURL = { data: string, id: string };
+type Song = Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> & {
+  musicDataURLDataId: string;
+  albumCoverDataURLId: string | null;
+};
+type MusicDataURL = { data: string; id: string };
+type AlbumCoverDataURL = { data: string; id: string };
 
 @Singleton
 export class MusicStorage extends Dexie implements MusicStorageInterface {
@@ -67,12 +75,15 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
   async addNewMusic(
     musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>,
   ): Promise<void> {
-    const { albumCoverDataURLData, songData, musicDataURLData } = getNewMusicData(musicData);
+    const { albumCoverDataURLData, songData, musicDataURLData } =
+      getNewMusicData(musicData);
 
     await Promise.all([
       this.songs.add(songData),
       this.musicDataURLs.add(musicDataURLData),
-      albumCoverDataURLData ? this.albumCoverDataURLs.add(albumCoverDataURLData) : null,
+      albumCoverDataURLData
+        ? this.albumCoverDataURLs.add(albumCoverDataURLData)
+        : null,
     ]);
   }
 
@@ -107,7 +118,10 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     filter: (obj: Song) => boolean = () => true,
   ): Promise<Omit<MusicDataInterface, 'musicDataURL' | 'imgURL'> | undefined> {
     return this.songs
-      .orderBy('createdAt').filter(filter).offset(index).reverse()
+      .orderBy('createdAt')
+      .filter(filter)
+      .offset(index)
+      .reverse()
       .first();
   }
 
@@ -117,8 +131,16 @@ export class MusicStorage extends Dexie implements MusicStorageInterface {
     const songData = await this.songs.where('id').equals(id).first();
     if (songData) {
       const { musicDataURLDataId, albumCoverDataURLId } = songData;
-      const musicDataURLData = await this.musicDataURLs.where('id').equals(musicDataURLDataId).first();
-      const albumCoverDataURLData = albumCoverDataURLId ? await this.albumCoverDataURLs.where('id').equals(albumCoverDataURLId).first() : null;
+      const musicDataURLData = await this.musicDataURLs
+        .where('id')
+        .equals(musicDataURLDataId)
+        .first();
+      const albumCoverDataURLData = albumCoverDataURLId
+        ? await this.albumCoverDataURLs
+            .where('id')
+            .equals(albumCoverDataURLId)
+            .first()
+        : null;
 
       if (!musicDataURLData) {
         return undefined;

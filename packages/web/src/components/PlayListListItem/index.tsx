@@ -1,63 +1,54 @@
 import React, { CSSProperties, ReactElement, useEffect, useState } from 'react';
 
 import {
-  useMusicPlayerMachine,
-  useMusicStorage,
   isTruthy,
+  PlaylistInterface,
+  usePlaylistStorage,
 } from '@open-music-player/core';
-import { MusicDataInterface } from '@open-music-player/core';
 import { ListItem } from '../ListItem';
+import { Playlist } from '../../Playlist.enum';
 
-type MusicDetails = Pick<MusicDataInterface, 'title' | 'artists' | 'id'> | null;
-
-export interface MusicListItemProps {
+export interface PlayListItemProps {
   index: number;
   itemKey: string;
   height: number;
   width: number;
   style?: CSSProperties;
-  onSelectItem?: (data: { id: string; index: number } | null) => void;
+  onClickItem?: (data: { id: string; index: number } | null) => void;
 }
 
-export function MusicListItem(props: MusicListItemProps): ReactElement {
-  const { index, style = {}, onSelectItem, height, width } = props;
+export function PlayListItem(props: PlayListItemProps): ReactElement {
+  const { index, style = {}, onClickItem, height, width } = props;
 
-  const db = useMusicStorage();
-  const [current] = useMusicPlayerMachine();
-  const [musicDetails, setMusicDetails] = useState<MusicDetails>(null);
-  const { currentPlayingMusic } = current.context;
-  const { artists } = musicDetails ?? {};
+  const playlistStorage = usePlaylistStorage();
+  const [playlist, setPlaylist] =
+    useState<Omit<PlaylistInterface, 'createdAt'>>();
+  const { name } = playlist ?? {};
 
-  const loading = !isTruthy(musicDetails);
-  let artistsName = isTruthy(artists) ? artists.join(' , ') : '';
-
-  if (artistsName.length === 0) {
-    artistsName = 'unknown';
-  }
+  const loading = !isTruthy(playlist);
 
   useEffect(() => {
     const componentOnMount = async () => {
-      const fetchedMusicDetails = await db.getMusicAt(index);
-      if (isTruthy(fetchedMusicDetails)) {
-        setMusicDetails(fetchedMusicDetails);
+      if (index === 0) {
+        return setPlaylist({
+          id: Playlist.DEFAULT,
+          name: 'All Songs',
+        });
+      }
+
+      const result = await playlistStorage.getPlaylistAt(index - 1);
+      if (isTruthy(result)) {
+        setPlaylist(result);
       }
     };
 
     componentOnMount();
-
-    db.onChange(() => {
-      componentOnMount();
-    });
-  }, [db, index]);
-
-  const isCurrentPlayingMusic = Boolean(
-    currentPlayingMusic?.id && currentPlayingMusic.id === musicDetails?.id,
-  );
+  }, [index]);
 
   const clickHandler = () => {
-    if (typeof onSelectItem === 'function') {
-      if (isTruthy(musicDetails)) {
-        onSelectItem({ id: musicDetails.id, index });
+    if (typeof onClickItem === 'function') {
+      if (isTruthy(playlist)) {
+        onClickItem({ id: playlist.id, index });
       }
     }
   };
@@ -69,8 +60,8 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       height={height}
       loading={loading}
       itemKey={index.toString()}
-      secondaryText={artistsName}
-      primaryText={musicDetails?.title}
+      secondaryText={''}
+      primaryText={name}
       onClick={clickHandler}
     />
   );

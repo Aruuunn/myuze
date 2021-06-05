@@ -9,7 +9,12 @@ import { FixedSizeList } from 'react-window';
 
 export interface ListProps {
   totalCount: number;
-  children: FC<{ index: number; style: CSSProperties }>;
+  children: FC<{
+    index: number;
+    style: CSSProperties;
+    itemSize: number;
+    width: number;
+  }>;
 }
 
 export function List(props: ListProps): ReactElement {
@@ -44,7 +49,14 @@ export function List(props: ListProps): ReactElement {
         height={containerHeight}
         itemSize={itemSize}
         style={{ maxWidth: '100%' }}>
-        {({ index, style }) => <ChildComponent index={index} style={style} />}
+        {({ index, style }) => (
+          <ChildComponent
+            index={index}
+            style={style}
+            itemSize={85}
+            width={500}
+          />
+        )}
       </FixedSizeList>
     </>
   );

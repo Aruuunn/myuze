@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Switch, useLocation, Redirect } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
-import { MusicPlayerPage, HomePage } from './pages';
+import { MusicPlayerPage, PlaylistPage, HomePage } from './pages';
 
 export function Routes(): ReactElement {
   const location = useLocation();
@@ -10,7 +10,10 @@ export function Routes(): ReactElement {
     <AnimatePresence>
       <Switch location={location} key={location.pathname}>
         <Route path="/play/:id" exact component={MusicPlayerPage} />
+        <Route path="/p/:pid" exact component={PlaylistPage} />
         <Route path="/" exact component={HomePage} />
+        {/* @TODO add not-found route */}
+        <Redirect to="/" />
       </Switch>
     </AnimatePresence>
   );

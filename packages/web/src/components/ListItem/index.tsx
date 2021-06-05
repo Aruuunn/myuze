@@ -14,6 +14,7 @@ export interface ListItemProps {
   className?: string;
   style?: CSSProperties;
   onClick?: React.MouseEventHandler;
+  cardStyle?: CSSProperties;
 }
 
 export function ListItem(props: ListItemProps): ReactElement {
@@ -27,6 +28,7 @@ export function ListItem(props: ListItemProps): ReactElement {
     primaryText,
     secondaryText,
     className,
+    cardStyle,
   } = props;
 
   const styles = useStyles({ height, width });
@@ -39,6 +41,7 @@ export function ListItem(props: ListItemProps): ReactElement {
         data-testid="list-item"
         data-loading={loading.toString()}
         className={styles.card}
+        style={cardStyle}
         onClick={onClick}>
         <Grid container alignItems="center">
           <Grid

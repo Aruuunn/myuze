@@ -1,14 +1,10 @@
 import React, { ReactElement } from 'react';
-import { IconButton } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
-
 import { saveMusic, useMusicStorage } from '@open-music-player/core';
 
-import { useStyles } from './styles';
+import { AddButton } from '../AddButton';
 
 export function UploadNewMusic(): ReactElement {
   const db = useMusicStorage();
-  const styles = useStyles();
 
   const handleFileSelected = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -29,16 +25,7 @@ export function UploadNewMusic(): ReactElement {
         id="upload-file"
       />
       <label htmlFor="upload-file">
-        {' '}
-        <IconButton
-          className={styles.addBtn}
-          id="upload-file-button"
-          component="span"
-          color="primary"
-          aria-label="upload music"
-        >
-          <Add fontSize="small" />
-        </IconButton>
+        <AddButton id="upload-file-button" aria-label="upload music" />
       </label>
     </>
   );
