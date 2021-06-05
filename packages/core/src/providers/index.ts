@@ -1,3 +1,4 @@
 export { AudioServiceContext } from './audio-service.provider';
 export { MusicStorageContext } from './music-storage.provider';
 export { MusicPlayerInterpreterContext } from './music-player-machine.provider';
+export { PlaylistStorageContext } from './playlist-storage.provider';

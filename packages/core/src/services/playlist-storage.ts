@@ -3,7 +3,9 @@ import { v1 as uuid } from 'uuid';
 import { PlaylistStorageInterface } from '../interfaces/playlist-storage';
 import { PlaylistInterface } from '../interfaces/playlist.interface';
 import { PlaylistMusicInterface } from '../interfaces/playlist-music.interface';
+import { Singleton } from '../decorators';
 
+@Singleton
 export class PlaylistStorage extends Dexie implements PlaylistStorageInterface {
   private playlist: Dexie.Table<PlaylistInterface, string>;
   private playlistMusic: Dexie.Table<PlaylistMusicInterface, string>;
