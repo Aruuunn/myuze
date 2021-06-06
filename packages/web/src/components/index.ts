@@ -10,6 +10,7 @@ export { ListItem } from './ListItem';
 export { ListViewLayout } from './ListViewLayout';
 export { PlayListList } from './PlayListList';
 export { AddButton } from './AddButton';
+export { Modal } from './Modal';
 
 export type { MusicSliderProps } from './MusicSlider';
 export type { MusicControllerProps } from './MusicControls';
@@ -20,3 +21,4 @@ export type { MusicListProps } from './MusicList';
 export type { ListItemProps } from './ListItem';
 export type { ListViewLayoutProps } from './ListViewLayout';
 export type { PlayListListProps } from './PlayListList';
+export type { ModalProps } from './Modal';
