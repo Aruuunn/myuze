@@ -48,15 +48,13 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
   return (
     <motion.div
       whileTap={{ scale: isDisabled() ? 1 : 0.9 }}
-      whileHover={{ scale: isDisabled() ? 1 : 1.05 }}
-    >
+      whileHover={{ scale: isDisabled() ? 1 : 1.05 }}>
       <IconButton
         className={`${styles.root} ${styles[size]} ${className ?? ''}`}
         color="primary"
         disabled={isDisabled()}
         onClick={togglePlay}
-        data-testid="play-button"
-      >
+        data-testid="play-button">
         <SvgIcon>
           {isPlaying() ? (
             <PauseRounded fontSize={size} />

@@ -1,7 +1,11 @@
 import React, { CSSProperties, ReactElement } from 'react';
 import { IconButton } from '@material-ui/core';
 import { RepeatRounded as OnRepeatIcon } from '@material-ui/icons';
-import { useMusicPlayerMachine, MusicPlayerMachineEvents, MusicPlayerModes } from '@open-music-player/core';
+import {
+  useMusicPlayerMachine,
+  MusicPlayerMachineEvents,
+  MusicPlayerModes,
+} from '@open-music-player/core';
 import { useStyles } from './styles';
 
 export interface ToggleOnRepeatButtonProps {
@@ -10,7 +14,9 @@ export interface ToggleOnRepeatButtonProps {
   style?: CSSProperties;
 }
 
-export function ToggleOnRepeatButton(props: ToggleOnRepeatButtonProps): ReactElement {
+export function ToggleOnRepeatButton(
+  props: ToggleOnRepeatButtonProps,
+): ReactElement {
   const { size, className, style } = props;
 
   const [current, send] = useMusicPlayerMachine();
@@ -20,7 +26,9 @@ export function ToggleOnRepeatButton(props: ToggleOnRepeatButtonProps): ReactEle
   const toggleOnRepeatMode = () => {
     send({
       type: MusicPlayerMachineEvents.CHANGE_MODE,
-      mode: isOnRepeatMode ? MusicPlayerModes.NORMAL : MusicPlayerModes.ON_REPEAT,
+      mode: isOnRepeatMode
+        ? MusicPlayerModes.NORMAL
+        : MusicPlayerModes.ON_REPEAT,
     });
   };
 
@@ -32,12 +40,8 @@ export function ToggleOnRepeatButton(props: ToggleOnRepeatButtonProps): ReactEle
       onClick={toggleOnRepeatMode}
       size="medium"
       style={style}
-      className={`${styles.onRepeat} ${className ?? ''}`}
-    >
-      <OnRepeatIcon
-        className={styles.onRepeatIcon}
-        fontSize={size}
-      />
+      className={`${styles.onRepeat} ${className ?? ''}`}>
+      <OnRepeatIcon className={styles.onRepeatIcon} fontSize={size} />
     </IconButton>
   );
 }

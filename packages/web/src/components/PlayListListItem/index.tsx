@@ -7,6 +7,8 @@ import {
 } from '@open-music-player/core';
 import { ListItem } from '../ListItem';
 import { Playlist } from '../../Playlist.enum';
+import { useStyles } from './styles';
+import clsx from 'clsx';
 
 export interface PlayListItemProps {
   index: number;
@@ -20,6 +22,7 @@ export interface PlayListItemProps {
 export function PlayListItem(props: PlayListItemProps): ReactElement {
   const { index, style = {}, onClickItem, height, width } = props;
 
+  const classes = useStyles();
   const playlistStorage = usePlaylistStorage();
   const [playlist, setPlaylist] =
     useState<Omit<PlaylistInterface, 'createdAt'>>();
@@ -63,6 +66,9 @@ export function PlayListItem(props: PlayListItemProps): ReactElement {
       secondaryText={''}
       primaryText={name}
       onClick={clickHandler}
+      innerCardClassName={clsx({
+        [classes.allSongs]: playlist?.id === Playlist.DEFAULT,
+      })}
     />
   );
 }

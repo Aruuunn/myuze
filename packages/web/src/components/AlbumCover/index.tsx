@@ -11,16 +11,17 @@ export interface AlbumCoverProps {
 }
 
 export function AlbumCover(props: AlbumCoverProps): ReactElement {
-  const {
-    artistName, imgURL, musicTitle, className = '', style = {},
-  } = props;
+  const { artistName, imgURL, musicTitle, className = '', style = {} } = props;
 
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles({ imgURL, sm });
 
   const getShortName = (str: string): string => {
-    const modifiedString = str.replace(/[\W_]+/g, ' ').trim().toUpperCase();
+    const modifiedString = str
+      .replace(/[\W_]+/g, ' ')
+      .trim()
+      .toUpperCase();
 
     if (modifiedString.length <= 2) return modifiedString;
 
@@ -39,11 +40,12 @@ export function AlbumCover(props: AlbumCoverProps): ReactElement {
     <div
       style={style}
       className={`${styles.root} ${className}`}
-      data-testid="album-cover"
-    >
+      data-testid="album-cover">
       {!imgURL ? (
         <span className={styles.innerText}>
-          {getShortName(typeof artistName === 'undefined' ? musicTitle : artistName)}
+          {getShortName(
+            typeof artistName === 'undefined' ? musicTitle : artistName,
+          )}
         </span>
       ) : null}
     </div>

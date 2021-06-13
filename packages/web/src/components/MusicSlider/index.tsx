@@ -1,15 +1,11 @@
-import React, {
-  ReactElement,
-  useState,
-  useEffect,
-  ChangeEvent,
-} from 'react';
+import React, { ReactElement, useState, useEffect, ChangeEvent } from 'react';
 
 import { send } from 'xstate';
 import {
   MusicPlayerMachineEvents,
   MusicPlayerMachineStates,
-  useAudioService, useMusicPlayerMachine,
+  useAudioService,
+  useMusicPlayerMachine,
 } from '@open-music-player/core';
 
 import { Slider } from './components';

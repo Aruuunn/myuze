@@ -7,55 +7,69 @@ import { componentRenderFactory } from '../../../../test-wrapper';
 describe('<ToggleOnRepeatButton/>', () => {
   afterEach(cleanup);
 
-  const renderPlayNextButton = componentRenderFactory('toggle-on-repeat-button', ToggleOnRepeatButton);
+  const renderPlayNextButton = componentRenderFactory(
+    'toggle-on-repeat-button',
+    ToggleOnRepeatButton,
+  );
 
   it('should turn on on-repeat mode is it is disabled on click', () => {
-    const { rootElement, musicPlayerMachineService } = renderPlayNextButton({ size: 'large' }, {
-      machines: {
-        musicPlayerMachine: {
-          context: {
-            mode: MusicPlayerModes.NORMAL,
-            index: 1,
-            currentPlayingMusic: {
-              musicDataURL: '',
-              createdAt: new Date(),
-              title: 'Dope',
-              id: 'id',
+    const { rootElement, musicPlayerMachineService } = renderPlayNextButton(
+      { size: 'large' },
+      {
+        machines: {
+          musicPlayerMachine: {
+            context: {
+              mode: MusicPlayerModes.NORMAL,
+              index: 1,
+              currentPlayingMusic: {
+                musicDataURL: '',
+                createdAt: new Date(),
+                title: 'Dope',
+                id: 'id',
+              },
             },
           },
         },
       },
-    });
+    );
 
     act(() => {
       fireEvent.click(rootElement);
     });
 
-    expect(musicPlayerMachineService.state.context.mode === MusicPlayerModes.ON_REPEAT).toBe(true);
+    expect(
+      musicPlayerMachineService.state.context.mode ===
+        MusicPlayerModes.ON_REPEAT,
+    ).toBe(true);
   });
 
   it('should turn off on-repeat mode is it is enabled on click', () => {
-    const { rootElement, musicPlayerMachineService } = renderPlayNextButton({ size: 'large' }, {
-      machines: {
-        musicPlayerMachine: {
-          context: {
-            mode: MusicPlayerModes.ON_REPEAT,
-            index: 1,
-            currentPlayingMusic: {
-              musicDataURL: '',
-              createdAt: new Date(),
-              title: 'Dope',
-              id: 'id',
+    const { rootElement, musicPlayerMachineService } = renderPlayNextButton(
+      { size: 'large' },
+      {
+        machines: {
+          musicPlayerMachine: {
+            context: {
+              mode: MusicPlayerModes.ON_REPEAT,
+              index: 1,
+              currentPlayingMusic: {
+                musicDataURL: '',
+                createdAt: new Date(),
+                title: 'Dope',
+                id: 'id',
+              },
             },
           },
         },
       },
-    });
+    );
 
     act(() => {
       fireEvent.click(rootElement);
     });
 
-    expect(musicPlayerMachineService.state.context.mode === MusicPlayerModes.NORMAL).toBe(true);
+    expect(
+      musicPlayerMachineService.state.context.mode === MusicPlayerModes.NORMAL,
+    ).toBe(true);
   });
 });

@@ -18,7 +18,7 @@ export class PlaylistStorage extends Dexie implements PlaylistStorageInterface {
   constructor() {
     super('Playlist');
     this.version(1).stores({
-      playlist: 'id, &name',
+      playlist: 'id, &name, createdAt',
       playlistMusic: ',playlistId, musicId, order',
     });
     this.playlist = this.table('playlist');

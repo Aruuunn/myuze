@@ -11,6 +11,7 @@ export { ListViewLayout } from './ListViewLayout';
 export { PlayListList } from './PlayListList';
 export { AddButton } from './AddButton';
 export { Modal } from './Modal';
+export { TextField } from './TextField';
 
 export type { MusicSliderProps } from './MusicSlider';
 export type { MusicControllerProps } from './MusicControls';

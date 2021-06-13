@@ -3,6 +3,7 @@ import { Grid, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
 import { useStyles } from './styles';
+import clsx from 'clsx';
 
 export interface ListItemProps {
   height: number;
@@ -15,6 +16,7 @@ export interface ListItemProps {
   style?: CSSProperties;
   onClick?: React.MouseEventHandler;
   cardStyle?: CSSProperties;
+  innerCardClassName?: string;
 }
 
 export function ListItem(props: ListItemProps): ReactElement {
@@ -29,6 +31,7 @@ export function ListItem(props: ListItemProps): ReactElement {
     secondaryText,
     className,
     cardStyle,
+    innerCardClassName,
   } = props;
 
   const styles = useStyles({ height, width });
@@ -40,7 +43,7 @@ export function ListItem(props: ListItemProps): ReactElement {
         tabIndex={1}
         data-testid="list-item"
         data-loading={loading.toString()}
-        className={styles.card}
+        className={clsx(styles.card, innerCardClassName)}
         style={cardStyle}
         onClick={onClick}>
         <Grid container alignItems="center">

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 
-export const useStyles = makeStyles(({
+export const useStyles = makeStyles({
   container: {
     minHeight: '100vh',
     alignItems: 'center',
@@ -21,4 +21,4 @@ export const useStyles = makeStyles(({
   musicPlayerBg: {
     backgroundColor: 'rgb(var(--bg-dark))',
   },
-}));
+});

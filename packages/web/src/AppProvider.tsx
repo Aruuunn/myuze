@@ -6,7 +6,9 @@ import {
   AudioServiceContext,
   MusicStorageContext,
   MusicPlayerInterpreterContext,
-  AudioServiceInterface, MusicStorageInterface, MusicPlayerMachineContext,
+  AudioServiceInterface,
+  MusicStorageInterface,
+  MusicPlayerMachineContext,
 } from '@open-music-player/core';
 
 import './styles';
@@ -28,8 +30,7 @@ export function AppProvider(props: AppProviderProps): ReactElement {
   return (
     <>
       <MusicPlayerInterpreterContext.Provider
-        value={musicPlayerMachineInterpreter}
-      >
+        value={musicPlayerMachineInterpreter}>
         <AudioServiceContext.Provider value={audioService}>
           <MusicStorageContext.Provider value={musicStorage}>
             <BrowserRouter>{children}</BrowserRouter>

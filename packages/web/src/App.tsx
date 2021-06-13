@@ -4,7 +4,8 @@ import { interpret } from 'xstate';
 import {
   AudioServiceInterface,
   MusicStorageInterface,
-  AudioAPI, MusicStorage,
+  AudioAPI,
+  MusicStorage,
   addMusicPlayListeners,
   musicPlayerMachine,
 } from '@open-music-player/core';
@@ -24,8 +25,7 @@ function App(): ReactElement {
       <AppProvider
         audioService={audioService}
         musicStorage={musicStorage}
-        musicPlayerMachineInterpreter={musicPlayerMachineService}
-      >
+        musicPlayerMachineInterpreter={musicPlayerMachineService}>
         <Routes />
       </AppProvider>
     </>

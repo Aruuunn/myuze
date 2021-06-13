@@ -1,19 +1,22 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useRef, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { isTruthy } from '@open-music-player/core';
+import { isTruthy, usePlaylistStorage } from '@open-music-player/core';
 
 import {
   AddButton,
   ListViewLayout,
   PlayListList,
   Modal,
+  TextField,
 } from '../../components';
 import { useStyles } from './styles';
 
 export function HomePage(): ReactElement {
   const history = useHistory();
   const classes = useStyles();
+  const playlistStorage = usePlaylistStorage();
+  const inputRef = useRef<HTMLInputElement>();
   const [open, setOpen] = useState(false);
 
   return (
@@ -23,16 +26,37 @@ export function HomePage(): ReactElement {
         onClose={() => {
           setOpen(false);
         }}
-        text={'What do you want to add?'}
+        text={''}
         actions={
-          <>
-            <Button className={classes.modalBtn} variant="contained">
-              New Playlist
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const playListName = inputRef.current?.value ?? '';
+              // @TODO handle if the playlist already exists
+              playlistStorage.addNewPlaylist(playListName);
+              setOpen(false);
+            }}>
+            <TextField
+              inputProps={{
+                style: {
+                  color: 'white',
+                },
+              }}
+              InputLabelProps={{ style: { color: 'rgb(var(--primary-dark))' } }}
+              autoFocus
+              fullWidth
+              required
+              inputRef={inputRef}
+              className={classes.textField}
+              label={'Playlist name'}
+            />
+            <Button
+              type="submit"
+              className={classes.modalBtn}
+              variant="contained">
+              Add
             </Button>
-            <Button className={classes.modalBtn} variant="contained">
-              New Music
-            </Button>
-          </>
+          </form>
         }
       />
       <ListViewLayout

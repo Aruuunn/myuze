@@ -9,7 +9,7 @@ import {
 export interface PlayPrevButtonProps {
   className?: string;
   style?: CSSProperties;
-  size: 'small' | 'large'
+  size: 'small' | 'large';
 }
 
 export function PlayPrevButton(props: PlayPrevButtonProps): ReactElement {
@@ -19,12 +19,16 @@ export function PlayPrevButton(props: PlayPrevButtonProps): ReactElement {
   return (
     <IconButton
       data-testid="play-prev-button"
-      onClick={() => { send({ type: MusicPlayerMachineEvents.PREV }); }}
+      onClick={() => {
+        send({ type: MusicPlayerMachineEvents.PREV });
+      }}
       size="medium"
       style={style}
-      className={className}
-    >
-      <PlayPrevIcon style={{ transform: size === 'small' ? 'scale(1.4)' : '' }} fontSize={size} />
+      className={className}>
+      <PlayPrevIcon
+        style={{ transform: size === 'small' ? 'scale(1.4)' : '' }}
+        fontSize={size}
+      />
     </IconButton>
   );
 }

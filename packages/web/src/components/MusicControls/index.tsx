@@ -1,11 +1,13 @@
 import React, { ReactElement } from 'react';
-import {
-  Grid, Hidden, useMediaQuery, useTheme,
-} from '@material-ui/core';
+import { Grid, Hidden, useMediaQuery, useTheme } from '@material-ui/core';
 
 import { useMusicPlayerMachine } from '@open-music-player/core';
 import {
-  PlayButton, PlayNextButton, PlayPrevButton, ToggleOnRepeatButton, ToggleShufflePlayButton,
+  PlayButton,
+  PlayNextButton,
+  PlayPrevButton,
+  ToggleOnRepeatButton,
+  ToggleShufflePlayButton,
 } from './components';
 import { useStyles } from './styles';
 
@@ -26,8 +28,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
       container
       justify="center"
       alignItems="center"
-      className={styles.root}
-    >
+      className={styles.root}>
       <Grid
         container
         style={{ marginBottom: sm ? '10px' : 'auto' }}
@@ -35,8 +36,7 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         lg={2}
         md={2}
         xs={12}
-        justify={sm ? 'center' : 'flex-end'}
-      >
+        justify={sm ? 'center' : 'flex-end'}>
         <Hidden only={['xs', 'sm']}>
           <ToggleShufflePlayButton size={size} />
         </Hidden>
@@ -48,20 +48,10 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         md={5}
         xs={12}
         wrap="nowrap"
-        justify={sm ? 'center' : 'space-between'}
-      >
-        <PlayPrevButton
-          size={size}
-          className={styles.controls}
-        />
-        <PlayButton
-          className={styles.controls}
-          size={size}
-        />
-        <PlayNextButton
-          size={size}
-          className={styles.controls}
-        />
+        justify={sm ? 'center' : 'space-between'}>
+        <PlayPrevButton size={size} className={styles.controls} />
+        <PlayButton className={styles.controls} size={size} />
+        <PlayNextButton size={size} className={styles.controls} />
       </Grid>
       <Grid
         container
@@ -72,20 +62,13 @@ export function MusicControls(props: MusicControllerProps): ReactElement {
         alignItems="center"
         style={{ marginTop: sm ? '10px' : 'auto' }}
         xs={12}
-        justify={sm ? 'center' : 'flex-start'}
-      >
-        <Hidden
-          only={size === 'small' ? ['sm'] : []}
-        >
+        justify={sm ? 'center' : 'flex-start'}>
+        <Hidden only={size === 'small' ? ['sm'] : []}>
           <Hidden mdUp>
-            <ToggleShufflePlayButton
-              size={size}
-            />
+            <ToggleShufflePlayButton size={size} />
             <div style={{ margin: '10px' }} />
           </Hidden>
-          <ToggleOnRepeatButton
-            size={size}
-          />
+          <ToggleOnRepeatButton size={size} />
         </Hidden>
       </Grid>
     </Grid>

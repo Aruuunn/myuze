@@ -26,38 +26,47 @@ describe('<PlayButton/> should be able to toggle playing state of music player',
   const renderPlayButton = componentRenderFactory('play-button', PlayButton);
 
   it('should be disabled initially', () => {
-    const { rootElement } = renderPlayButton({ size: 'large' }, { machines: { musicPlayerMachine: {} } });
+    const { rootElement } = renderPlayButton(
+      { size: 'large' },
+      { machines: { musicPlayerMachine: {} } },
+    );
     expect(rootElement).toBeDisabled();
   });
 
   it('should be enabled if current playing music is not null', () => {
-    const { rootElement } = renderPlayButton({ size: 'large' }, {
-      machines: {
-        musicPlayerMachine: {
-          context: mockMusicPlayerMachineContext,
+    const { rootElement } = renderPlayButton(
+      { size: 'large' },
+      {
+        machines: {
+          musicPlayerMachine: {
+            context: mockMusicPlayerMachineContext,
+          },
         },
       },
-    });
+    );
 
     expect(rootElement).not.toBeDisabled();
   });
 
   it('machine state should go to paused state on click from playing state', (done) => {
-    const { rootElement } = renderPlayButton({ size: 'large' }, {
-      machines: {
-        musicPlayerMachine: {
-          config: {
-            services: {
-              pauseMusic: async () => {
-                done();
+    const { rootElement } = renderPlayButton(
+      { size: 'large' },
+      {
+        machines: {
+          musicPlayerMachine: {
+            config: {
+              services: {
+                pauseMusic: async () => {
+                  done();
+                },
               },
             },
+            context: mockMusicPlayerMachineContext,
+            initialState: MusicPlayerMachineStates.PLAYING,
           },
-          context: mockMusicPlayerMachineContext,
-          initialState: MusicPlayerMachineStates.PLAYING,
         },
       },
-    });
+    );
 
     act(() => {
       fireEvent.click(rootElement);
@@ -65,7 +74,8 @@ describe('<PlayButton/> should be able to toggle playing state of music player',
   });
 
   it('machine state should go to playing state on click from paused state', (done) => {
-    const { rootElement } = renderPlayButton({ size: 'large' },
+    const { rootElement } = renderPlayButton(
+      { size: 'large' },
       {
         machines: {
           musicPlayerMachine: {
@@ -80,7 +90,8 @@ describe('<PlayButton/> should be able to toggle playing state of music player',
             initialState: MusicPlayerMachineStates.PAUSED,
           },
         },
-      });
+      },
+    );
 
     act(() => {
       fireEvent.click(rootElement);
