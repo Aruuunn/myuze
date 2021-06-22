@@ -31,3 +31,4 @@ tsconfig.tsbuildinfo
 .netlify
 
 cypress/videos/
+cypress/screenshots/

@@ -8,7 +8,7 @@ export class AudioAPI implements AudioServiceInterface {
   private interval = 0;
 
   constructor() {
-    this.audioEl = document.createElement('audio');
+    this.audioEl = new window.Audio();
   }
 
   get duration(): number {
