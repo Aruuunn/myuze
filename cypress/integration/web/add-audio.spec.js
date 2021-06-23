@@ -1,33 +1,15 @@
 /// <reference types="cypress" />
-
-const musicFiles = [
-  { fileName: 'BTS - Butter.mp3' },
-  { fileName: 'BLACKPINK - Pretty Savage.mp3' },
-  { fileName: 'BTS - Spring Day.mp3' },
-  { fileName: 'The Weeknd - Star Boy (ft. Daft Punk).mp3' },
-  {
-    fileName: "The Weeknd - Can't Feel My Face.mp3",
-    musicTitle: "Can't Feel My Face",
-    artistName: 'The Weeknd',
-  },
-];
-
-let audios = [];
+import { musicFiles } from '../../musicfiles';
 
 context('Add Music File', async () => {
-  beforeEach(() => {
-    audios = [];
-    cy.visit('http://localhost:3000', {
-      onBeforeLoad(win) {
-        const originalAudio = win.Audio;
-        cy.stub(win, 'Audio').callsFake(() => {
-          const aud = new originalAudio();
-          audios.push(aud);
-          console.log("audio fakes");
-          return aud;
-        });
-      },
+  before(() => {
+    cy.visit('http://localhost:3000').then(() => {
+      cy.clearIndexedDB();
     });
+  });
+
+  beforeEach(() => {
+    cy.visit('http://localhost:3000');
   });
 
   it('Label should exist to add audio file', () => {
@@ -47,19 +29,5 @@ context('Add Music File', async () => {
             .should('contain.text', musicFile.artistName ?? '');
         });
     });
-  });
-
-  it('should start playing music', () => {
-    cy.get('[data-testid="music-list-item"][data-loading="false"]')
-      .first()
-      .click()
-      .then(() => {
-        cy.location('pathname').should('contain',  '/play/');
-        cy.waitUntil(() => audios[0]?.paused===false).then(() => {
-          cy.get('[data-testid="play-button"]').as('play-button').click().then(() => {
-            cy.waitUntil(() => audios[0]?.paused === true);
-          })
-        });
-      });
   });
 });
