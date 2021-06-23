@@ -26,29 +26,50 @@ context('Music Player Controls', () => {
 
     if (!once) {
       once = true;
-      cy.get('input#upload-file')
-        .as('file-upload')
-        .attachFile(musicFiles[0].fileName)
-        .then(() => {
-          cy.get('@file-upload').attachFile(musicFiles[1].fileName);
-        });
+      let fileUpload = cy.get('input#upload-file').as('file-upload');
+
+      musicFiles.forEach((musicFile) => {
+          fileUpload = fileUpload.then(() => {
+              fileUpload
+             .attachFile(musicFile.fileName);
+          });
+      });
     }
+    cy.get('[data-testid="music-list-item"][data-loading="false"]').as('music-items');
   });
 
-  it('should start playing music', () => {
-    cy.get('[data-testid="music-list-item"][data-loading="false"]')
+  it('should start playing music and should be able to pause the music', () => {
+    cy.get('@music-items')
       .first()
-      .click()
-      .then(() => {
-        cy.location('pathname').should('contain', '/play/');
-        cy.waitUntil(() => audios[0]?.paused === false).then(() => {
-          cy.get('[data-testid="play-button"]')
-            .as('play-button')
-            .click()
-            .then(() => {
-              cy.waitUntil(() => audios[0]?.paused === true);
+       .click()
+        .then(() => {
+            cy.location('pathname').should('contain', '/play/');
+            cy.waitUntil(() => audios[0]?.paused === false).then(() => {
+            cy.get('[data-testid="play-button"]')
+                .as('play-button')
+                 .click()
+                 .then(() => {
+                  cy.waitUntil(() => audios[0]?.paused === true);
+                 });
             });
         });
-      });
-  });
+    });
+
+    it('Should be able to go to next songs by pressing next', () => {
+      cy.window().then(win => {
+         cy.get('@music-items')
+        .first()
+        .click()
+         .waitUntil(() => win.location.pathname!=='/')
+          .then(() => {
+           const pathname = win.location.pathname;
+            cy.get('[data-testid="play-next-button"]')
+              .click()
+              .waitUntil(() => win.location.pathname !== pathname, {timeout: 5000})
+              .then(() => {
+                cy.location('pathname').should('contain','/play/')
+              })
+          })
+       })
+    })
 });
