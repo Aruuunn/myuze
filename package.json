@@ -22,6 +22,10 @@
     "packages/**/src/**/*.{ts,js,tsx,jsx}": [
       "npx prettier --write",
       "eslint packages/**/src/**/*.{ts,js,tsx,jsx} --fix"
+    ],
+    "cypress/integration/**/*.{ts,js,tsx,jsx}": [
+      "npx prettier --write",
+      "eslint packages/**/src/**/*.{ts,js,tsx,jsx} --fix"
     ]
   },
   "eslintConfig": {
