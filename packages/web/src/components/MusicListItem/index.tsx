@@ -1,6 +1,4 @@
-import React, {
-  CSSProperties, ReactElement, useEffect, useState,
-} from 'react';
+import React, { CSSProperties, ReactElement, useEffect, useState } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
@@ -24,9 +22,7 @@ export interface MusicListItemProps {
 }
 
 export function MusicListItem(props: MusicListItemProps): ReactElement {
-  const {
-    index, style = {}, onSelectItem, height, width,
-  } = props;
+  const { index, style = {}, onSelectItem, height, width } = props;
 
   const db = useMusicStorage();
   const [current] = useMusicPlayerMachine();
@@ -69,6 +65,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
       <Paper
         tabIndex={1}
         data-testid="music-list-item"
+        data-music-id={musicDetails?.id}
         data-loading={loading.toString()}
         className={styles.card}
         onClick={() => {
@@ -77,8 +74,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
               onSelectItem({ id: musicDetails.id, index });
             }
           }
-        }}
-      >
+        }}>
         <Grid container alignItems="center">
           <Grid
             item
@@ -87,8 +83,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
               whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',
               overflow: 'hidden',
-            }}
-          >
+            }}>
             {!loading ? musicDetails?.title : <Skeleton />}
           </Grid>
           <Grid className={styles.artists} item xs={12}>

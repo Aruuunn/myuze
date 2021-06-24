@@ -10,13 +10,12 @@ export interface MusicNameProps {
 }
 
 export function MusicName(props: MusicNameProps): ReactElement {
-  const {
-    title, artists, size,
-  } = props;
+  const { title, artists, size } = props;
 
   const styles = useStyles({ size });
   const rootContainerElRef = useRef<HTMLDivElement>(null);
-  const secondaryText = (artists ?? []).length === 0 ? 'unknown' : (artists ?? []).join(' , ');
+  const secondaryText =
+    (artists ?? []).length === 0 ? 'unknown' : (artists ?? []).join(' , ');
 
   useEffect(() => {
     let interval = -1;
@@ -35,7 +34,8 @@ export function MusicName(props: MusicNameProps): ReactElement {
           `.${styles.secondaryText}`,
         );
 
-        if (secondaryTextEl) secondaryTextEl.innerText = ` - by ${secondaryText}`;
+        if (secondaryTextEl)
+          secondaryTextEl.innerText = ` - by ${secondaryText}`;
 
         if (primaryTextEl && secondaryTextEl) {
           rootContainerEl.innerHTML = '';
@@ -53,8 +53,9 @@ export function MusicName(props: MusicNameProps): ReactElement {
             const firstElement = textWithEl[0];
 
             if (textWithEl[textWithEl.length - 1].type === firstElement.type) {
-              textWithEl[textWithEl.length - 1].text = textWithEl[textWithEl.length - 1].text
-                  + (firstElement?.text?.[0] ?? '');
+              textWithEl[textWithEl.length - 1].text =
+                textWithEl[textWithEl.length - 1].text +
+                (firstElement?.text?.[0] ?? '');
             } else {
               textWithEl.push({
                 type: firstElement.type,
@@ -76,7 +77,8 @@ export function MusicName(props: MusicNameProps): ReactElement {
                 child = secondaryTextEl?.cloneNode(true);
               }
 
-              if (child) (child as HTMLSpanElement).innerText = textWithEl[i].text ?? '';
+              if (child)
+                (child as HTMLSpanElement).innerText = textWithEl[i].text ?? '';
               // eslint-disable-next-line no-continue
               else continue;
 
@@ -106,10 +108,12 @@ export function MusicName(props: MusicNameProps): ReactElement {
     <div
       ref={rootContainerElRef}
       className={styles.root}
-    >
+      data-testid="music-name">
       <span className={styles.primaryText}>{title ?? ''}</span>
       <span className={styles.secondaryText}>
-        {typeof artists?.length !== 'undefined' && artists.length !== 0 ? ` - ${secondaryText}` : ''}
+        {typeof artists?.length !== 'undefined' && artists.length !== 0
+          ? ` - ${secondaryText}`
+          : ''}
       </span>
     </div>
   );
