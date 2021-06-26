@@ -1,5 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+import { rgb } from 'color';
 import { State } from 'xstate';
+import ColorThief from 'colorthief';
 import { motion } from 'framer-motion';
 import { useParams, useHistory } from 'react-router-dom';
 import { ExpandMoreOutlined as ExpandLessIcon } from '@material-ui/icons';
@@ -17,6 +19,8 @@ import {
   MusicPlayerMachineEvents,
   MusicPlayerMachineStates,
   MusicPlayerMachineContext,
+  DefaultPalette,
+  Palette,
 } from '@open-music-player/core';
 import {
   MusicSlider,
@@ -25,6 +29,9 @@ import {
   MusicName,
 } from '../../components';
 import { useStyles } from './styles';
+import { injectPaletteIntoCSSVariables } from 'inject-palette';
+
+const colorthief = new ColorThief();
 
 export function MusicPlayerPage(): ReactElement {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +44,52 @@ export function MusicPlayerPage(): ReactElement {
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down('xs'));
   const smallScreenHeight = useMediaQuery('(max-height: 625px)');
+
+  useEffect(() => {
+    return () => {
+      injectPaletteIntoCSSVariables(DefaultPalette);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (currentPlayingMusic?.imgURL) {
+      const img = document.createElement('img');
+      img.src = currentPlayingMusic.imgURL;
+      img.onload = async () => {
+        let color = rgb(colorthief.getColor(img));
+
+        if (color.isDark()) {
+          color = color.lighten(1);
+        }
+
+        const newPalette: Palette = {
+          ...DefaultPalette,
+          PRIMARY: rgb(DefaultPalette.PRIMARY).mix(color).rgb().array() as [
+            number,
+            number,
+            number,
+          ],
+          PRIMARY_DARK: rgb(DefaultPalette.PRIMARY_DARK)
+            .mix(color)
+            .rgb()
+            .array() as [number, number, number],
+          PRIMARY_BRIGHT: rgb(DefaultPalette.PRIMARY_BRIGHT)
+            .mix(color)
+            .rgb()
+            .array() as [number, number, number],
+          BG_COLOR: rgb(DefaultPalette.BG_COLOR).mix(color).rgb().array() as [
+            number,
+            number,
+            number,
+          ],
+        };
+
+        injectPaletteIntoCSSVariables(newPalette);
+      };
+    } else {
+      injectPaletteIntoCSSVariables(DefaultPalette);
+    }
+  }, [currentPlayingMusic]);
 
   useEffect(() => {
     if (
@@ -90,7 +143,10 @@ export function MusicPlayerPage(): ReactElement {
       }}>
       {animationComplete && (
         <Fade in timeout={3000}>
-          <div className={styles.blurBg} />
+          <>
+            <div className={styles.blurBg} />
+            <div className={styles.blurBg2} />
+          </>
         </Fade>
       )}
       <Container

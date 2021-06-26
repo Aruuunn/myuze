@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 
-export const useStyles = makeStyles(({
+export const useStyles = makeStyles({
   container: {
     minHeight: '100vh',
     alignItems: 'center',
@@ -18,7 +18,16 @@ export const useStyles = makeStyles(({
     top: 0,
     left: 0,
   }),
+  blurBg2: () => ({
+    height: '100vh',
+    width: '100vw',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    backgroundColor: 'black',
+    opacity: 0.6,
+  }),
   musicPlayerBg: {
     backgroundColor: 'rgb(var(--bg-dark))',
   },
-}));
+});

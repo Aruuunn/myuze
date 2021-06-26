@@ -25,7 +25,7 @@
     "composite": true,
     "noImplicitAny": true,
     "noErrorTruncation": true,
-    "baseUrl": "."
+    "baseUrl": ".",
   },
   "include": ["packages/*/src"]
 }
