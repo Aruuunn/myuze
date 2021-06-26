@@ -3,3 +3,4 @@
 
 npx lint-staged
 lerna run precommit --concurrency 2 --stream
+node scripts/replace-source-yarnlock.js
