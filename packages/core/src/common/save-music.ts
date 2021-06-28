@@ -29,7 +29,7 @@ export async function saveMusic(
         );
       }
       // eslint-disable-next-line no-await-in-loop
-      const musicDataURL:string = await fileToBase64(file);
+      const musicDataURL: string = await fileToBase64(file);
       const mimeType = getMimeType(musicDataURL);
 
       if (!audioEl.canPlayType(mimeType)) {
@@ -39,9 +39,9 @@ export async function saveMusic(
       }
 
       musicData.push({
-        artists: artists ?? [],
+        artists: artists?.filter((artist) => artist.trim() !== '') || [],
         imgURL: pictureBase64,
-        title: title ?? files[0].name,
+        title: title?.trim() || files[0].name,
         musicDataURL,
       });
     } catch (e) {
