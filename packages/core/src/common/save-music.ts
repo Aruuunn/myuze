@@ -1,52 +1,72 @@
-import { parseBlob, selectCover } from 'music-metadata-browser';
+import {
+  parseBlob,
+  selectCover,
+  IAudioMetadata,
+  IPicture,
+} from 'music-metadata-browser';
 import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
 import { fileToBase64, getMimeType, uintToBase64Image } from '../utils';
+import { EitherAsync, Either, MaybeAsync, Maybe } from 'purify-ts';
 
-export async function saveMusic(
+const audioEl = new Audio();
+
+const alertUserOfNotPlayableMusic = (fileName: string) =>
+  alert(`${fileName} is not supported by the browser!`);
+
+const promiseToEitherAsync = <T>(
+  promise: Promise<T>,
+): EitherAsync<unknown, T> =>
+  EitherAsync.fromPromise(() => promise.then((val) => Either.of(val)));
+
+const isEmptyString = (s: string) => s.trim() !== '';
+
+const isNotNullable = <T>(a: T | undefined | null): a is T =>
+  a !== null && typeof a !== 'undefined';
+
+const getPicture = (picture?: IPicture[]) =>
+  Maybe.fromNullable(picture)
+    .map(selectCover)
+    .filter(isNotNullable)
+    .map((_) => uintToBase64Image(_.format, _.data))
+    .extract();
+
+type ExtractedMetaData = EitherAsync<
+  unknown,
+  Pick<MusicDataInterface, 'artists' | 'title' | 'imgURL'>
+>;
+
+const extractMetaData = (file: File): ExtractedMetaData =>
+  EitherAsync(async () => file)
+    .chain<unknown, IAudioMetadata>((_) => promiseToEitherAsync(parseBlob(_)))
+    .map(({ common: { artists, title, picture } }) => ({
+      artists,
+      title,
+      picture,
+    }))
+    .map(({ artists, picture, title }) => ({
+      artists: artists?.filter(isEmptyString) || [],
+      title: title || file.name,
+      imgURL: getPicture(picture),
+    }));
+
+const canPlayMimeType = (mime: string) =>
+  audioEl.canPlayType(mime).length !== 0;
+
+const saveOneMusicFile = async (db: MusicStorageInterface, file: File) =>
+  extractMetaData(file)
+    .chain((metaData) =>
+      fileToBase64(file).chain((musicDataURL) =>
+        MaybeAsync(async () => musicDataURL)
+          .map(getMimeType)
+          .filter(canPlayMimeType)
+          .map(() => db.addNewMusic({ musicDataURL, ...metaData }))
+          .toEitherAsync(null),
+      ),
+    )
+    .ifLeft(() => alertUserOfNotPlayableMusic(file.name))
+    .run();
+
+export const saveMusic = async (
   db: MusicStorageInterface,
   files: File[],
-): Promise<void> {
-  const musicData: Omit<MusicDataInterface, 'id' | 'createdAt'>[] = [];
-  const audioEl = new Audio();
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const file of files) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const metaData = await parseBlob(file);
-
-      const {
-        common: { artists, title, picture },
-      } = metaData;
-
-      let pictureBase64: string | undefined;
-      const selectedPicture = selectCover(picture);
-
-      if (picture && selectedPicture) {
-        pictureBase64 = uintToBase64Image(
-          selectedPicture.format,
-          selectedPicture.data,
-        );
-      }
-      // eslint-disable-next-line no-await-in-loop
-      const musicDataURL: string = await fileToBase64(file);
-      const mimeType = getMimeType(musicDataURL);
-
-      if (!audioEl.canPlayType(mimeType)) {
-        alert(`${file.name} is not supported by the browser!`);
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
-      musicData.push({
-        artists: artists?.filter((artist) => artist.trim() !== '') || [],
-        imgURL: pictureBase64,
-        title: title?.trim() || files[0].name,
-        musicDataURL,
-      });
-    } catch (e) {
-      alert(`${file.name} is not playable!`);
-    }
-  }
-  await db.addBulkNewMusic(musicData);
-}
+): Promise<void> => void files.map((file) => saveOneMusicFile(db, file));

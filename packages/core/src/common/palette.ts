@@ -1,3 +1,5 @@
+export type RGB = [r: number, g: number, b: number];
+
 export type Palette = Record<
   | 'PRIMARY_BRIGHT'
   | 'PRIMARY'
@@ -7,7 +9,7 @@ export type Palette = Record<
   | 'TEXT_SECONDARY'
   | 'BG_COLOR'
   | 'BG_COLOR_LIGHTER',
-  [r: number, g: number, b: number]
+  RGB
 >;
 
 export const DefaultPalette: Palette = {
