@@ -141,7 +141,7 @@ export function MusicPlayerPage(): ReactElement {
           setAnimationComplete(true);
         }, 100);
       }}>
-      {animationComplete && (
+      {animationComplete && currentPlayingMusic?.imgURL && (
         <Fade in timeout={3000}>
           <>
             <div className={styles.blurBg} />
