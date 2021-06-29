@@ -1,9 +1,7 @@
 import React, { ReactElement } from 'react';
-import {
-  Container, Grid, Hidden, IconButton,
-} from '@material-ui/core';
+import { Container, Grid, Hidden, IconButton } from '@material-ui/core';
 import { ExpandLessRounded as ExpandIcon } from '@material-ui/icons';
-import { useMusicPlayerMachine, isTruthy } from '@open-music-player/core';
+import { useMusicPlayerMachine, isNotNullable } from '@open-music-player/core';
 import { useHistory } from 'react-router-dom';
 
 import { useStyles } from './styles';
@@ -17,13 +15,11 @@ export function BottomControlsBar(): ReactElement {
   const [current] = useMusicPlayerMachine();
 
   const {
-    context: {
-      currentPlayingMusic,
-    },
+    context: { currentPlayingMusic },
   } = current;
 
   const gotoMusicPlayerPage = () => {
-    if (isTruthy(currentPlayingMusic?.id)) {
+    if (isNotNullable(currentPlayingMusic?.id)) {
       history.push(`/play/${currentPlayingMusic?.id}`);
     }
   };
@@ -39,19 +35,12 @@ export function BottomControlsBar(): ReactElement {
             justify="space-between"
             lg={5}
             xs={12}
-            sm={7}
-          >
-            <Grid
-              item
-              className={styles.expandBtnCtn}
-              xs={1}
-              sm={2}
-            >
+            sm={7}>
+            <Grid item className={styles.expandBtnCtn} xs={1} sm={2}>
               <IconButton
                 disabled={!currentPlayingMusic}
                 onClick={gotoMusicPlayerPage}
-                className={styles.expandBtn}
-              >
+                className={styles.expandBtn}>
                 <ExpandIcon />
               </IconButton>
             </Grid>
@@ -60,8 +49,7 @@ export function BottomControlsBar(): ReactElement {
               xs={10}
               sm={9}
               onClick={gotoMusicPlayerPage}
-              className={styles.musicTitleCtn}
-            >
+              className={styles.musicTitleCtn}>
               <MusicName
                 onClick={gotoMusicPlayerPage}
                 title={currentPlayingMusic?.title}

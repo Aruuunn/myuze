@@ -1,8 +1,8 @@
 import { AnyEventObject } from 'xstate';
-import { isTruthy } from '../../../utils';
 import { notify } from '../../../common';
 import { MusicPlayerMachineContext as Context } from '../context.interface';
 import { getAudioService, getMusicStorage } from '../../../services';
+import { isNotNullable } from '../../../utils';
 
 const audioService = getAudioService();
 const db = getMusicStorage();
@@ -14,7 +14,7 @@ export async function loadMusic(_: Context, event: AnyEventObject) {
     return Promise.reject();
   }
 
-  if (!isTruthy<string>(id)) {
+  if (!isNotNullable<string>(id)) {
     const total = await db.getTotalCount();
     if (index >= total) {
       index %= total;
@@ -23,7 +23,7 @@ export async function loadMusic(_: Context, event: AnyEventObject) {
     }
     id = (await db.getMusicAt(index))?.id ?? null;
 
-    if (!isTruthy<string>(id)) {
+    if (!isNotNullable<string>(id)) {
       return Promise.reject();
     }
   }
@@ -31,17 +31,14 @@ export async function loadMusic(_: Context, event: AnyEventObject) {
   const musicData = await db.getMusicUsingId(id);
 
   if (musicData) {
-    return audioService
-      .load(musicData.musicDataURL)
-      .then(() => {
-        notify(musicData.title,
-          {
-            image: musicData.imgURL,
-            silent: true,
-            requireInteraction: false,
-          });
-        return ({ ...musicData, index });
+    return audioService.load(musicData.musicDataURL).then(() => {
+      notify(musicData.title, {
+        image: musicData.imgURL,
+        silent: true,
+        requireInteraction: false,
       });
+      return { ...musicData, index };
+    });
   }
 
   return Promise.reject();

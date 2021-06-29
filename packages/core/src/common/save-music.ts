@@ -5,8 +5,14 @@ import {
   IPicture,
 } from 'music-metadata-browser';
 import { MusicDataInterface, MusicStorageInterface } from '../interfaces';
-import { fileToBase64, getMimeType, uintToBase64Image } from '../utils';
+import {
+  fileToBase64,
+  getMimeType,
+  uintToBase64Image,
+  isNotNullable,
+} from '../utils';
 import { EitherAsync, Either, MaybeAsync, Maybe } from 'purify-ts';
+import { isEmptyString } from '../utils/isEmptyString';
 
 const audioEl = new Audio();
 
@@ -17,11 +23,6 @@ const promiseToEitherAsync = <T>(
   promise: Promise<T>,
 ): EitherAsync<unknown, T> =>
   EitherAsync.fromPromise(() => promise.then((val) => Either.of(val)));
-
-const isEmptyString = (s: string) => s.trim() !== '';
-
-const isNotNullable = <T>(a: T | undefined | null): a is T =>
-  a !== null && typeof a !== 'undefined';
 
 const getPicture = (picture?: IPicture[]) =>
   Maybe.fromNullable(picture)

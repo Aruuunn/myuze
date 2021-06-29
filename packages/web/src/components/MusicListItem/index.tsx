@@ -5,7 +5,7 @@ import { Skeleton } from '@material-ui/lab';
 import {
   useMusicPlayerMachine,
   useMusicStorage,
-  isTruthy,
+  isNotNullable,
 } from '@open-music-player/core';
 import { MusicDataInterface } from '../../../../core/src/interfaces';
 import { useStyles } from './styles';
@@ -30,8 +30,8 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   const { currentPlayingMusic } = current.context;
   const { artists } = musicDetails ?? {};
 
-  const loading = !isTruthy(musicDetails);
-  let artistsName = isTruthy(artists) ? artists.join(' , ') : '';
+  const loading = !isNotNullable(musicDetails);
+  let artistsName = isNotNullable(artists) ? artists.join(' , ') : '';
 
   if (artistsName.length === 0) {
     artistsName = 'unknown';
@@ -40,7 +40,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
   useEffect(() => {
     const componentOnMount = async () => {
       const fetchedMusicDetails = await db.getMusicAt(index);
-      if (isTruthy(fetchedMusicDetails)) {
+      if (isNotNullable(fetchedMusicDetails)) {
         setMusicDetails(fetchedMusicDetails);
       }
     };
@@ -70,7 +70,7 @@ export function MusicListItem(props: MusicListItemProps): ReactElement {
         className={styles.card}
         onClick={() => {
           if (typeof onSelectItem === 'function') {
-            if (isTruthy(musicDetails)) {
+            if (isNotNullable(musicDetails)) {
               onSelectItem({ id: musicDetails.id, index });
             }
           }
