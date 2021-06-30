@@ -7,7 +7,7 @@
     "prebuild": "yarn run clean",
     "build": "tsc -b .",
     "clean": "rimraf 'tsconfig.tsbuildinfo' 'dist' 'bundle'",
-    "dev": "tsc -b -w .",
+    "dev": "ts-node-dev src/index.ts",
     "bundle": "webpack"
   },
   "pkg": {
@@ -19,13 +19,17 @@
     "outputPath": "dist"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "fastify": "^3.17.0",
+    "fastify-cookie": "^5.3.1",
     "fastify-etag": "^2.1.0",
+    "fastify-oauth2": "^4.2.3",
     "fastify-static": "^4.2.2",
     "purify-ts": "^0.16.3",
     "typescript": "^4.3.2"
   },
   "devDependencies": {
+    "ts-node-dev": "^1.1.7",
     "typescript": "^4.3.2",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",
